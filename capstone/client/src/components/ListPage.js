@@ -8,4 +8,4 @@ class ListPage extends Component {
   }
 }
 
-export default ListPage;
+export { ListPage };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import WebRouter from './components/WebRouter.js';
+import { WebRouter } from './components/WebRouter.js';
 import './components/styles.css';
 
 
@@ -21,4 +21,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export { App };

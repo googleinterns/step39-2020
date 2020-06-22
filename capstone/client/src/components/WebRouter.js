@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
-import ListPage from './ListPage.js';
+import { ListPage } from './ListPage.js';
 
 function WebRouter() {
   return (
@@ -15,4 +15,4 @@ function WebRouter() {
   )
 }
 
-export default WebRouter;
+export  { WebRouter };
