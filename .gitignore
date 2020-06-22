@@ -1,0 +1,8 @@
+#Ignore generated NPM files
+node_modules/
+
+# Ignore generated Maven build files
+target/
+
+# Ignore editor config
+.idea
