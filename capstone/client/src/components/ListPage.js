@@ -51,7 +51,7 @@ class ListPage extends Component {
         selectedItemsList: null,
         errorMessage: (<Alert severity="error">Please select at least one item!</Alert>),
       });
-      return; 
+      return;
     }
     const listItems = arr.map((item) => (
       <ListItem key={item}>
