@@ -1,0 +1,40 @@
+h1 { 
+    color: #111; 
+    font-family: 'Helvetica Neue', sans-serif; 
+    font-size: 70px; 
+    font-weight: bold; 
+    letter-spacing: -1px; 
+    line-height: 1; 
+    text-align: center; 
+}
+
+/* ListPage start */
+
+#list-page-container {
+    text-align: center;
+    color: azure;
+}
+
+#items-list-container {
+    background-color: #667ef7;
+    border-radius: 14px;
+    color: azure;
+    margin: 5% 10% 3% 0;
+}
+
+#distance-list-container {
+    background-color: #70e1ed;
+    border-radius: 14px;
+    color: azure;
+    margin: 5% 5% 3% 10%;
+}
+
+#items-list {
+    margin-left: 5%;
+}
+
+#distance-list {
+    margin-left: 5%;
+}
+
+/* ListPage end */
