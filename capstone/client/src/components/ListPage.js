@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button } from '@material-ui/core';
+import { Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button, Grid, Card, Radio, RadioGroup } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 const items = [
@@ -21,7 +21,8 @@ class ListPage extends Component {
     super(props);
     this.state = {
       selectedItemsList: null,
-      errorMessage: null,
+      alert: null,
+      distanceValue: 4,
     };
   }
 
@@ -29,7 +30,7 @@ class ListPage extends Component {
     this.selectedItems = new Set();
   }
 
-  handleChange = (event) => {
+  handleItemChange = (event) => {
     if (event.target.checked) {
       this.selectedItems.add(event.target.name);
     } else {
@@ -37,12 +38,18 @@ class ListPage extends Component {
     }
   }
 
+  handleDistanceChange = (event) => {
+    this.setState({
+      distanceValue: parseInt(event.target.value),
+    })
+  }
+
   onSubmit = () => {
     const arr = [...this.selectedItems];
     if (arr.length === 0) {
       this.setState({
         selectedItemsList: null,
-        errorMessage: (<Alert severity="error">Please select at least one item!</Alert>),
+        alert: (<Alert severity="error">Please select at least one item!</Alert>),
       });
       return;
     }
@@ -56,8 +63,21 @@ class ListPage extends Component {
     ));
     this.setState({
       selectedItemsList: listItems,
-      errorMessage: null,
+      alert: null,
     });
+  }
+
+  onSave = () => {
+    const arr = [...this.selectedItems];
+    if (arr.length === 0) {
+      this.setState({
+        alert: (<Alert severity="error">Please select at least one item!</Alert>),
+      })
+    } else {
+      this.setState({
+        alert: (<Alert severity="success">Your list has been saved!</Alert>),
+      });
+    }
   }
 
   render() {
@@ -66,20 +86,43 @@ class ListPage extends Component {
         control={<Checkbox name={item} data-testid='checkbox item'/>}
         label={item}
         key={item}
-        onChange={this.handleChange}
+        onChange={this.handleItemChange}
+        />
+    ));
+
+    const distances = [2, 4, 6, 8, 10, 12, 14].map((item) => (
+      <FormControlLabel
+        control={<Radio name={item + " mile radius"}/>}
+        label={item + " mile radius"}
+        value={item}
+        key={item}
+        onChange={this.handleDistanceChange}
         />
     ));
 
     return (
-      <div>
-        {this.state.errorMessage}
-        <FormGroup>
-          {checkboxItems}
-        </FormGroup>
-        <Button onClick={this.onSubmit}>Submit</Button>
-        <List>
-          {this.state.selectedItemsList}
-        </List>
+      <div id="list-page-container">
+        {this.state.alert}
+        <h1>Preferences</h1>
+        <Grid container alignItems="stretch">
+          <Grid id="distance-list-container" item component={Card} xs>
+            <p>I would like to choose from stores in a</p>
+            <RadioGroup id="distance-list" value={this.state.distanceValue}>
+              {distances} 
+            </RadioGroup>
+          </Grid>
+          <Grid id="items-list-container" item component={Card} xs>
+            <p>Select items to add to your list</p>
+            <FormGroup id="items-list">
+              {checkboxItems}
+            </FormGroup>
+            <Button  onClick={this.onSave}  variant="contained">Save List</Button>
+            <List>
+              {this.state.selectedItemsList}
+            </List>
+          </Grid>
+        </Grid>
+        <Button  onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
       </div>
     );
   }
