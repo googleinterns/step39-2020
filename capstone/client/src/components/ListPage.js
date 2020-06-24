@@ -21,7 +21,7 @@ class ListPage extends Component {
     super(props);
     this.state = {
       selectedItemsList: null,
-      errorMessage: null,
+      alert: null,
       distanceValue: 4,
     };
   }
@@ -49,7 +49,7 @@ class ListPage extends Component {
     if (arr.length === 0) {
       this.setState({
         selectedItemsList: null,
-        errorMessage: (<Alert severity="error">Please select at least one item!</Alert>),
+        alert: (<Alert severity="error">Please select at least one item!</Alert>),
       });
       return;
     }
@@ -63,8 +63,21 @@ class ListPage extends Component {
     ));
     this.setState({
       selectedItemsList: listItems,
-      errorMessage: null,
+      alert: null,
     });
+  }
+
+  onSave = () => {
+    const arr = [...this.selectedItems];
+    if (arr.length === 0) {
+      this.setState({
+        alert: (<Alert severity="error">Please select at least one item!</Alert>),
+      })
+    } else {
+      this.setState({
+        alert: (<Alert severity="success">Your list has been saved!</Alert>),
+      });
+    }
   }
 
   render() {
@@ -89,7 +102,7 @@ class ListPage extends Component {
 
     return (
       <div id="list-page-container">
-        {this.state.errorMessage}
+        {this.state.alert}
         <h1>Preferences</h1>
         <Grid container alignItems="stretch">
           <Grid id="distance-list-container" item component={Card} xs>
@@ -103,12 +116,13 @@ class ListPage extends Component {
             <FormGroup id="items-list">
               {checkboxItems}
             </FormGroup>
+            <Button  onClick={this.onSave}  variant="contained">Save List</Button>
             <List>
               {this.state.selectedItemsList}
             </List>
           </Grid>
         </Grid>
-        <Button  onClick={this.onSubmit} color="primary" variant="contained">Submit</Button>
+        <Button  onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
       </div>
     );
   }
