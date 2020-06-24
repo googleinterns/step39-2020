@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button, Grid, Card, Radio, RadioGroup } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+
 
 const items = [
   'Milk',
@@ -74,6 +76,18 @@ class ListPage extends Component {
         alert: (<Alert severity="error">Please select at least one item!</Alert>),
       })
     } else {
+      const response = axios.post(
+        '/api/v1/create-or-update-user-list-servlet',
+        { 
+          userId: "user1",
+          userList: {
+            listId: 1,
+            displayName: "First List",
+            itemsTypes: arr
+          }
+        },
+      )
+      console.log(response);
       this.setState({
         alert: (<Alert severity="success">Your list has been saved!</Alert>),
       });
