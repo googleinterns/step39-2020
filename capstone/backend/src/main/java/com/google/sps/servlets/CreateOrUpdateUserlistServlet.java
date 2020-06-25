@@ -56,6 +56,7 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
    response.getWriter().println(g.toJson(responseBody));
  }
 
+  
   private void writeData(RequestBody requestBody, DatabaseClient dbClient) {
     List<Mutation> mutations = Arrays.asList(
       Mutation.newInsertOrUpdateBuilder("UserLists")
@@ -64,10 +65,11 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
           .set("ListId")
           .to(requestBody.userList.listId)
           .set("ItemTypes")
-          .to(requestBody.userList.itemTypes)
+          .toStringArray(requestBody.userList.itemTypes)
           .build());
     dbClient.write(mutations);
   }
+  
 
   private RequestBody getRequestBody(HttpServletRequest request) throws IOException {
     Gson g = new Gson();
