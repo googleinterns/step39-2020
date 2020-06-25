@@ -15,7 +15,17 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
-  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.google.cloud</groupId>
+        <artifactId>libraries-bom</artifactId>
+        <version>5.4.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -29,9 +39,52 @@
       <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
+    <!-- START spanner dependencies -->
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-spanner</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api.grpc</groupId>
+      <artifactId>proto-google-cloud-spanner-admin-instance-v1</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api.grpc</groupId>
+      <artifactId>proto-google-cloud-spanner-v1</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api.grpc</groupId>
+      <artifactId>proto-google-cloud-spanner-admin-database-v1</artifactId>
+    </dependency>
+    <!-- END spanner dependencies -->
+
   </dependencies>
   <build>
+    <finalName>spanner-google-cloud-step39</finalName>
     <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <descriptors>
+            <descriptor>assembly-descriptor.xml</descriptor>
+          </descriptors>
+          <archive>
+            <manifest>
+              <mainClass>com.example.spanner.CreateSpannerTables</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <!-- Old plugin that is deprecated for deployment but can be used for local testing. 
       Enables usage of `mvn appengine:devserver` for local testing, which is in many of the walkthroughs. 
       Cannot deploy with `mvn appengine:update` because it's deprecated. -->
