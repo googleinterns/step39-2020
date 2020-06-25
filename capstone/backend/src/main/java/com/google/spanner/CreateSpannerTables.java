@@ -73,7 +73,7 @@ public class UsersSpanner {
                     + "  ItemNameAndBrand  STRING(MAX),"
                     + "  ItemType          STRING(MAX)"
                     + ") PRIMARY KEY (ItemId)",
-                "CREATE TABLE Inventory ("
+                "CREATE TABLE Inventories ("
                     + "  StoreId           INT64,"
                     + "  ItemId            INT64,"
                     + "  ItemAvailability  STRING(MAX),"
@@ -85,7 +85,6 @@ public class UsersSpanner {
     try {
       // Initiate the request which returns an OperationFuture.
       Database db = op.get();
-      System.out.println("Created database [" + db.getId() + "]");
     } catch (ExecutionException e) {
       // If the operation failed during execution, expose the cause.
       throw (SpannerException) e.getCause();
@@ -96,7 +95,7 @@ public class UsersSpanner {
     }
   }
   
-  static void run(
+  private static void run(
       DatabaseClient dbClient,
       DatabaseAdminClient dbAdminClient,
       InstanceAdminClient instanceAdminClient,
@@ -111,7 +110,7 @@ public class UsersSpanner {
     }
   }
   
-  static void printUsageAndExit() {
+  private static void printUsageAndExit() {
     System.err.println("Usage:");
     System.err.println("    SpannerExample <command> <instance_id> <database_id>");
     System.err.println("");
@@ -124,13 +123,11 @@ public class UsersSpanner {
     if (args.length != 3) {
       printUsageAndExit();
     }
-    // [START init_client]
     SpannerOptions options = SpannerOptions.newBuilder().build();
     Spanner spanner = options.getService();
     try {
       String command = args[0];
       DatabaseId db = DatabaseId.of(options.getProjectId(), args[1], args[2]);
-      // [END init_client]
       // This will return the default project id based on the environment.
       String clientProject = spanner.getOptions().getProjectId();
       if (!db.getInstanceId().getProject().equals(clientProject)) {
@@ -141,17 +138,13 @@ public class UsersSpanner {
         printUsageAndExit();
       }
 
-      // [START init_client]
       DatabaseClient dbClient = spanner.getDatabaseClient(db);
       DatabaseAdminClient dbAdminClient = spanner.getDatabaseAdminClient();
       InstanceAdminClient instanceAdminClient = spanner.getInstanceAdminClient();
-      // Use client here...
-      // [END init_client]
       run(dbClient, dbAdminClient, instanceAdminClient, command, db);
     } finally {
       spanner.close();
     }
-    // [END init_client]
     System.out.println("Closed client");
   }
 }
