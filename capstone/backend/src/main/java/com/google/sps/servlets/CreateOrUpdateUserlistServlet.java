@@ -2,6 +2,7 @@ package com.google.sps.servlets;
 
 import com.google.gson.Gson; 
 import com.google.cloud.spanner.Mutation;
+import com.google.cloud.spanner.SpannerOptions;
 import com.google.cloud.Date;
 import com.google.cloud.spanner.DatabaseClient;
 import java.io.BufferedReader;
@@ -50,12 +51,13 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
    Gson g = new Gson();
    RequestBody requestBody = getRequestBody(request);
    List<String> itemTypes = requestBody.userList.itemTypes;
+   DatabaseClient dbClient = initClient();
+   writeData(requestBody, dbClient);
 
    ResponseBody responseBody = new ResponseBody(ResponseStatus.SUCCESS);
    response.setContentType("application/json;");
    response.getWriter().println(g.toJson(responseBody));
  }
-
   
   private void writeData(RequestBody requestBody, DatabaseClient dbClient) {
     List<Mutation> mutations = Arrays.asList(
@@ -70,6 +72,13 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     dbClient.write(mutations);
   }
   
+  private DatabaseClient initClient() {
+    SpannerOptions options = SpannerOptions.newBuilder().build();
+    Spanner spanner = options.getService();
+
+    DatabaseId db = DatabaseId.of(options.getProjectId(), "Test Instance", "example-db");
+    return spanner.getDatabaseClient(db);
+  }
 
   private RequestBody getRequestBody(HttpServletRequest request) throws IOException {
     Gson g = new Gson();
