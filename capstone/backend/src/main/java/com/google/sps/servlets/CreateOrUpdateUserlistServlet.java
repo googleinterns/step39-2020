@@ -1,7 +1,9 @@
 package com.google.sps.servlets;
 
 import com.google.gson.Gson; 
+import com.google.cloud.spanner.DatabaseId;
 import com.google.cloud.spanner.Mutation;
+import com.google.cloud.spanner.Spanner;
 import com.google.cloud.spanner.SpannerOptions;
 import com.google.cloud.Date;
 import com.google.cloud.spanner.DatabaseClient;
@@ -36,7 +38,7 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
   }
 
   private class RequestBody {
-    private String userId;
+    private int userId;
     private UserList userList;
   }
 
@@ -53,6 +55,8 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
    List<String> itemTypes = requestBody.userList.itemTypes;
    DatabaseClient dbClient = initClient();
    writeData(requestBody, dbClient);
+
+   System.out.println(requestBody.userList.displayName);
 
    ResponseBody responseBody = new ResponseBody(ResponseStatus.SUCCESS);
    response.setContentType("application/json;");
@@ -76,7 +80,7 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     SpannerOptions options = SpannerOptions.newBuilder().build();
     Spanner spanner = options.getService();
 
-    DatabaseId db = DatabaseId.of(options.getProjectId(), "Test Instance", "example-db");
+    DatabaseId db = DatabaseId.of(options.getProjectId(), "Capstone Instance", "step39-db");
     return spanner.getDatabaseClient(db);
   }
 
