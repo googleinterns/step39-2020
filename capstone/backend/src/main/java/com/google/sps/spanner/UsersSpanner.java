@@ -43,14 +43,14 @@ public class UsersSpanner {
             id.getDatabase(),
             Arrays.asList(
                 "CREATE TABLE Users ("
-                    + "  UserId   INT64 NOT NULL,"
+                    + "  UserId   INT64,"
                     + "  Username  STRING(MAX),"
                     + "  Email   STRING(MAX)"
                     + ") PRIMARY KEY (UserId)",
                 "CREATE TABLE UserLists ("
-                    + "  UserId     INT64 NOT NULL,"
-                    + "  ListId      INT64 NOT NULL,"
-                    + "  ItemTypes   ARRAY<STRING>"
+                    + "  UserId     INT64,"
+                    + "  ListId      INT64,"
+                    + "  ItemTypes   ARRAY<STRING(MAX)>"
                     + ") PRIMARY KEY (UserId, ListId),"
                     + "  INTERLEAVE IN PARENT Users ON DELETE CASCADE",
                 "CREATE TABLE Stores ("
