@@ -28,6 +28,8 @@ enum ResponseStatus {
 */
 @WebServlet("/api/v1/create-or-update-user-list-servlet")
 public class CreateOrUpdateUserlistServlet extends HttpServlet {
+  private String DATABASE_INSTANCE = "Capstone Instance";
+  private String DATABASE_NAME = "step39-db";
 
   private class ResponseBody {
     private ResponseStatus responseStatus;
@@ -52,11 +54,8 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
    Gson g = new Gson();
    RequestBody requestBody = getRequestBody(request);
-   List<String> itemTypes = requestBody.userList.itemTypes;
    DatabaseClient dbClient = initClient();
    writeData(requestBody, dbClient);
-
-   System.out.println(requestBody.userList.displayName);
 
    ResponseBody responseBody = new ResponseBody(ResponseStatus.SUCCESS);
    response.setContentType("application/json;");
@@ -80,7 +79,7 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     SpannerOptions options = SpannerOptions.newBuilder().build();
     Spanner spanner = options.getService();
 
-    DatabaseId db = DatabaseId.of(options.getProjectId(), "Capstone Instance", "step39-db");
+    DatabaseId db = DatabaseId.of(options.getProjectId(), DATABASE_INSTANCE, DATABASE_NAME);
     return spanner.getDatabaseClient(db);
   }
 
