@@ -45,14 +45,33 @@ public class UsersSpanner {
                 "CREATE TABLE Users ("
                     + "  UserId   INT64 NOT NULL,"
                     + "  Username  STRING(MAX),"
-                    + "  Email   STRING(MAX),"
+                    + "  Email   STRING(MAX)"
                     + ") PRIMARY KEY (UserId)",
                 "CREATE TABLE UserLists ("
                     + "  UserId     INT64 NOT NULL,"
                     + "  ListId      INT64 NOT NULL,"
                     + "  ItemTypes   ARRAY<STRING>"
                     + ") PRIMARY KEY (UserId, ListId),"
-                    + "  INTERLEAVE IN PARENT Users ON DELETE CASCADE"));
+                    + "  INTERLEAVE IN PARENT Users ON DELETE CASCADE",
+                "CREATE TABLE Stores ("
+                    + "StoreId      INT64,"
+                    + "StoreName    STRING(MAX),"
+                    + "Address     STRING(MAX)"
+                    + ") PRIMARY KEY (StoreId)",
+                "CREATE TABLE Items ("
+                    + "ItemId      INT64,"
+                    + "ItemNameAndBrand    STRING(MAX),"
+                    + "ItemType     STRING(MAX)"
+                    + ") PRIMARY KEY (ItemId)",
+                "CREATE TABLE Inventory ("
+                    + "StoreId     INT64,"
+                    + "ItemId      INT64,"
+                    + "ItemAvailability STRING(MAX),"
+                    + "LastUpdated TIMESTAMP OPTIONS (allow_commit_timestamp=true),"
+                    + "Price FLOAT64,"
+                    + "CONSTRAINT FK_ItemId FOREIGN KEY (ItemId) REFERENCES Items (ItemId)"
+                    + ") PRIMARY KEY (StoreId, ItemId),"
+                    + "INTERLEAVE IN PARENT Stores ON DELETE CASCADE"));
     try {
       // Initiate the request which returns an OperationFuture.
       Database db = op.get();
