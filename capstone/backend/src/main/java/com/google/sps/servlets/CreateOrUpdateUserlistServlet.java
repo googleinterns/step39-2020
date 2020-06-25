@@ -11,17 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
-* 
+* Servlet that creates or updates user lists. 
 */
 @WebServlet("/api/v1/create-or-update-user-list-servlet")
 public class CreateOrUpdateUserlistServlet extends HttpServlet {
-  private class ResponseBody {
-    private ResponseStatus responseStatus;
-
-    public ResponseBody(ResponseStatus responseStatus) {
-        this.responseStatus = responseStatus;
-    }
-  }
+  private static final int OK = 200;
+  private static final int BAD_REQUEST = 400;
+  private static final int INTERNAL_SERVER_ERROR = 500;
 
   private class RequestBody {
     private int userId;
@@ -37,13 +33,23 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
  @Override
  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
    Gson g = new Gson();
-   RequestBody requestBody = getRequestBody(request);
-   DatabaseClient dbClient = initClient();
-   writeData(requestBody, dbClient);
-
-   ResponseBody responseBody = new ResponseBody(ResponseStatus.SUCCESS);
-   response.setContentType("application/json;");
-   response.getWriter().println(g.toJson(responseBody));
+   SpannerUtilFunctions suf = new SpannerUtilFunctions();
+   try {
+     RequestBody requestBody = getRequestBody(request);
+   } catch (IOException) {
+      response.setStatus(BAD_REQUEST)
+      response.getWriter().println("");
+      return;
+   }
+   try {
+     suf.writeUserLists(requestBody.userId. requestBody.UserList.listId, requestBody.UserList.itemTypes);
+   } catch (Exception e) {
+     response.setStatus(INTERNAL_SERVER_ERROR);
+     response.getWriter().println("");
+     return;
+   }
+   response.setStatus(OK);
+   response.getWriter().println("");
  }
 
   private RequestBody getRequestBody(HttpServletRequest request) throws IOException {
