@@ -71,7 +71,7 @@
           </descriptors>
           <archive>
             <manifest>
-              <mainClass>com.example.spanner.UsersSpanner</mainClass>
+              <mainClass>com.example.spanner.CreateSpannerTables</mainClass>
             </manifest>
           </archive>
         </configuration>
