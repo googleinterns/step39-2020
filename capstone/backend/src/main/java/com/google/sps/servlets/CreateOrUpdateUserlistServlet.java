@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/api/v1/create-or-update-user-list-servlet")
 public class CreateOrUpdateUserlistServlet extends HttpServlet {
-  private static final int OK = 200;
   private static final int BAD_REQUEST = 400;
   private static final int INTERNAL_SERVER_ERROR = 500;
+  private static final int OK = 200;
 
   private class RequestBody {
     private int userId;
