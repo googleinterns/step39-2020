@@ -34,11 +34,12 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
     SpannerUtilFunctions suf = new SpannerUtilFunctions();
+    RequestBody requestBody;
     try {
-      RequestBody requestBody = getRequestBody(request);
-      if (responseBody == null) {
+      requestBody = getRequestBody(request);
+      if (requestBody == null) {
         response.setStatus(BAD_REQUEST);
-        response.getWriter.println("");
+        response.getWriter().println("");
       }
     } catch (IOException e) {
       response.setStatus(BAD_REQUEST);
@@ -47,7 +48,7 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     }
     try {
       suf.writeUserLists(
-          requestBody.userId.requestBody.UserList.listId, requestBody.UserList.itemTypes);
+          requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes);
     } catch (Exception e) {
       response.setStatus(INTERNAL_SERVER_ERROR);
       response.getWriter().println("");
@@ -66,12 +67,12 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     while ((line = br.readLine()) != null) {
       reqString += line;
     }
-    ResponseBody responseBody = g.fromJson(reqString, RequestBody.class);
-    if (responseBody == null || requestBody.userId == 0 || requestBody.userList == null
+    RequestBody requestBody = g.fromJson(reqString, RequestBody.class);
+    if (requestBody == null || requestBody.userId == 0 || requestBody.userList == null
         || requestBody.userList.listId == 0 || requestBody.userList.displayName == null
         || requestBody.userList.itemTypes == null) {
       return null;
     }
-    return responseBody;
+    return requestBody;
   }
 }
