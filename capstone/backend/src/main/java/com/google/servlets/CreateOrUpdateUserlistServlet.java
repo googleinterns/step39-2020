@@ -15,13 +15,22 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/api/v1/create-or-update-user-list-servlet")
 public class CreateOrUpdateUserlistServlet extends HttpServlet {
+  private static final int NEW_LIST = -1
   private class RequestBody {
     private int userId;
     private UserList userList;
   }
 
+  private class ResponseBody {
+    private UserList userList;
+
+    public ResponseBody(Userlist userList) {
+        this.userList = userList;
+    } 
+  }
+
   private class UserList {
-    private int listId;
+    private long listId;
     private String displayName;
     private List<String> itemTypes;
   }
@@ -32,18 +41,27 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     SpannerUtilFunctions suf = new SpannerUtilFunctions();
     RequestBody requestBody = getRequestBody(request);
     if (requestBody == null) {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-      response.getWriter().println("");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
+    }
+    if (requestBody.userList.listId == NEW_LIST) {
+      requestBody.userList.listId = generateListId(requestBody.userId);
     }
     if (!suf.writeUserLists(
             requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes)) {
-      response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      response.getWriter().println("An error occured while writing to the database.");
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occured while writing to the database.");
       return;
     }
+    ResponseBody responseBody = new ResponseBody(requestBody.userList);
     response.setStatus(HttpServletResponse.SC_OK);
-    response.getWriter().println("");
+    response.setContentType("application/json;")
+    response.getWriter().println(gson.toJson(responseBody));
+  }
+
+  private long generateListId(int userId) {
+    long currentTime = System.currentTimeMillis();
+    String id = String.valueOf(userId) + currentTime;
+    return Long.parseLong(id);
   }
 
   private RequestBody getRequestBody(HttpServletRequest request) {
