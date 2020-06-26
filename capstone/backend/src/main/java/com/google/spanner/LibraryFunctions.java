@@ -33,12 +33,17 @@ public class LibraryFunctions {
   private static String DATABASE_INSTANCE = "capstone-instance";
   private static String DATABASE_NAME = "step39-db";
 
-  private static DatabaseClient initClient() {
-    SpannerOptions options = SpannerOptions.newBuilder().build();
-    Spanner spanner = options.getService();
+  private static DatabaseClient databaseClient = null;
 
-    DatabaseId db = DatabaseId.of(options.getProjectId(), DATABASE_INSTANCE, DATABASE_NAME);
-    return spanner.getDatabaseClient(db);
+  private static DatabaseClient initClient() {
+    if(databaseClient == null) {
+      SpannerOptions options = SpannerOptions.newBuilder().build();
+      Spanner spanner = options.getService();
+
+      DatabaseId db = DatabaseId.of(options.getProjectId(), DATABASE_INSTANCE, DATABASE_NAME);
+      databaseClient = spanner.getDatabaseClient(db);
+    }
+    return databaseClient;
   }
 
   public static void writeUserLists(int userId, int listId, List<String> itemTypes) {
