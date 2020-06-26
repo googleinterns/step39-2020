@@ -79,7 +79,7 @@ class ListPage extends Component {
       const response = axios.post(
         '/api/v1/create-or-update-user-list-servlet',
         { 
-          userId: "user1",
+          userId: 1,
           userList: {
             listId: 1,
             displayName: "First List",
@@ -87,7 +87,6 @@ class ListPage extends Component {
           }
         },
       )
-      console.log(response);
       this.setState({
         alert: (<Alert severity="success">Your list has been saved!</Alert>),
       });
