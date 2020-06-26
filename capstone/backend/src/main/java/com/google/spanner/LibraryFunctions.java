@@ -33,8 +33,19 @@ import java.util.List;
 public class LibraryFunctions {
   private static String DATABASE_INSTANCE = "capstone-instance";
   private static String DATABASE_NAME = "step39-db";
+  
+  private static final String EMAIL =     "Email";
+  private static final String ITEMTYPES = "ItemTypes";
+  private static final String LISTID =    "ListId";
+  private static final String USERID =    "UserId";
+  private static final String USERLISTS = "UserLists";
+  private static final String USERNAME =  "Username";
+  private static final String USERS =     "Users";
+
 
   private static DatabaseClient databaseClient = null;
+
+  private LibraryFunctions() {}
 
   private static DatabaseClient initClient() {
     if(databaseClient == null) {
@@ -47,73 +58,60 @@ public class LibraryFunctions {
     return databaseClient;
   }
 
-  public static boolean writeUserLists(int userId, int listId, List<String> itemTypes) {
-    try {
-      DatabaseClient dbClient = initClient();
-      List<Mutation> mutations = Arrays.asList(
-        Mutation.newInsertOrUpdateBuilder("UserLists")
-          .set("UserId")
+  public static void writeUserLists(int userId, int listId, List<String> itemTypes) {
+    DatabaseClient dbClient = initClient();
+    List<Mutation> mutations = Arrays.asList(
+      Mutation.newInsertOrUpdateBuilder(USERLISTS)
+          .set(USERID)
           .to(userId)
-          .set("ListId")
+          .set(LISTID)
           .to(listId)
-          .set("ItemTypes")
+          .set(ITEMTYPES)
           .toStringArray(itemTypes)
           .build());
-      dbClient.write(mutations);
-      return true;
-    }
-    catch (Exception e) {
-      return false;
-    }
+    dbClient.write(mutations);
   }
 
   public static List<List<String>> getUserLists(int userId) {
     DatabaseClient dbClient = initClient();
+    String query = "SELECT ItemTypes FROM UserLists WHERE UserId = @userId";
     Statement s = 
-        Statement.newBuilder(
-                "SELECT ItemTypes "
-                    + "FROM UserLists "
-                    + "WHERE UserId = @userId")
+        Statement.newBuilder(query)
             .bind("userId")
             .to(userId)
             .build();
     List<List<String>> userLists = new ArrayList<>();
     try (ResultSet resultSet = dbClient.singleUse().executeQuery(s)) {
         while (resultSet.next()) {
-            userLists.add(resultSet.getStringList("ItemTypes"));
+            userLists.add(resultSet.getStringList(ITEMTYPES));
         }
     }
     return userLists;
   }
 
-  public static boolean createUser(int userId, String userName, String email) {
-    try {
-      DatabaseClient dbClient = initClient();
-      Mutation mutation = Mutation.newInsertBuilder("Users")
-                            .set("UserId")
+  public static void createUser(int userId, String userName, String email) {
+    DatabaseClient dbClient = initClient();
+    Mutation mutation = Mutation.newInsertBuilder(USERS)
+                            .set(USERID)
                             .to(userId)
-                            .set("UserName")
+                            .set(USERNAME)
                             .to(userName)
-                            .set("Email")
+                            .set(EMAIL)
                             .to(email)
                             .build();
-      dbClient.write(Arrays.asList(mutation));
-      return true;
-    }
-    catch (Exception e) {
-      return false;
-    }
+    dbClient.write(Arrays.asList(mutation));
   }
 
   public static List<String> getItemTypes(int page) {
     DatabaseClient dbClient = initClient();
     List<String> itemTypes = new ArrayList<String>();
+    String query = "SELECT DISTINCT ItemType FROM Items ORDER BY ItemType";
     try (ResultSet resultSet =
       dbClient
           .singleUse() // Execute a single read or query against Cloud Spanner.
-          .executeQuery(Statement.of("SELECT DISTINCT ItemType FROM Items ORDER BY ItemType"))) {
-      for (int i = 0; resultSet.next() && i < (page+1)*10; i++) {
-        if (i >= page*10) {
+          .executeQuery(Statement.of(query))) {
+      for (int i = 0; resultSet.next() && i < (page + 1) * 10; i++) {
+        if (i >= page * 10) {
             itemTypes.add(resultSet.getString(0));
         }
       }
