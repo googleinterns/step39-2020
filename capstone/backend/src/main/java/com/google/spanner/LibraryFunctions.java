@@ -23,7 +23,7 @@ import com.google.cloud.spanner.DatabaseClient;
 import java.util.Arrays;
 
 public class SpannerUtilFunctions {
-  private String DATABASE_INSTANCE = "Capstone Instance";
+  private String DATABASE_INSTANCE = "capstone-instance";
   private String DATABASE_NAME = "step39-db";
 
   private DatabaseClient initClient() {
