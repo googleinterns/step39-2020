@@ -30,38 +30,32 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
     SpannerUtilFunctions suf = new SpannerUtilFunctions();
-    RequestBody requestBody;
-    try {
-      requestBody = getRequestBody(request);
-      if (requestBody == null) {
-        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-        response.getWriter().println("");
-      }
-    } catch (IOException e) {
+    RequestBody requestBody = getRequestBody(request);
+    if (requestBody == null) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       response.getWriter().println("");
-      return;
     }
-    try {
-      suf.writeUserLists(
-          requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes);
-    } catch (Exception e) {
+    if (!suf.writeUserLists(
+            requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes)) {
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-      response.getWriter().println("");
+      response.getWriter().println("An error occured while writing to the database.");
       return;
     }
     response.setStatus(HttpServletResponse.SC_OK);
     response.getWriter().println("");
   }
 
-  private RequestBody getRequestBody(HttpServletRequest request) throws IOException {
+  private RequestBody getRequestBody(HttpServletRequest request) {
     Gson g = new Gson();
-    BufferedReader br = request.getReader();
     String reqString = "";
     String line;
-
-    while ((line = br.readLine()) != null) {
-      reqString += line;
+    try {
+      BufferedReader br = request.getReader();
+      while ((line = br.readLine()) != null) {
+        reqString += line;
+      }
+    } catch (IOException e) {
+      return null;
     }
     RequestBody requestBody = g.fromJson(reqString, RequestBody.class);
     if (requestBody == null || requestBody.userId == 0 || requestBody.userList == null
