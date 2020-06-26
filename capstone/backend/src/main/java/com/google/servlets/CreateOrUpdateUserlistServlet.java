@@ -34,6 +34,7 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     if (requestBody == null) {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       response.getWriter().println("");
+      return;
     }
     if (!suf.writeUserLists(
             requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes)) {
