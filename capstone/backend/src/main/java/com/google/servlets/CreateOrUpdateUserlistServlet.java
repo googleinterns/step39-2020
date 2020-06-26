@@ -26,8 +26,8 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     private UserList userList;
 
     public ResponseBody(UserList userList) {
-        this.userList = userList;
-    } 
+      this.userList = userList;
+    }
   }
 
   private class UserList {
@@ -50,7 +50,8 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     }
     if (!suf.writeUserLists(
             requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes)) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occured while writing to the database.");
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+          "An error occured while writing to the database.");
       return;
     }
     ResponseBody responseBody = new ResponseBody(requestBody.userList);
