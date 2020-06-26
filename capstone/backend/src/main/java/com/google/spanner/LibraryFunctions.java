@@ -24,6 +24,7 @@ import com.google.cloud.spanner.SpannerOptions;
 import com.google.cloud.spanner.Statement;
 import com.google.cloud.spanner.ResultSet;
 import com.google.cloud.ServiceOptions;
+import java.lang.Exception;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +47,11 @@ public class LibraryFunctions {
     return databaseClient;
   }
 
-  public static void writeUserLists(int userId, int listId, List<String> itemTypes) {
-    DatabaseClient dbClient = initClient();
-    List<Mutation> mutations = Arrays.asList(
-      Mutation.newInsertOrUpdateBuilder("UserLists")
+  public static boolean writeUserLists(int userId, int listId, List<String> itemTypes) {
+    try {
+      DatabaseClient dbClient = initClient();
+      List<Mutation> mutations = Arrays.asList(
+        Mutation.newInsertOrUpdateBuilder("UserLists")
           .set("UserId")
           .to(userId)
           .set("ListId")
@@ -57,7 +59,12 @@ public class LibraryFunctions {
           .set("ItemTypes")
           .toStringArray(itemTypes)
           .build());
-    dbClient.write(mutations);
+      dbClient.write(mutations);
+      return true;
+    }
+    catch (Exception e) {
+      return false;
+    }
   }
 
   public static List<List<String>> getUserLists(int userId) {
@@ -79,9 +86,10 @@ public class LibraryFunctions {
     return userLists;
   }
 
-  public static void createUser(int userId, String userName, String email) {
-    DatabaseClient dbClient = initClient();
-    Mutation mutation = Mutation.newInsertBuilder("Users")
+  public static boolean createUser(int userId, String userName, String email) {
+    try {
+      DatabaseClient dbClient = initClient();
+      Mutation mutation = Mutation.newInsertBuilder("Users")
                             .set("UserId")
                             .to(userId)
                             .set("UserName")
@@ -89,7 +97,12 @@ public class LibraryFunctions {
                             .set("Email")
                             .to(email)
                             .build();
-    dbClient.write(Arrays.asList(mutation));
+      dbClient.write(Arrays.asList(mutation));
+      return true;
+    }
+    catch (Exception e) {
+      return false;
+    }
   }
 
   public static List<String> getItemTypes(int page) {
