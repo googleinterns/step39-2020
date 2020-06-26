@@ -128,26 +128,6 @@
             <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>com.github.os72</groupId>
-          <artifactId>protoc-jar-maven-plugin</artifactId>
-          <version>3.1.0.1</version>
-          <executions>
-            <execution>
-              <phase>generate-sources</phase>
-              <goals>
-                <goal>run</goal>
-              </goals>
-              <configuration>
-                <protocVersion>3.1.0</protocVersion>
-                <inputDirectories>
-                  <include>src/main/java/com/google/sps/proto</include>
-                </inputDirectories>
-              <outputDirectory>src/main/java/com/google/sps/generated</outputDirectory>
-              </configuration>
-            </execution>
-        </executions>
-        </plugin>
     </plugins>
   </build>
 </project>
