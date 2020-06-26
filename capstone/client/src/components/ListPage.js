@@ -77,7 +77,7 @@ class ListPage extends Component {
     if (arr.length === 0) {
       this.setState({
         alert: (<Alert severity="error">Please select at least one item!</Alert>),
-      })
+      });
     } else {
       const response = axios.post(
         '/api/v1/create-or-update-user-list-servlet',
@@ -90,15 +90,15 @@ class ListPage extends Component {
           }
         },
       ).then((res) => {
-          if (res.status === 200) {
-            this.setState({
-              alert: (<Alert severity="success">Your list has been saved!</Alert>),
-              listId: res.data.userList.listId,
-            });
-          } else {
-              alert: (<Alert severity="error">There was an error saving your list.</Alert>)
-          }
-      })      
+        this.setState({
+          alert: (<Alert severity="success">Your list has been saved!</Alert>),
+          listId: res.data.userList.listId,
+        });
+      }).catch((error) => {
+        this.setState({
+          alert: (<Alert severity="error">{error}</Alert>)
+        })
+      });   
     }
   }
 
