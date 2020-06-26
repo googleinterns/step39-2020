@@ -1,9 +1,7 @@
 package com.google.servlets;
 
 import com.google.gson.Gson;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.lang.StringBuilder;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
@@ -40,7 +38,8 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
     SpannerUtilFunctions suf = new SpannerUtilFunctions();
-    RequestBody requestBody = getRequestBody(request);
+    String reqString = ServletUtil.getRequestBody(request);
+    RequestBody requestBody = requestValidator(reqString);
     if (requestBody == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
@@ -63,23 +62,11 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
   private long generateListId(int userId) {
     long currentTime = System.currentTimeMillis();
     String id = String.valueOf(userId) + currentTime;
-    return Long.parseLong(id);
+    return id.hashCode();
   }
 
-  private RequestBody getRequestBody(HttpServletRequest request) {
+  private RequestBody requestValidator(String reqString) {
     Gson g = new Gson();
-    StringBuilder sb = new StringBuilder();
-    String reqString = "";
-    String line;
-    try {
-      BufferedReader br = request.getReader();
-      while ((line = br.readLine()) != null) {
-        sb.append(line);
-      }
-    } catch (IOException e) {
-      return null;
-    }
-    reqString = sb.toString();
     RequestBody requestBody = g.fromJson(reqString, RequestBody.class);
     if (requestBody == null || requestBody.userId == 0 || requestBody.userList == null
         || requestBody.userList.listId == 0 || requestBody.userList.displayName == null
