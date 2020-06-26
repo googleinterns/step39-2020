@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
+package com.java.spanner;
+
+import com.google.cloud.spanner.DatabaseClient;
 import com.google.cloud.spanner.DatabaseId;
 import com.google.cloud.spanner.Mutation;
 import com.google.cloud.spanner.Spanner;
 import com.google.cloud.spanner.SpannerOptions;
+import com.google.cloud.spanner.Statement;
+import com.google.cloud.spanner.ResultSet;
 import com.google.cloud.ServiceOptions;
-import com.google.cloud.spanner.DatabaseClient;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SpannerUtilFunctions {
+
+public class LibraryFunctions {
   private String DATABASE_INSTANCE = "capstone-instance";
   private String DATABASE_NAME = "step39-db";
 
@@ -50,8 +57,8 @@ public class SpannerUtilFunctions {
 
    private List<List<String>> getUserLists(int userId) {
     DatabaseClient dbClient = initClient();
-    Statment statment = 
-        Statment.newBuilder(
+    Statement s = 
+        Statement.newBuilder(
                 "SELECT ItemTypes "
                     + "FROM UserLists"
                     + "WHERE UserId = @userId")
@@ -59,7 +66,7 @@ public class SpannerUtilFunctions {
             .to(userId)
             .build();
     List<List<String>> userLists = new ArrayList<>();
-    try (ResultSet resultSet = dbClient.singleUse().executeQuery(statment)) {
+    try (ResultSet resultSet = dbClient.singleUse().executeQuery(s)) {
         while (resultSet.next()) {
             userLists.add(resultSet.getStringList("ItemTypes"));
         }
@@ -68,7 +75,7 @@ public class SpannerUtilFunctions {
   }
 
   private void createUser(int userId, String userName, String email) {
-    DatabaseClient = initClient();
+    DatabaseClient dbClient = initClient();
     Mutation mutation = Mutation.newInsertBuilder("Users")
                             .set("UserId")
                             .to(userId)
@@ -81,7 +88,7 @@ public class SpannerUtilFunctions {
   }
 
   static List<String> getItemTypes(int page) {
-    DatabaseClient = initClient();
+    DatabaseClient dbClient = initClient();
     List<String> itemTypes = new ArrayList<String>();
     try (ResultSet resultSet =
       dbClient
@@ -95,5 +102,4 @@ public class SpannerUtilFunctions {
     }
     return itemTypes;
   }
-
 }
