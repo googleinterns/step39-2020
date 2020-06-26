@@ -95,7 +95,7 @@ public class LibraryFunctions {
           .singleUse() // Execute a single read or query against Cloud Spanner.
           .executeQuery(Statement.of("SELECT DISTINCT ItemType FROM Items ORDER BY ItemType"))) {
       for (int i = 0; resultSet.next() && i < (page+1)*10; i++) {
-        if (i >= page*10){
+        if (i >= page*10) {
             itemTypes.add(resultSet.getString(0));
         }
       }
