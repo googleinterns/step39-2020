@@ -16,6 +16,7 @@
 
 package com.java.spanner;
 
+import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,7 +29,14 @@ public final class LibraryFunctionsTest {
   @Test
   public void itemTypesCheck() {
     List<String> actual = LibraryFunctions.getItemTypes(0);
-    List<String> expected = List.of("CEREAL, MILK, WATER");
+    List<String> expected = Arrays.asList("CEREAL", "MILK", "WATER");
     Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void userListsCheck() {
+    List<List<String>> actual = LibraryFunctions.getUserLists(1);
+    List<List<String>> expected = Arrays.asList(Arrays.asList("Milk", "Eggs", "Bread"));
+    Assert.assertEquals(actual, expected);
   }
 }

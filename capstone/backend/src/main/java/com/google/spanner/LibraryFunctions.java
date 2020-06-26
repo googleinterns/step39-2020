@@ -30,10 +30,10 @@ import java.util.List;
 
 
 public class LibraryFunctions {
-  private String DATABASE_INSTANCE = "capstone-instance";
-  private String DATABASE_NAME = "step39-db";
+  private static String DATABASE_INSTANCE = "capstone-instance";
+  private static String DATABASE_NAME = "step39-db";
 
-  private DatabaseClient initClient() {
+  private static DatabaseClient initClient() {
     SpannerOptions options = SpannerOptions.newBuilder().build();
     Spanner spanner = options.getService();
 
@@ -41,7 +41,7 @@ public class LibraryFunctions {
     return spanner.getDatabaseClient(db);
   }
 
-  public void writeUserLists(int userId, int listId, List<String> itemTypes) {
+  public static void writeUserLists(int userId, int listId, List<String> itemTypes) {
     DatabaseClient dbClient = initClient();
     List<Mutation> mutations = Arrays.asList(
       Mutation.newInsertOrUpdateBuilder("UserLists")
@@ -55,12 +55,12 @@ public class LibraryFunctions {
     dbClient.write(mutations);
   }
 
-   private List<List<String>> getUserLists(int userId) {
+  public static List<List<String>> getUserLists(int userId) {
     DatabaseClient dbClient = initClient();
     Statement s = 
         Statement.newBuilder(
                 "SELECT ItemTypes "
-                    + "FROM UserLists"
+                    + "FROM UserLists "
                     + "WHERE UserId = @userId")
             .bind("userId")
             .to(userId)
@@ -74,7 +74,7 @@ public class LibraryFunctions {
     return userLists;
   }
 
-  private void createUser(int userId, String userName, String email) {
+  public static void createUser(int userId, String userName, String email) {
     DatabaseClient dbClient = initClient();
     Mutation mutation = Mutation.newInsertBuilder("Users")
                             .set("UserId")
@@ -87,7 +87,7 @@ public class LibraryFunctions {
     dbClient.write(Arrays.asList(mutation));
   }
 
-  static List<String> getItemTypes(int page) {
+  public static List<String> getItemTypes(int page) {
     DatabaseClient dbClient = initClient();
     List<String> itemTypes = new ArrayList<String>();
     try (ResultSet resultSet =
