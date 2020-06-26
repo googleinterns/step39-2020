@@ -3,6 +3,7 @@ package com.google.servlets;
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.StringBuilder;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/api/v1/create-or-update-user-list-servlet")
 public class CreateOrUpdateUserlistServlet extends HttpServlet {
-  private static final int NEW_LIST = -1
+  private static final int NEW_LIST = -1;
   private class RequestBody {
     private int userId;
     private UserList userList;
@@ -24,7 +25,7 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
   private class ResponseBody {
     private UserList userList;
 
-    public ResponseBody(Userlist userList) {
+    public ResponseBody(UserList userList) {
         this.userList = userList;
     } 
   }
@@ -54,8 +55,8 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     }
     ResponseBody responseBody = new ResponseBody(requestBody.userList);
     response.setStatus(HttpServletResponse.SC_OK);
-    response.setContentType("application/json;")
-    response.getWriter().println(gson.toJson(responseBody));
+    response.setContentType("application/json;");
+    response.getWriter().println(g.toJson(responseBody));
   }
 
   private long generateListId(int userId) {
@@ -66,16 +67,18 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
 
   private RequestBody getRequestBody(HttpServletRequest request) {
     Gson g = new Gson();
+    StringBuilder sb = new StringBuilder();
     String reqString = "";
     String line;
     try {
       BufferedReader br = request.getReader();
       while ((line = br.readLine()) != null) {
-        reqString += line;
+        sb.append(line);
       }
     } catch (IOException e) {
       return null;
     }
+    reqString = sb.toString();
     RequestBody requestBody = g.fromJson(reqString, RequestBody.class);
     if (requestBody == null || requestBody.userId == 0 || requestBody.userList == null
         || requestBody.userList.listId == 0 || requestBody.userList.displayName == null
