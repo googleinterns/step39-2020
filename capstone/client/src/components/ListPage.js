@@ -25,6 +25,9 @@ class ListPage extends Component {
       selectedItemsList: null,
       alert: null,
       distanceValue: 4,
+      listId: -1,
+      listName: "First List",
+      userId: 1,
     };
   }
 
@@ -79,17 +82,23 @@ class ListPage extends Component {
       const response = axios.post(
         '/api/v1/create-or-update-user-list-servlet',
         { 
-          userId: 1,
+          userId: this.state.userId,
           userList: {
-            listId: 1,
-            displayName: "First List",
+            listId: this.state.listId,
+            displayName: this.state.listName,
             itemsTypes: arr
           }
         },
-      )
-      this.setState({
-        alert: (<Alert severity="success">Your list has been saved!</Alert>),
-      });
+      ).then((res) => {
+          if (res.status === 200) {
+            this.setState({
+              alert: (<Alert severity="success">Your list has been saved!</Alert>),
+              listId: res.data.userList.listId,
+            });
+          } else {
+              alert: (<Alert severity="error">There was an error saving your list.</Alert>)
+          }
+      })      
     }
   }
 
