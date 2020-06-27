@@ -14,32 +14,28 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/api/v1/get-user-lists")
 public class GetUserListsServlet extends HttpServlet {
-  private class RequestBody {
-    int userId;
-  }
-
   private class ResponseBody {
-    List<List<String>> userLists;
+    List<UserList> userLists;
 
-    public ResponseBody(List<List<String>> userLists) {
+    public ResponseBody(List<UserList> userLists) {
       this.userLists = userLists;
     }
   }
 
   /*
-   * This handles a POST request to "/get-user-lists". The user's saved lists 
+   * This handles a GET request to "/get-user-lists". The user's saved lists 
    * are returned. 
    */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
-    String reqString = ServletUtil.getRequestBody(request);
-    RequestBody requestBody = requestValidator(reqString);
-    if (requestBody == null) {
+    String userIdString = request.getParameter("userId");
+    if (userIdString == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
     }
-    List<List<String>> userLists = LibraryFunctions.getUserLists(requestBody.userId);
+    long userId = Long.parseLong(userIdString);
+    List<UserList> userLists = LibraryFunctions.getUserLists(userId);
     if (userLists == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
         "An error occured while retriving data from the database.");
@@ -50,14 +46,5 @@ public class GetUserListsServlet extends HttpServlet {
     response.setContentType("application/json;");
     response.setStatus(HttpServletResponse.SC_OK);
     response.getWriter().println(g.toJson(responseBody));
-  }
-
-  private RequestBody requestValidator(String reqString) {
-    Gson g = new Gson();
-    RequestBody requestBody = g.fromJson(reqString, RequestBody.class);
-    if (requestBody == null || requestBody.userId == 0) {
-      return null;
-    }
-    return requestBody;
   }
 }
