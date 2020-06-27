@@ -32,7 +32,7 @@ import java.util.concurrent.ExecutionException;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.ChronoField;
 
-public class UsersSpanner {
+public class CreateSpannerTables {
   /*
    * Creates database using an Admin Client, accessing the instance signalled in
    * the DatabaseId and creating 5 hard coded tables: Users, UserLists, Stores, Items,
