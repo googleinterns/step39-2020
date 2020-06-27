@@ -33,8 +33,7 @@ public class GetUserListsServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
-    SpannerUtilFunctions suf = new SpannerUtilFunctions();
-    String reqString = ServerUtil.getRequestBody(request);
+    String reqString = LibraryFunctions.getRequestBody(request);
     RequestBody requestBody = requestValidator(reqString);
     if (requestBody == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
