@@ -33,13 +33,13 @@ public class GetUserListsServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
-    String reqString = LibraryFunctions.getRequestBody(request);
+    String reqString = ServletUtil.getRequestBody(request);
     RequestBody requestBody = requestValidator(reqString);
     if (requestBody == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
     }
-    List<List<String>> userLists = suf.getUserLists(requestBody.userId);
+    List<List<String>> userLists = LibraryFunctions.getUserLists(requestBody.userId);
     if (userLists == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
         "An error occured while retriving data from the database.");
