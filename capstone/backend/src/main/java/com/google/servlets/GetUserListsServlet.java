@@ -34,38 +34,27 @@ public class GetUserListsServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
     SpannerUtilFunctions suf = new SpannerUtilFunctions();
-    RequestBody requestBody = getRequestBody(request);
+    String reqString = ServerUtil.getRequestBody(request);
+    RequestBody requestBody = requestValidator(reqString);
     if (requestBody == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
     }
-    List<List<String>> userLists = suf.getUserLists(userId);
+    List<List<String>> userLists = suf.getUserLists(requestBody.userId);
     if (userLists == null) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
         "An error occured while retriving data from the database.");
       return;
     }
 
-    ResponseBody responseBody = new ResponseBody(ResponseStatus.SUCCESS, userLists);
+    ResponseBody responseBody = new ResponseBody(userLists);
     response.setContentType("application/json;");
-    response.setStatus(HttpServletRequest.SC_OK);
+    response.setStatus(HttpServletResponse.SC_OK);
     response.getWriter().println(g.toJson(responseBody));
   }
 
-  private RequestBody getRequestBody(HttpServletRequest request) {
+  private RequestBody requestValidator(String reqString) {
     Gson g = new Gson();
-    StringBuilder sb = new StringBuilder();
-    String reqString = "";
-    String line;
-    try {
-      BufferedReader br = request.getReader();
-      while ((line = br.readLine()) != null) {
-        sb.append(line);
-      }
-    } catch (IOException e) {
-      return null;
-    }
-    reqString = sb.toString();
     RequestBody requestBody = g.fromJson(reqString, RequestBody.class);
     if (requestBody == null || requestBody.userId == 0) {
       return null;
