@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package com.java.spanner;
 
 import com.google.api.gax.longrunning.OperationFuture;
@@ -33,14 +32,12 @@ import java.util.concurrent.ExecutionException;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.temporal.ChronoField;
 
-
 public class CreateSpannerTables {
-
   /*
    * Creates database using an Admin Client, accessing the instance signalled in
    * the DatabaseId and creating 5 hard coded tables: Users, UserLists, Stores, Items,
    * and Inventory.
-   * 
+   *
    * @param dbAdminClient client used to access the instance and database
    * @param id contains the information regarding the instance (name, etc.)
    *
@@ -48,11 +45,8 @@ public class CreateSpannerTables {
    */
   static void createDatabase(DatabaseAdminClient dbAdminClient, DatabaseId id) {
     OperationFuture<Database, CreateDatabaseMetadata> op =
-        dbAdminClient.createDatabase(
-            id.getInstanceId().getInstance(),
-            id.getDatabase(),
-            Arrays.asList(
-                "CREATE TABLE Users ("
+        dbAdminClient.createDatabase(id.getInstanceId().getInstance(), id.getDatabase(),
+            Arrays.asList("CREATE TABLE Users ("
                     + "  UserId    INT64,"
                     + "  Username  STRING(MAX),"
                     + "  Email     STRING(MAX)"
@@ -87,20 +81,16 @@ public class CreateSpannerTables {
       Database db = op.get();
     } catch (ExecutionException e) {
       // If the operation failed during execution, expose the cause.
-      throw (SpannerException) e.getCause();
+      throw(SpannerException) e.getCause();
     } catch (InterruptedException e) {
       // Throw when a thread is waiting, sleeping, or otherwise occupied,
       // and the thread is interrupted, either before or during the activity.
       throw SpannerExceptionFactory.propagateInterrupt(e);
     }
   }
-  
-  private static void run(
-      DatabaseClient dbClient,
-      DatabaseAdminClient dbAdminClient,
-      InstanceAdminClient instanceAdminClient,
-      String command,
-      DatabaseId database) {
+
+  private static void run(DatabaseClient dbClient, DatabaseAdminClient dbAdminClient,
+      InstanceAdminClient instanceAdminClient, String command, DatabaseId database) {
     switch (command) {
       case "createdatabase":
         createDatabase(dbAdminClient, database);
@@ -109,7 +99,7 @@ public class CreateSpannerTables {
         printUsageAndExit();
     }
   }
-  
+
   private static void printUsageAndExit() {
     System.err.println("Usage:");
     System.err.println("    SpannerExample <command> <instance_id> <database_id>");
@@ -118,7 +108,7 @@ public class CreateSpannerTables {
     System.err.println("    SpannerExample createdatabase my-instance step39-db");
     System.exit(1);
   }
-  
+
   public static void main(String[] args) throws Exception {
     if (args.length != 3) {
       printUsageAndExit();
@@ -131,10 +121,9 @@ public class CreateSpannerTables {
       // This will return the default project id based on the environment.
       String clientProject = spanner.getOptions().getProjectId();
       if (!db.getInstanceId().getProject().equals(clientProject)) {
-        System.err.println(
-            "Invalid project specified. Project in the database id should match the"
-                + "project name set in the environment variable GOOGLE_CLOUD_PROJECT. Expected: "
-                + clientProject);
+        System.err.println("Invalid project specified. Project in the database id should match the"
+            + "project name set in the environment variable GOOGLE_CLOUD_PROJECT. Expected: "
+            + clientProject);
         printUsageAndExit();
       }
 

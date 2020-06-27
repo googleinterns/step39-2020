@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button, Grid, Card, Radio, RadioGroup } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+
 
 const items = [
   'Milk',
@@ -23,6 +25,9 @@ class ListPage extends Component {
       selectedItemsList: null,
       alert: null,
       distanceValue: 4,
+      listId: -1,
+      listName: "First List",
+      userId: 1,
     };
   }
 
@@ -72,11 +77,28 @@ class ListPage extends Component {
     if (arr.length === 0) {
       this.setState({
         alert: (<Alert severity="error">Please select at least one item!</Alert>),
-      })
-    } else {
-      this.setState({
-        alert: (<Alert severity="success">Your list has been saved!</Alert>),
       });
+    } else {
+      const response = axios.post(
+        '/api/v1/create-or-update-user-list-servlet',
+        { 
+          userId: this.state.userId,
+          userList: {
+            listId: this.state.listId,
+            displayName: this.state.listName,
+            itemsTypes: arr
+          }
+        },
+      ).then((res) => {
+        this.setState({
+          alert: (<Alert severity="success">Your list has been saved!</Alert>),
+          listId: res.data.userList.listId,
+        });
+      }).catch((error) => {
+        this.setState({
+          alert: (<Alert severity="error">{error}</Alert>)
+        })
+      });   
     }
   }
 
