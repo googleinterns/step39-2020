@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.BufferedReader;
@@ -35,8 +36,6 @@ public class GetUserListsServletTest extends TestCase {
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
-    assertTrue("should be valid json format", 
-        result.startsWith("{") && result.endsWith("}"));
     assertTrue("Should contain userLists object", result.contains("UserLists:"));
   }
 
@@ -48,6 +47,7 @@ public class GetUserListsServletTest extends TestCase {
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
     String result = setupObj.writer.toString();
+    assertTrue("Is valid json format", isValidJson(result));
     assertTrue("Should say invalid syntax", result.contains("Invalid request syntax."));
   }
 
@@ -60,5 +60,15 @@ public class GetUserListsServletTest extends TestCase {
     Mockito.when(req.getReader()).thenReturn(new BufferedReader(reader));
     Mockito.when(res.getWriter()).thenReturn(new PrintWriter(writer));
     return new SetupObj(req, res, writer);
+  }
+
+  private static boolean isValidJson(String str) {
+    Gson g = new Gson();
+    try {
+      g.fromJson(str, Object.class);
+      return true;
+    } catch(com.google.gson.JsonSyntaxException e) { 
+      return false;
+    }
   }
 }
