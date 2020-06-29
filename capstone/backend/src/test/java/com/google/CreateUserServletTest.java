@@ -40,7 +40,7 @@ public class CreateUserServletTest extends TestCase {
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
-    assertTrue(isValidJson(result));
+    assertTrue("Is valid josn format.", isValidJson(result));
     assertTrue("Should contain userid in object", result.contains("userId:"));
   }
 
