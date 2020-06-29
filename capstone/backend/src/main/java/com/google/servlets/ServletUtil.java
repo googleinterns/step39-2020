@@ -1,8 +1,9 @@
-import javax.servlet.http.HttpServletRequest;
+package com.google.servlets;
 
 import java.io.BufferedReader;
 import java.lang.StringBuilder;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 
 class ServletUtil {
 
@@ -11,7 +12,6 @@ class ServletUtil {
    */
   public static String getRequestBody(HttpServletRequest request) {
     StringBuilder sb = new StringBuilder();
-    String reqString = "";
     String line;
     try {
       BufferedReader br = request.getReader();
