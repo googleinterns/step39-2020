@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.java.spanner;
+package com.google.spanner;
 
 import com.google.cloud.spanner.DatabaseClient;
 import com.google.cloud.spanner.DatabaseId;
@@ -24,10 +24,13 @@ import com.google.cloud.spanner.SpannerOptions;
 import com.google.cloud.spanner.Statement;
 import com.google.cloud.spanner.ResultSet;
 import com.google.cloud.ServiceOptions;
+import com.google.servlets.UserList;
 import java.lang.Exception;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 
 public class LibraryFunctions {
@@ -37,6 +40,7 @@ public class LibraryFunctions {
   private static final String EMAIL =     "Email";
   private static final String ITEMTYPES = "ItemTypes";
   private static final String LISTID =    "ListId";
+  private static final String LISTNAME =  "DisplayName";
   private static final String USERID =    "UserId";
   private static final String USERLISTS = "UserLists";
   private static final String USERNAME =  "Username";
@@ -72,18 +76,19 @@ public class LibraryFunctions {
     dbClient.write(mutations);
   }
 
-  public static List<List<String>> getUserLists(int userId) {
+  public static List<UserList> getUserLists(long userId) {
     DatabaseClient dbClient = initClient();
-    String query = "SELECT ItemTypes FROM UserLists WHERE UserId = @userId";
+    String query = "SELECT ItemTypes, DisplayName, ListId FROM UserLists WHERE UserId = @userId";
     Statement s = 
         Statement.newBuilder(query)
             .bind("userId")
             .to(userId)
             .build();
-    List<List<String>> userLists = new ArrayList<>();
+    List<UserList> userLists = new ArrayList<>();
     try (ResultSet resultSet = dbClient.singleUse().executeQuery(s)) {
         while (resultSet.next()) {
-            userLists.add(resultSet.getStringList(ITEMTYPES));
+            userLists.add(new UserList(resultSet.getLong(LISTID), 
+            resultSet.getString(LISTNAME), resultSet.getStringList(ITEMTYPES)));
         }
     }
     return userLists;

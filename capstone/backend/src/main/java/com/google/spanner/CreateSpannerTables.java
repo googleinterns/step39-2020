@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.java.spanner;
+package com.google.spanner;
 
 import com.google.api.gax.longrunning.OperationFuture;
 import com.google.cloud.spanner.Database;
