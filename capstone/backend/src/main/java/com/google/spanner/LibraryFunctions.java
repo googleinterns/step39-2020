@@ -20,6 +20,7 @@ import com.google.cloud.spanner.DatabaseClient;
 import com.google.cloud.spanner.DatabaseId;
 import com.google.cloud.spanner.Mutation;
 import com.google.cloud.spanner.Spanner;
+import com.google.cloud.spanner.SpannerException;
 import com.google.cloud.spanner.SpannerOptions;
 import com.google.cloud.spanner.Statement;
 import com.google.cloud.spanner.ResultSet;
@@ -62,7 +63,7 @@ public class LibraryFunctions {
     return databaseClient;
   }
 
-  public static void writeUserLists(int userId, int listId, List<String> itemTypes) {
+  public static void writeUserLists(long userId, long listId, List<String> itemTypes) throws SpannerException {
     DatabaseClient dbClient = initClient();
     List<Mutation> mutations = Arrays.asList(
       Mutation.newInsertOrUpdateBuilder(USERLISTS)
@@ -76,7 +77,7 @@ public class LibraryFunctions {
     dbClient.write(mutations);
   }
 
-  public static List<UserList> getUserLists(long userId) {
+  public static List<UserList> getUserLists(long userId) throws SpannerException {
     DatabaseClient dbClient = initClient();
     String query = "SELECT ItemTypes, DisplayName, ListId FROM UserLists WHERE UserId = @userId";
     Statement s = 
@@ -94,7 +95,7 @@ public class LibraryFunctions {
     return userLists;
   }
 
-  public static void createUser(int userId, String userName, String email) {
+  public static void createUser(int userId, String userName, String email) throws SpannerException {
     DatabaseClient dbClient = initClient();
     Mutation mutation = Mutation.newInsertBuilder(USERS)
                             .set(USERID)
@@ -107,7 +108,7 @@ public class LibraryFunctions {
     dbClient.write(Arrays.asList(mutation));
   }
 
-  public static List<String> getItemTypes(int page) {
+  public static List<String> getItemTypes(int page) throws SpannerException {
     DatabaseClient dbClient = initClient();
     List<String> itemTypes = new ArrayList<String>();
     String query = "SELECT DISTINCT ItemType FROM Items ORDER BY ItemType";

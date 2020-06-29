@@ -1,6 +1,8 @@
 package com.google.servlets;
 
+import com.google.cloud.spanner.SpannerException;
 import com.google.gson.Gson;
+import com.google.spanner.LibraryFunctions;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -37,19 +39,21 @@ public class CreateUserServlet extends HttpServlet {
     Gson g = new Gson();
     String reqString = ServletUtil.getRequestBody(request);
     RequestBody requestBody = requestValidator(reqString);
+    
     if (requestBody == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
     }
-    long userId = LibraryFunctions.createUser(requestBody.email.hashCode(), requestBody.userName, 
+    try {
+      LibraryFunctions.createUser(requestBody.email.hashCode(), requestBody.userName, 
         requestBody.email);
-    if (userId == INVALID_USER_ID) {
+    } catch (SpannerException se){
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
           "An error occured while adding a new user to the databse.");
       return;
     }
 
-    ResponseBody responseBody = new ResponseBody(userId);
+    ResponseBody responseBody = new ResponseBody(requestBody.email.hashCode());
     response.setStatus(HttpServletResponse.SC_OK);
     response.setContentType("application/json;");
     response.getWriter().println(g.toJson(responseBody));

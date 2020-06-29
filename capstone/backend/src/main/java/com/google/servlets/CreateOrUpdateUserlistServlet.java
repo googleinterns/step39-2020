@@ -1,6 +1,8 @@
 package com.google.servlets;
 
+import com.google.cloud.spanner.SpannerException;
 import com.google.gson.Gson;
+import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -37,9 +39,9 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
-    SpannerUtilFunctions suf = new SpannerUtilFunctions();
     String reqString = ServletUtil.getRequestBody(request);
     RequestBody requestBody = requestValidator(reqString);
+
     if (requestBody == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
@@ -47,12 +49,15 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     if (requestBody.userList.listId == NEW_LIST) {
       requestBody.userList.listId = generateListId(requestBody.userId);
     }
-    if (!suf.writeUserLists(
-            requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes)) {
+    try {
+      LibraryFunctions.writeUserLists(
+            requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes);
+    } catch (SpannerException se) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
           "An error occured while writing to the database.");
       return;
     }
+  
     ResponseBody responseBody = new ResponseBody(requestBody.userList);
     response.setStatus(HttpServletResponse.SC_OK);
     response.setContentType("application/json;");
