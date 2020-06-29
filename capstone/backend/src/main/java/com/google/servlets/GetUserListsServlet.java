@@ -1,11 +1,8 @@
 package com.google.servlets;
 
 import com.google.gson.Gson; 
-import java.lang.StringBuilder;
-import java.io.BufferedReader;
+import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/api/v1/get-user-lists")
 public class GetUserListsServlet extends HttpServlet {
   private class ResponseBody {
-    List<UserList> userLists;
+    private List<UserList> userLists;
 
     public ResponseBody(List<UserList> userLists) {
       this.userLists = userLists;
