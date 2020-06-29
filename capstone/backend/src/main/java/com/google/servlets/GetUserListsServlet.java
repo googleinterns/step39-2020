@@ -30,7 +30,7 @@ public class GetUserListsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
     String userIdString = request.getParameter("userId");
-    if (userIdString == null) {
+    if (userIdString == null || userIdString == "") {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
     }
