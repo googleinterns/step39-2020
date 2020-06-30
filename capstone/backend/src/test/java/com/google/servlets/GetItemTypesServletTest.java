@@ -25,9 +25,9 @@ import junit.framework.TestCase;
 
 public class GetItemTypesServletTest extends TestCase {
   private static final String PAGE_KEY = "page";
-  private static final String PAGE = "0";
-
+/*
   public void testGetItems() throws ServletException, IOException {
+    String PAGE = "0";
     HashMap<String, String> map = new HashMap<>();
     map.put(PAGE_KEY, PAGE);
     SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
@@ -37,7 +37,19 @@ public class GetItemTypesServletTest extends TestCase {
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
-    System.out.println(result);
     assertTrue("Wrong item types", result.contains("[\"CEREAL\",\"MILK\",\"WATER\"]"));
+  }*/
+
+  public void testBadPageNumber() throws ServletException, IOException {
+    String PAGE = "-1";
+    HashMap<String, String> map = new HashMap<>();
+    map.put(PAGE_KEY, PAGE);
+    SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
+
+    GetItemTypesServlet servlet = new GetItemTypesServlet();
+    servlet.doGet(setupObj.request, setupObj.response);
+
+    String result = setupObj.writer.toString();
+    Mockito.verify(setupObj.response).sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page number: -1");
   }
 }

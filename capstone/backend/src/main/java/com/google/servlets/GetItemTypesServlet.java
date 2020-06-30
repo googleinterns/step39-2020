@@ -39,17 +39,19 @@ import javax.servlet.http.HttpServletResponse;
     String pageString = request.getParameter("page");
     int pageInt = Integer.valueOf(pageString);
     if (pageInt < 0) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page number: " + pageString);
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
-    List<String> items;
+    List<String> items = new ArrayList<String>();
     try {
       items = LibraryFunctions.getItemTypes(pageInt);
+      response.setStatus(HttpServletResponse.SC_OK);
+      response.getWriter().println(g.toJson(items));
     } catch (SpannerException e) {
-      throw new IOException("Failed to get Item Types");
+      response.sendError(400, e.getMessage());
+      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
-    response.setStatus(HttpServletResponse.SC_OK);
-    response.getWriter().println(g.toJson(items));
   }
 
 }
