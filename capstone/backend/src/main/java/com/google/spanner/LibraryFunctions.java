@@ -31,9 +31,6 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
 public class LibraryFunctions {
   private static String DATABASE_INSTANCE = "capstone-instance";
   private static String DATABASE_NAME = "step39-db";
