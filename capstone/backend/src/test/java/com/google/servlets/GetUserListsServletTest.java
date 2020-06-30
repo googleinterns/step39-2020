@@ -22,7 +22,8 @@ public class GetUserListsServletTest extends TestCase {
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
-    assertTrue("Should contain userLists object", result.contains("UserLists:"));
+    assertTrue("Is valid json format", ServletTestUtil.isValidJson(result));
+    assertTrue("Should contain userLists object", result.contains("\"userLists\":"));
   }
 
   public void testDoPostBadRequest() throws ServletException, IOException {
@@ -33,9 +34,6 @@ public class GetUserListsServletTest extends TestCase {
     GetUserListsServlet servlet = new GetUserListsServlet();
     servlet.doGet(setupObj.request, setupObj.response);
 
-    Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    String result = setupObj.writer.toString();
-    assertTrue("Is valid json format", ServletTestUtil.isValidJson(result));
-    assertTrue("Should say invalid syntax", result.contains("Invalid request syntax."));
+    Mockito.verify(setupObj.response).sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
   }
 }

@@ -8,8 +8,8 @@ import org.mockito.Mockito;
 
 public class CreateUserServletTest extends TestCase {
   private static final String CORRECT_REQUEST_STRING = 
-      "{\"email\": \"test@gmail.com\",\"userName\":\"test user\"}";
-  private static final String INCORRECT_REQUEST_STRING = "{\"bad response\" list:\"bread\"}";
+      "{\"email\": \"testing@gmail.com\",\"userName\":\"test user\"}";
+  private static final String INCORRECT_REQUEST_STRING = "{list:\"bread\"}";
 
   public void testDoPostSucceed() throws ServletException, IOException {
     SetupObj setupObj = ServletTestUtil.setupMockDataPost(CORRECT_REQUEST_STRING);
@@ -20,7 +20,7 @@ public class CreateUserServletTest extends TestCase {
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
     assertTrue("Is valid josn format", ServletTestUtil.isValidJson(result));
-    assertTrue("Should contain userid in object", result.contains("userId:"));
+    assertTrue("Should contain userid in object", result.contains("\"userId\":"));
   }
 
   public void testDoPostBadRequest() throws ServletException, IOException {
@@ -29,8 +29,6 @@ public class CreateUserServletTest extends TestCase {
     CreateUserServlet servlet = new CreateUserServlet();
     servlet.doPost(setupObj.request, setupObj.response);
 
-    Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    String result = setupObj.writer.toString();
-    assertTrue("Should say invalid syntax", result.contains("Invalid request syntax."));
+    Mockito.verify(setupObj.response).sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
   }
 } 
