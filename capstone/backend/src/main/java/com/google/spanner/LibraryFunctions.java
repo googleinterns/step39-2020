@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.java.spanner;
+package com.google.spanner;
 
 import com.google.cloud.spanner.DatabaseClient;
 import com.google.cloud.spanner.DatabaseId;

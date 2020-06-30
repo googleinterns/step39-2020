@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.java.spanner;
+package com.google.servlets;
 
 import com.google.gson.Gson;
+import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;

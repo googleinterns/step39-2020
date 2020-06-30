@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.java.spanner;
+package com.google.spanner;
 
 import java.util.Arrays;
 import java.util.List;
