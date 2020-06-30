@@ -51,7 +51,8 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     }
     try {
       LibraryFunctions.writeUserLists(
-            requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes);
+            requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes,
+            requestBody.userList.displayName);
     } catch (SpannerException se) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
           "An error occured while writing to the database.");

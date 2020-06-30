@@ -63,7 +63,8 @@ public class LibraryFunctions {
     return databaseClient;
   }
 
-  public static void writeUserLists(long userId, long listId, List<String> itemTypes) throws SpannerException {
+  public static void writeUserLists(long userId, long listId, List<String> itemTypes, 
+        String displayName) throws SpannerException {
     DatabaseClient dbClient = initClient();
     List<Mutation> mutations = Arrays.asList(
       Mutation.newInsertOrUpdateBuilder(USERLISTS)
@@ -73,6 +74,8 @@ public class LibraryFunctions {
           .to(listId)
           .set(ITEMTYPES)
           .toStringArray(itemTypes)
+          .set(LISTNAME)
+          .to(displayName)
           .build());
     dbClient.write(mutations);
   }
