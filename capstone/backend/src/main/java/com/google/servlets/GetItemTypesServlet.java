@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
- @WebServlet("/get-products")
+ @WebServlet("/api/v1/get-item-types")
  public final class GetItemTypesServlet extends HttpServlet {
 
   @Override
