@@ -16,6 +16,7 @@
 
 package com.google.servlets;
 
+import com.google.cloud.spanner.SpannerException;
 import com.google.gson.Gson;
 import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
@@ -29,23 +30,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
  @WebServlet("/get-products")
- public final class ProductDataServlet extends HttpServlet {
-
-  private class PageRequest {
-    int page;
-  }
+ public final class GetItemTypesServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
     Gson g = new Gson();
-    String jsonString = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-    PageRequest p = g.fromJson(jsonString, PageRequest.class);
-    if (p.page < 0) {
+    String pageString = request.getParameter("page");
+    int pageInt = Integer.valueOf(pageString);
+    if (pageInt < 0) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
     }
-    List<String> items = LibraryFunctions.getItemTypes(p.page);
+    List<String> items;
+    try {
+      items = LibraryFunctions.getItemTypes(pageInt);
+    } catch (SpannerException e) {
+      throw new IOException("Failed to get Item Types");
+    }
     response.setStatus(HttpServletResponse.SC_OK);
     response.getWriter().println(g.toJson(items));
   }

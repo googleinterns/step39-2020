@@ -23,20 +23,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
 
-public class ProductDataServletTest extends TestCase {
+public class GetItemTypesServletTest extends TestCase {
   private static final String PAGE_KEY = "page";
-  private static final int PAGE = 0;
+  private static final String PAGE = "0";
 
-  public void testDoPostSucceed() throws ServletException, IOException {
-    HashMap<String, Integer> map = new HashMap<>();
+  public void testGetItems() throws ServletException, IOException {
+    HashMap<String, String> map = new HashMap<>();
     map.put(PAGE_KEY, PAGE);
     SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
 
-    ProductDataServlet servlet = new ProductDataServlet();
+    GetItemTypesServlet servlet = new GetItemTypesServlet();
     servlet.doGet(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
-    assertTrue("Should contain userLists object", result.contains("UserLists:"));
+    System.out.println(result);
+    assertTrue("Wrong item types", result.contains("[\"CEREAL\",\"MILK\",\"WATER\"]"));
   }
 }
