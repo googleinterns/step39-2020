@@ -1,11 +1,9 @@
 package com.google.servlets;
 
+import com.google.cloud.spanner.SpannerException;
 import com.google.gson.Gson; 
-import java.lang.StringBuilder;
-import java.io.BufferedReader;
+import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/api/v1/get-user-lists")
 public class GetUserListsServlet extends HttpServlet {
   private class ResponseBody {
-    List<UserList> userLists;
+    private List<UserList> userLists;
 
     public ResponseBody(List<UserList> userLists) {
       this.userLists = userLists;
@@ -30,13 +28,16 @@ public class GetUserListsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson g = new Gson();
     String userIdString = request.getParameter("userId");
+    
     if (userIdString == null || userIdString == "") {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
       return;
     }
     long userId = Long.parseLong(userIdString);
-    List<UserList> userLists = LibraryFunctions.getUserLists(userId);
-    if (userLists == null) {
+    List<UserList> userLists;
+    try {
+      userLists = LibraryFunctions.getUserLists(userId);
+    } catch (SpannerException se){
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
         "An error occured while retriving data from the database.");
       return;

@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package com.java.spanner;
+package com.google.spanner;
 
 import com.google.cloud.spanner.DatabaseClient;
 import com.google.cloud.spanner.DatabaseId;
 import com.google.cloud.spanner.Mutation;
 import com.google.cloud.spanner.Spanner;
+import com.google.cloud.spanner.SpannerException;
 import com.google.cloud.spanner.SpannerOptions;
 import com.google.cloud.spanner.Statement;
 import com.google.cloud.spanner.ResultSet;
 import com.google.cloud.ServiceOptions;
+import com.google.servlets.UserList;
 import java.lang.Exception;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class LibraryFunctions {
   private static String DATABASE_INSTANCE = "capstone-instance";
@@ -37,6 +38,7 @@ public class LibraryFunctions {
   private static final String EMAIL =     "Email";
   private static final String ITEMTYPES = "ItemTypes";
   private static final String LISTID =    "ListId";
+  private static final String LISTNAME =  "DisplayName";
   private static final String USERID =    "UserId";
   private static final String USERLISTS = "UserLists";
   private static final String USERNAME =  "Username";
@@ -58,7 +60,8 @@ public class LibraryFunctions {
     return databaseClient;
   }
 
-  public static void writeUserLists(int userId, int listId, List<String> itemTypes) {
+  public static void writeUserLists(long userId, long listId, List<String> itemTypes, 
+        String displayName) throws SpannerException {
     DatabaseClient dbClient = initClient();
     List<Mutation> mutations = Arrays.asList(
       Mutation.newInsertOrUpdateBuilder(USERLISTS)
@@ -68,28 +71,31 @@ public class LibraryFunctions {
           .to(listId)
           .set(ITEMTYPES)
           .toStringArray(itemTypes)
+          .set(LISTNAME)
+          .to(displayName)
           .build());
     dbClient.write(mutations);
   }
 
-  public static List<List<String>> getUserLists(int userId) {
+  public static List<UserList> getUserLists(long userId) throws SpannerException {
     DatabaseClient dbClient = initClient();
-    String query = "SELECT ItemTypes FROM UserLists WHERE UserId = @userId";
+    String query = "SELECT ItemTypes, DisplayName, ListId FROM UserLists WHERE UserId = @userId";
     Statement s = 
         Statement.newBuilder(query)
             .bind("userId")
             .to(userId)
             .build();
-    List<List<String>> userLists = new ArrayList<>();
+    List<UserList> userLists = new ArrayList<>();
     try (ResultSet resultSet = dbClient.singleUse().executeQuery(s)) {
         while (resultSet.next()) {
-            userLists.add(resultSet.getStringList(ITEMTYPES));
+            userLists.add(new UserList(resultSet.getLong(LISTID), 
+            resultSet.getString(LISTNAME), resultSet.getStringList(ITEMTYPES)));
         }
     }
     return userLists;
   }
 
-  public static void createUser(int userId, String userName, String email) {
+  public static void createUser(int userId, String userName, String email) throws SpannerException {
     DatabaseClient dbClient = initClient();
     Mutation mutation = Mutation.newInsertBuilder(USERS)
                             .set(USERID)
@@ -102,7 +108,7 @@ public class LibraryFunctions {
     dbClient.write(Arrays.asList(mutation));
   }
 
-  public static List<String> getItemTypes(int page) {
+  public static List<String> getItemTypes(int page) throws SpannerException {
     DatabaseClient dbClient = initClient();
     List<String> itemTypes = new ArrayList<String>();
     String query = "SELECT DISTINCT ItemType FROM Items ORDER BY ItemType";

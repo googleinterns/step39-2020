@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.java.spanner;
+package com.google.spanner;
 
+import com.google.servlets.UserList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
@@ -35,8 +36,9 @@ public final class LibraryFunctionsTest {
 
   @Test
   public void userListsCheck() {
-    List<List<String>> actual = LibraryFunctions.getUserLists(1);
-    List<List<String>> expected = Arrays.asList(Arrays.asList("Milk", "Eggs", "Bread"));
+    List<UserList> actual = LibraryFunctions.getUserLists(1);
+    UserList userList = new UserList(1, "My List", Arrays.asList("Milk", "Eggs", "Bread"));
+    List<UserList> expected = Arrays.asList(userList);
     Assert.assertEquals(actual, expected);
   }
 }

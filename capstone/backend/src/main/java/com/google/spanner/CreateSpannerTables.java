@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.java.spanner;
+package com.google.spanner;
 
 import com.google.api.gax.longrunning.OperationFuture;
 import com.google.cloud.spanner.Database;
@@ -54,6 +54,7 @@ public class CreateSpannerTables {
                 "CREATE TABLE UserLists ("
                     + "  UserId      INT64,"
                     + "  ListId      INT64,"
+                    + "  DisplayName STRING(MAX)"
                     + "  ItemTypes   ARRAY<STRING(MAX)>"
                     + ") PRIMARY KEY (UserId, ListId),"
                     + "  INTERLEAVE IN PARENT Users ON DELETE CASCADE",
