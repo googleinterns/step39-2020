@@ -37,15 +37,16 @@ public class Store {
     storeAddress = address;
   }
 
-  public Store(StoreResult otherStore, String itemId, int priceOfItem) {
+  public Store(StoreResult otherStore, String itemId, int priceOfItem, String itemName) {
     this.storeId = otherStore.storeId;
     this.storeName = otherStore.storeName;
     this.storeAddress = otherStore.storeAddress;
-    this.addItem(itemId, priceOfItem);
+    this.addItem(itemId, priceOfItem, itemName);
   }
 
-  public void addItem(String itemId, int priceOfItem) {
-    items.add(itemId);
+  public void addItem(int itemId, int priceOfItem, String itemName) {
+    Item newItem = new Item(itemId, priceOfItem, itemName)
+    items.add(newItem);
     totalPrice += priceOfItem;
   }
 

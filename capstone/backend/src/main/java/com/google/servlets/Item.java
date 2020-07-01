@@ -20,13 +20,13 @@ public class Item {
 
   private int itemId;
   
-  private int price;
+  private int itemPrice;
   
   private String itemName;
 
-  public Item(int id, int p, int name) {
+  public Item(int id, int price, int name) {
     itemId = id;
-    price = p;
+    itemPrice = price;
     itemName = name;
   }
 
@@ -35,7 +35,7 @@ public class Item {
   }
 
   public int getPrice() {
-    return price;
+    return itemPrice;
   }
 
   public String getName() {
