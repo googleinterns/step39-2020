@@ -16,16 +16,24 @@
 
 package com.google.servlets;
 
-import org.mockito.Mockito;
+import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Arrays;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
+import org.junit.Before;
+import org.mockito.Mockito;
 
 public class GetItemTypesServletTest extends TestCase {
   private static final String PAGE_KEY = "page";
-/*
+
+  @Before
+  public void setUp() {
+    LibraryFunctions.setDatabase("test-db");
+  }
+
   public void testGetItems() throws ServletException, IOException {
     String PAGE = "0";
     HashMap<String, String> map = new HashMap<>();
@@ -37,8 +45,8 @@ public class GetItemTypesServletTest extends TestCase {
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
-    assertTrue("Wrong item types", result.contains("[\"CEREAL\",\"MILK\",\"WATER\"]"));
-  }*/
+    assertTrue("Wrong item types", result.contains("[\"CEREAL\",\"CHEESE\",\"MILK\",\"WATER\"]"));
+  }
 
   public void testBadPageNumber() throws ServletException, IOException {
     String PAGE = "-1";

@@ -60,6 +60,10 @@ public class LibraryFunctions {
     return databaseClient;
   }
 
+  public static void setDatabase(String dbName){
+    DATABASE_NAME = dbName;
+  }
+
   public static void writeUserLists(long userId, long listId, List<String> itemTypes, 
         String displayName) throws SpannerException {
     DatabaseClient dbClient = initClient();

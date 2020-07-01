@@ -83,7 +83,7 @@
           </descriptors>
           <archive>
             <manifest>
-              <mainClass>com.example.spanner.CreateSpannerTables</mainClass>
+              <mainClass>com.google.spanner.CreateSpannerTables</mainClass>
             </manifest>
           </archive>
         </configuration>
