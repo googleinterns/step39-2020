@@ -40,7 +40,8 @@ public class GetItemTypesServletTest extends TestCase {
     map.put(PAGE_KEY, PAGE);
     SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
 
-    GetItemTypesServlet servlet = new GetItemTypesServlet();
+    GetItemTypesServlet servlet = Mockito.spy(GetItemTypesServlet.class);
+    Mockito.when(servlet.getItemTypes(0)).thenReturn(Arrays.asList("CEREAL", "CHEESE", "MILK", "WATER"));
     servlet.doGet(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);

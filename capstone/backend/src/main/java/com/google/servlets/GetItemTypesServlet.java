@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
  @WebServlet("/api/v1/get-item-types")
- public final class GetItemTypesServlet extends HttpServlet {
+ public class GetItemTypesServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -45,13 +45,19 @@ import javax.servlet.http.HttpServletResponse;
     }
     List<String> items = new ArrayList<String>();
     try {
-      items = LibraryFunctions.getItemTypes(pageInt);
+      items = getItemTypes(pageInt);
+      System.out.println("1");
+      System.out.println(items);
       response.setStatus(HttpServletResponse.SC_OK);
       response.getWriter().println(g.toJson(items));
     } catch (SpannerException e) {
       response.sendError(400, e.getMessage());
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
     }
+  }
+
+  public List<String> getItemTypes(int page) {
+    return LibraryFunctions.getItemTypes(page);
   }
 
 }
