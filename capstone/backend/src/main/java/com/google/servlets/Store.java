@@ -32,9 +32,9 @@ public class Store {
   private String storeName;
 
   public Store(long storeId, String storeName, String storeAddress){
-    this.storeId = id;
-    this.storeName = name;
-    this.storeAddress = address;
+    this.storeId = storeId;
+    this.storeName = storeName;
+    this.storeAddress = storeAddress;
   }
 
   public Store(StoreResult otherStore, long itemId, float itemPrice, String itemName) {
