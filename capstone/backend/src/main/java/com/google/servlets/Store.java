@@ -21,9 +21,9 @@ import java.util.List;
 
 public class Store {
 
-  private int totalPrice = 0;
+  private float totalPrice;
 
-  private int storeId;
+  private long storeId;
 
   private List<Item> items = new ArrayList<Item>();
 
@@ -31,23 +31,23 @@ public class Store {
 
   private String storeName;
 
-  public Store(int id, String name, String address){
-    storeId = id;
-    storeName = name;
-    storeAddress = address;
+  public Store(long storeId, String storeName, String storeAddress){
+    this.storeId = id;
+    this.storeName = name;
+    this.storeAddress = address;
   }
 
-  public Store(StoreResult otherStore, String itemId, int priceOfItem, String itemName) {
+  public Store(StoreResult otherStore, long itemId, float itemPrice, String itemName) {
     this.storeId = otherStore.storeId;
     this.storeName = otherStore.storeName;
     this.storeAddress = otherStore.storeAddress;
-    this.addItem(itemId, priceOfItem, itemName);
+    this.addItem(itemId, itemPrice, itemName);
   }
 
-  public void addItem(int itemId, int priceOfItem, String itemName) {
-    Item newItem = new Item(itemId, priceOfItem, itemName)
+  public void addItem(long itemId, float itemPrice, String itemName) {
+    Item newItem = new Item(itemId, itemPrice, itemName)
     items.add(newItem);
-    totalPrice += priceOfItem;
+    totalPrice += itemPrice;
   }
 
   public int getNumberOfItems() {

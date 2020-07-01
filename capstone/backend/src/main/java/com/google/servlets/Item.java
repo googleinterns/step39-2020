@@ -20,21 +20,21 @@ public class Item {
 
   private int itemId;
   
-  private int itemPrice;
+  private float itemPrice;
   
   private String itemName;
 
-  public Item(int id, int price, int name) {
-    itemId = id;
-    itemPrice = price;
-    itemName = name;
+  public Item(long itemId, float itemPrice, int itemName) {
+    this.itemId = itemId;
+    this.itemPrice = itemPrice;
+    this.itemName = itemName;
   }
 
-  public int getId(){
+  public long getId(){
     return itemId;
   }
 
-  public int getPrice() {
+  public float getPrice() {
     return itemPrice;
   }
 
