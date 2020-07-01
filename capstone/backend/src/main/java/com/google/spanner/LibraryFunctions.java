@@ -128,4 +128,8 @@ public class LibraryFunctions {
     }
     return itemTypes;
   }
+
+  public static Map<String, Integer> getStoresWithItems(List<String> itemTypes) {
+      
+  }
 }
