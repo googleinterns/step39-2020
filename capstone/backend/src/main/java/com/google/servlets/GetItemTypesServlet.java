@@ -40,19 +40,15 @@ import javax.servlet.http.HttpServletResponse;
     int pageInt = Integer.valueOf(pageString);
     if (pageInt < 0) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page number: " + pageString);
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
       return;
     }
     List<String> items = new ArrayList<String>();
     try {
       items = getItemTypes(pageInt);
-      System.out.println("1");
-      System.out.println(items);
       response.setStatus(HttpServletResponse.SC_OK);
       response.getWriter().println(g.toJson(items));
     } catch (SpannerException e) {
-      response.sendError(400, e.getMessage());
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
     }
   }
 
