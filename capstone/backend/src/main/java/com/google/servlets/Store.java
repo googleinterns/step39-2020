@@ -37,7 +37,7 @@ public class Store {
     this.storeAddress = storeAddress;
   }
 
-  public Store(StoreResult otherStore, long itemId, float itemPrice, String itemName) {
+  public Store(Store otherStore, long itemId, float itemPrice, String itemName) {
     this.storeId = otherStore.storeId;
     this.storeName = otherStore.storeName;
     this.storeAddress = otherStore.storeAddress;
