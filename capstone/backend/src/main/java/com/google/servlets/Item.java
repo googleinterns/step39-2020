@@ -18,13 +18,13 @@ package com.google.servlets;
 
 public class Item {
 
-  private int itemId;
+  private long itemId;
   
   private float itemPrice;
   
   private String itemName;
 
-  public Item(long itemId, float itemPrice, int itemName) {
+  public Item(long itemId, float itemPrice, String itemName) {
     this.itemId = itemId;
     this.itemPrice = itemPrice;
     this.itemName = itemName;
