@@ -128,8 +128,4 @@ public class LibraryFunctions {
     }
     return itemTypes;
   }
-
-  public static List<Store> getStoresWithItems(List<String> itemTypes) {
-    
-  }
 }

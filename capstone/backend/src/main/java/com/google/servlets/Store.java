@@ -45,7 +45,7 @@ public class Store {
   }
 
   public void addItem(long itemId, float itemPrice, String itemName) {
-    Item newItem = new Item(itemId, itemPrice, itemName)
+    Item newItem = new Item(itemId, itemPrice, itemName);
     items.add(newItem);
     totalPrice += itemPrice;
   }
