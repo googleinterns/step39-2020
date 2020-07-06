@@ -66,4 +66,21 @@ public final class LibraryFunctionsTest {
       Assert.assertTrue(expected.get(i).equals(actual.get(i)));
     }
   }
+  
+  @Test
+  public void getStoresForTwoItemTypes() {
+    List<String> itemTypes = Arrays.asList("MILK", "WATER");
+    List<Store> actual = LibraryFunctions.getStoresWithItems(itemTypes);
+    List<Store> expected = new ArrayList<Store>();
+    Store store1 = new Store(1, "Walmart", "3255 Mission College Blvd");
+    store1.addItem(1, 11.98, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count");
+    store1.addItem(3, 17.2, "FIJI Natural Artesian Water,16.9 Fl Oz, 24 Ct");
+    expected.add(store1);
+    Assert.assertEquals(1, actual.size());
+    Collections.sort(actual);
+    Collections.sort(expected);
+    for(int i = 0; i < expected.size(); i++){
+      Assert.assertTrue(expected.get(i).equals(actual.get(i)));
+    }
+  }
 }
