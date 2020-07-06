@@ -25,6 +25,7 @@ import com.google.cloud.spanner.SpannerOptions;
 import com.google.cloud.spanner.Statement;
 import com.google.cloud.spanner.ResultSet;
 import com.google.cloud.ServiceOptions;
+import com.google.servlets.Store;
 import com.google.servlets.UserList;
 import java.lang.Exception;
 import java.util.Arrays;
@@ -35,14 +36,20 @@ public class LibraryFunctions {
   private static String DATABASE_INSTANCE = "capstone-instance";
   private static String DATABASE_NAME = "step39-db";
   
-  private static final String EMAIL =     "Email";
-  private static final String ITEMTYPES = "ItemTypes";
-  private static final String LISTID =    "ListId";
-  private static final String LISTNAME =  "DisplayName";
-  private static final String USERID =    "UserId";
-  private static final String USERLISTS = "UserLists";
-  private static final String USERNAME =  "Username";
-  private static final String USERS =     "Users";
+  private static final String ADDRESS =          "Address";
+  private static final String EMAIL =            "Email";
+  private static final String ITEMID =           "ItemId";
+  private static final String ITEMNAMEANDBRAND = "ItemNameAndBrand";
+  private static final String ITEMTYPES =        "ItemTypes";
+  private static final String LISTID =           "ListId";
+  private static final String LISTNAME =         "DisplayName";
+  private static final String PRICE =            "Price";
+  private static final String STOREID =          "StoreId";
+  private static final String STORENAME =        "StoreName";
+  private static final String USERID =           "UserId";
+  private static final String USERLISTS =        "UserLists";
+  private static final String USERNAME =         "Username";
+  private static final String USERS =            "Users";
 
 
   private static DatabaseClient databaseClient = null;
@@ -128,4 +135,68 @@ public class LibraryFunctions {
     }
     return itemTypes;
   }
+
+  /*
+   * Provided a list of ItemTypes, this method will return a list of Stores
+   * with every permutation of possible items from any given store that 
+   * satisfies this list of ItemTypes.
+   *
+   * @param itemTypes list of Strings that describes the desired Item Types
+   * @return a list of all potential stores and combinations that satisfy the Item Types
+   *
+   */
+  public static List<Store> getStoresWithItems(List<String> itemTypes) {
+    List<Store> stores = new ArrayList<Store>();
+    DatabaseClient dbClient = initClient();
+    String query = "";
+    boolean first = true;
+    for (String itemType : itemTypes) {
+      List<Store> newStores = new ArrayList<Store>();
+      query = "SELECT ItemId, ItemNameAndBrand FROM Items WHERE ItemType=@itemType";
+      long itemId;
+      String itemName;
+      Statement itemStatement = Statement.newBuilder(query).bind("itemType").to(itemType).build();
+      try (ResultSet itemInfo = dbClient.singleUse().executeQuery(itemStatement)) {
+        while (itemInfo.next()) {
+          itemId = itemInfo.getLong(ITEMID);
+          itemName = itemInfo.getString(ITEMNAMEANDBRAND);
+          query = "SELECT StoreId, Price FROM Inventory WHERE ItemAvailability=\"AVAILABLE\" AND ItemId=@itemId";
+          long storeId;
+          double price;
+          Statement inventoryStatement = Statement.newBuilder(query).bind("itemId").to(itemId).build();
+          try (ResultSet inventoryInfo = dbClient.singleUse().executeQuery(inventoryStatement)) {
+            while (inventoryInfo.next()) {
+              storeId = inventoryInfo.getLong(STOREID);
+              price = inventoryInfo.getDouble(PRICE);
+              query = "SELECT Address, StoreName FROM Stores WHERE StoreId=@storeId";
+              String address;
+              String storeName;
+              Statement storeStatement = Statement.newBuilder(query).bind("storeId").to(storeId).build();
+              try (ResultSet storeInfo = dbClient.singleUse().executeQuery(storeStatement)) {
+                while (storeInfo.next()) {
+                  address = storeInfo.getString(ADDRESS);
+                  storeName = storeInfo.getString(STORENAME);
+                  if (first) {
+                    Store newStore = new Store(storeId, storeName, address);
+                    newStore.addItem(itemId, price, itemName);
+                    newStores.add(newStore);
+                  } else {
+                    for (int i = 0; i < stores.size(); i++) {
+                      if (storeId == stores.get(i).getStoreId()) {
+                        Store newStore = new Store(stores.get(i), itemId, price, itemName);
+                        newStores.add(newStore);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      stores = newStores;
+    }
+    return stores;
+  }
+
 }

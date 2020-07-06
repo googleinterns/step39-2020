@@ -17,7 +17,10 @@
 package com.google.spanner;
 
 import com.google.servlets.UserList;
+import com.google.servlets.Store;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,5 +43,27 @@ public final class LibraryFunctionsTest {
     UserList userList = new UserList(1, "My List", Arrays.asList("Milk", "Eggs", "Bread"));
     List<UserList> expected = Arrays.asList(userList);
     Assert.assertEquals(actual, expected);
+  }
+
+  @Test
+  public void getStoresForOneItemType() {
+    List<String> itemTypes = Arrays.asList("MILK");
+    List<Store> actual = LibraryFunctions.getStoresWithItems(itemTypes);
+    List<Store> expected = new ArrayList<Store>();
+    Store store1 = new Store(1, "Walmart", "3255 Mission College Blvd");
+    Store store2 = new Store(2, "Target", "4080 Stevens Creek Blvd");
+    Store store3 = new Store(3, "Whole Foods", "301 Ranch Dr");
+    store1.addItem(1, 11.98, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count");
+    store2.addItem(1, 10.38, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count");
+    store3.addItem(2, 9.44, "Natrel Whole Milk, 32 fl oz");
+    expected.add(store1);
+    expected.add(store2);
+    expected.add(store3);
+    Assert.assertEquals(3, actual.size());
+    Collections.sort(actual);
+    Collections.sort(expected);
+    for(int i = 0; i < expected.size(); i++){
+      Assert.assertTrue(expected.get(i).equals(actual.get(i)));
+    }
   }
 }

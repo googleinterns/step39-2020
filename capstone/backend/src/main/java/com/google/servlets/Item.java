@@ -20,11 +20,11 @@ public class Item {
 
   private long itemId;
   
-  private float itemPrice;
+  private double itemPrice;
   
   private String itemName;
 
-  public Item(long itemId, float itemPrice, String itemName) {
+  public Item(long itemId, double itemPrice, String itemName) {
     this.itemId = itemId;
     this.itemPrice = itemPrice;
     this.itemName = itemName;
@@ -34,12 +34,17 @@ public class Item {
     return itemId;
   }
 
-  public float getPrice() {
+  public double getPrice() {
     return itemPrice;
   }
 
   public String getName() {
     return itemName;
+  }
+
+  public boolean equals(Item otherItem) {
+    return this.itemId == otherItem.itemId && this.itemPrice == otherItem.itemPrice && 
+                            this.itemName == otherItem.itemName;
   }
 
 }
