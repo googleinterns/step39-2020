@@ -99,7 +99,7 @@ public class LibraryFunctions {
     return userLists;
   }
 
-  public static void createUser(int userId, String userName, String email) throws SpannerException {
+  public static void createUser(long userId, String userName, String email) throws SpannerException {
     DatabaseClient dbClient = initClient();
     Mutation mutation = Mutation.newInsertBuilder(USERS)
                             .set(USERID)
