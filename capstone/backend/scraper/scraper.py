@@ -1,6 +1,7 @@
 # Lint as: python3
 """
-TODO(carolynlwang): Documentation
+Scrapes inventory data from the Walmart search result page
+and adds it to a .csv file.
 """
 
 import csv, json, requests
@@ -30,19 +31,14 @@ class Scraper:
 		for store in stores:
 			for type in types:
 				URL = 'https://www.walmart.com/search/?grid=false&query=' + type + '&stores=' + store
-				print(URL)
 				page = requests.get(URL)
 				soup = BeautifulSoup(page.content, 'html.parser')
 				results = soup.find('script', type='application/json', id='searchContent')
 				data = json.loads(results.find(text=True).strip())
-				#print(json.dumps(data, indent=4, sort_keys=True))
 				items = data['searchContent']['preso']['items']
+				
 				for item in items:	
 					row = [store]
-					#if 'seeAllName' in item:
-						#print(item['seeAllName'])
-					#print(item['title'].replace('<mark>', '').replace('</mark>', ''))
-					#print(json.dumps(item, indent=4, sort_keys=True))
 					row.append(item['productId']) if 'productId' in item else row.append('')
 					if 'inventory' in item:
 						if 'displayFlags' in item['inventory']:
@@ -51,7 +47,6 @@ class Scraper:
 							row.append('AVAILABLE')
 					else:
 						row.append('')
-					#print(json.dumps(item['inventory'], indent=4, sort_keys=True))	
 					row.append(datetime.now().strftime('%y-%m-%d %H:%M:%S'))
 			
 					# TODO(carolynlwang): About 20% of the items have prices listed in a min/max format.
