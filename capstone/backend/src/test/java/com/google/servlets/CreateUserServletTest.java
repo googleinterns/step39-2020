@@ -18,12 +18,12 @@ public class CreateUserServletTest extends TestCase {
 
   public void testDoPostSucceed() throws ServletException, IOException, GeneralSecurityException {
     SetupObj setupObj = ServletTestUtil.setupMockDataPost(CORRECT_REQUEST_STRING);
-    Payload payload = Mockito.mock(Payload.class);
+    Payload payload = new Payload();
+    payload.setSubject("abcd1234");
+    payload.set("email", "test@gmail.com");
+    payload.set("name", "Test User");
     GoogleIdToken idToken = Mockito.mock(GoogleIdToken.class);
     GoogleIdTokenVerifier verifier = Mockito.mock(GoogleIdTokenVerifier.class);
-    Mockito.when(payload.getSubject()).thenReturn("abcd1234");
-    Mockito.when(payload.getEmail()).thenReturn("test@gmail.com");
-    Mockito.when(payload.get("name")).thenReturn("Test User");
     Mockito.when(idToken.getPayload()).thenReturn(payload);
     Mockito.when(verifier.verify(ID_TOKEN_STRING)).thenReturn(idToken);
 
