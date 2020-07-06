@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button, Grid, Card, Radio, RadioGroup } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
+import { Store } from './Store';
+
 
 const items = [
   'Milk',
@@ -27,7 +29,7 @@ class ListPage extends Component {
       distanceValue: 4,
       listId: -1,
       listName: "First List",
-      userId: 1,
+      userId: this.props.store.get('userId'),
     };
   }
 
@@ -79,7 +81,7 @@ class ListPage extends Component {
         alert: (<Alert severity="error">Please select at least one item!</Alert>),
       });
     } else {
-      const response = axios.post(
+      axios.post(
         '/api/v1/create-or-update-user-list-servlet',
         { 
           userId: this.state.userId,
@@ -96,7 +98,7 @@ class ListPage extends Component {
         });
       }).catch((error) => {
         this.setState({
-          alert: (<Alert severity="error">{error}</Alert>)
+          alert: (<Alert severity="error">{error.message}</Alert>)
         })
       });   
     }
@@ -150,4 +152,4 @@ class ListPage extends Component {
   }
 }
 
-export { ListPage };
+export const ListPageWithStore = Store.withStore(ListPage);
