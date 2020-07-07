@@ -86,10 +86,9 @@ def main(argv):
   stores = ['2486', '2119', '2280', '3123', '4174']
 	
 
-  """
-  Writes results into a csv file.
-  """
-  # Write column names
+  
+  # Writes results into a csv file.
+  # First, write column names.
   with open('inventory.csv', mode='w') as inventory_file:	
     writer = csv.writer(inventory_file, delimiter=',')
     writer.writerow(['StoreId', 'ItemId', 'ItemAvailability', 'LastUpdated', 'Price', 'Ppu', 'Unit'])
@@ -100,6 +99,7 @@ def main(argv):
       items = Scraper.get_items(soup)
       for item in items:
         info = [store] + Scraper.get_item_info(item)
+        # Write inventory data into the csv file. 
         with open('inventory.csv', mode='a+', newline='') as inventory_file:
           writer = csv.writer(inventory_file, delimiter=',')
           writer.writerow(info)
