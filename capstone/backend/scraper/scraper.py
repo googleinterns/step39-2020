@@ -14,6 +14,9 @@ FLAGS = flags.FLAGS
 
 class Scraper:
   def get_page(URL, retries=3):
+    """Given a URL, scrapes the web page.
+    Retries three times (unless specified otherwise).
+    """
     try:
       page = requests.get(URL)
       soup = BeautifulSoup(page.content, 'html.parser')
@@ -25,11 +28,20 @@ class Scraper:
       return get(URL, retries - 1)
 
   def get_items(soup):
+    """
+    Given a Walmart search result page's scrape results,
+    Finds and returns the items in JSON format.
+    """
     results = soup.find('script', type='application/json', id='searchContent')
     data = json.loads(results.find(text=True).strip())
     return data['searchContent']['preso']['items']
 	
-  def get_item_info(item):	
+  def get_item_info(item):
+    """From the JSON data of the item, 
+    Finds and returns the attributes of the item
+    (right now, in the order of productId, itemAvailability, 
+    timeUpdated, price, ppu, unit) as a list.
+    """
     row = []
     row.append(item['productId']) if 'productId' in item else row.append('')
     if 'inventory' in item:
