@@ -1,7 +1,7 @@
 # Lint as: python3
 """
 Scrapes inventory data from the Walmart search result page
-and adds it to a .csv file.
+using BeautifulSoup.
 """
 
 import csv, json, requests
@@ -48,17 +48,16 @@ class Scraper:
       if 'offerPrice' in item['primaryOffer']:
         row.append(item['primaryOffer']['offerPrice'])
       else:
-        row.append('')
+        row.append('')   
+    if 'ppu' in item:
+      row.append(item['ppu']['amount']) if 'amount' in item['ppu']\
+      else row.append('')
+      row.append(item['ppu']['unit']) if 'unit' in item['ppu']\
+      else row.append('')
+    else:
+      row.extend(['', ''])
    
-   if 'ppu' in item:
-     row.append(item['ppu']['amount']) if 'amount' in item['ppu']\
-     else row.append('')
-     row.append(item['ppu']['unit']) if 'unit' in item['ppu']\
-     else row.append('')
-   else:
-     row.extend(['', ''])
-   
-   return row
+    return row
 
 def main(argv):
   if len(argv) > 1:
@@ -72,6 +71,10 @@ def main(argv):
   # Hard-coded store id, locations based on my own.
   stores = ['2486', '2119', '2280', '3123', '4174']
 	
+
+  """
+  Writes results into a csv file.
+  """
   # Write column names
   with open('inventory.csv', mode='w') as inventory_file:	
     writer = csv.writer(inventory_file, delimiter=',')
