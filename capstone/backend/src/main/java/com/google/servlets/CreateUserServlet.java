@@ -59,7 +59,7 @@ public class CreateUserServlet extends HttpServlet {
     }
     long userId = payload.getSubject().hashCode();
     try {
-      LibraryFunctions.createUser(userId, (String) payload.get("name"), payload.getEmail());
+      createUser(userId, (String) payload.get("name"), payload.getEmail());
     } catch (SpannerException se) {
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
           "An error occured while adding a new user to the databse.");
@@ -93,5 +93,9 @@ public class CreateUserServlet extends HttpServlet {
 
   public void setVerifier(GoogleIdTokenVerifier verifier) {
     this.verifier = verifier;
+  }
+
+  public void createUser(long userId, String userName, String email) throws SpannerException{
+    LibraryFunctions.createUser(userId, userName, email);
   }
 }
