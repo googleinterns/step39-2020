@@ -13,7 +13,7 @@ class Header extends Component {
     constructor(props) {
       super(props);
       this.state = {
-          alert: null,
+          errorMessage: null,
           loggedIn: this.props.store.get('loggedIn'), 
       }
     }
@@ -28,19 +28,19 @@ class Header extends Component {
         this.props.store.set('userId')(res.data.userId);
         this.props.store.set('loggedIn')(true);
         this.setState({
-          alert: null,
+          errorMessage: null,
           loggedIn: true,
         });
       }).catch((error) => {
         this.setState({
-          alert: (<Alert severity="error">There was an error signing into your account. Please try again.</Alert>)
+          errorMessage: "There was an error signing into your account. Please try again."
         })
       });   
     }
 
     loginFailure = () => {
       this.setState({
-        alert: <Alert severity="error">There was an error signing into your account. Please try again.</Alert>
+        errorMessage: "There was an error signing into your account. Please try again."
       })
     }
 
@@ -48,7 +48,7 @@ class Header extends Component {
       this.props.store.set('loggedIn')(false);
       this.props.store.set('userId')(-1);
       this.setState({
-        alert: null,
+        errorMessage: null,
         loggedIn: false,
       });
     }
@@ -80,7 +80,7 @@ class Header extends Component {
                 />}
               </Toolbar>
             </AppBar>
-            {this.state.alert}
+            <Alert severity="error">{this.state.errorMessage}</Alert>
           </div>
         )
     }
