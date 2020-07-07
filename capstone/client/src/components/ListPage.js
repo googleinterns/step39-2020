@@ -135,7 +135,7 @@ class ListPage extends Component {
   }
 
   onTextFieldChange = (event) => {
-    if (event.target.value.replace(/\s/g, '') === '') {
+    if (event.target.value.trim() === '') {
       this.setState({
         listSaveDialog: {
           display: true,
