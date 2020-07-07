@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CreateOrUpdateUserlistServlet extends HttpServlet {
   private static final int NEW_LIST = -1;
   private class RequestBody {
-    private int userId;
+    private long userId;
     private UserList userList;
   }
 
@@ -50,7 +50,7 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
       requestBody.userList.listId = generateListId(requestBody.userId);
     }
     try {
-      LibraryFunctions.writeUserLists(
+      writeUserLists(
             requestBody.userId, requestBody.userList.listId, requestBody.userList.itemTypes,
             requestBody.userList.displayName);
     } catch (SpannerException se) {
@@ -65,7 +65,7 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
     response.getWriter().println(g.toJson(responseBody));
   }
 
-  private long generateListId(int userId) {
+  private long generateListId(long userId) {
     long currentTime = System.currentTimeMillis();
     String id = String.valueOf(userId) + currentTime;
     return id.hashCode();
@@ -80,5 +80,9 @@ public class CreateOrUpdateUserlistServlet extends HttpServlet {
       return null;
     }
     return requestBody;
+  }
+
+  public void writeUserLists(long userId, long listId, List<String> itemTypes, String displayName) throws SpannerException{
+    LibraryFunctions.writeUserLists(userId, listId, itemTypes, displayName);
   }
 }

@@ -2,6 +2,7 @@ package com.google.servlets;
 
 import org.mockito.Mockito;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,8 @@ public class GetUserListsServletTest extends TestCase {
     map.put(USER_ID_KEY, VALID_USER_ID);
     SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
 
-    GetUserListsServlet servlet = new GetUserListsServlet();
+    GetUserListsServlet servlet = Mockito.spy(GetUserListsServlet.class);
+    Mockito.doReturn(Arrays.asList(new UserList(2, "List Name", Arrays.asList("Milk", "Bread")))).when(servlet).getUserLists(2);
     servlet.doGet(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
