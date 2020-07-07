@@ -80,7 +80,7 @@ class Header extends Component {
                 />}
               </Toolbar>
             </AppBar>
-            <Alert severity="error">{this.state.errorMessage}</Alert>
+            {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
           </div>
         )
     }
