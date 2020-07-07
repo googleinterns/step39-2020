@@ -64,16 +64,16 @@ class Scraper:
     
     if 'inventory' in item:
       if 'displayFlags' in item['inventory']:
-        inventory_row.append(item['inventory']['displayFlags'][0]) 
-      else: 
+        inventory_row.append(item['inventory']['displayFlags'][0])
+      else:
         inventory_row.append('AVAILABLE')
     else:
       inventory_row.append('')
-    
+
     inventory_row.append(datetime.now().strftime('%y-%m-%d %H:%M:%S'))
-			
+
     # TODO(carolynlwang): About 20% of the items have prices listed in a min/max format.
-    # Right now, their prices don't end up in the database.   
+    # Right now, their prices don't end up in the database.
     if 'primaryOffer' in item:
       if 'offerPrice' in item['primaryOffer']:
         inventory_row.append(item['primaryOffer']['offerPrice'])
@@ -92,10 +92,10 @@ class Scraper:
 def main(argv):
   if len(argv) > 1:
     raise app.UsageError('Too many command-line arguments.')
-	
+
   # Hard-coded item types.
   types = ['milk', 'paper+towels', 'water', 'cookies', 'pencil',
-  'soda', 'cereal', 'chips', 'ketchup', 'flour', 'napkin', 
+  'soda', 'cereal', 'chips', 'ketchup', 'flour', 'napkin',
   'ramen', 'shampoo', 'sugar', 'olive+oil']
 
   # Hard-coded store id, locations based on my own.
@@ -112,6 +112,7 @@ def main(argv):
 
   # Keep a list of unique ItemIds
   item_ids = []
+  
   for store in stores:
     for type in types:
       soup = Scraper.get_page('https://www.walmart.com/search/?grid=false&query=' + type + '&stores=' + store)

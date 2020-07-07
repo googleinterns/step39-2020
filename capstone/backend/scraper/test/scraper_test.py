@@ -1,6 +1,6 @@
 # Lint as: python3
 """
-
+Tests for scraper.py.
 """
 
 from .. import scraper
@@ -12,13 +12,12 @@ import mock
 import requests
 import unittest
 
-_FAKE_TARGET_URL = 'http://walmartfake.com/'
-_FAKE_HTML_RESPONSE = '<html>Empty</html>'
-_FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/json"> { 
-  "searchContent": { 
+
+_FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/json"> {
+  "searchContent": {
     "preso": {
       "items": [
-        { 
+        {
           "title": "fake"
         }
       ]
