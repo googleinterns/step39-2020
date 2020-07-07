@@ -26,8 +26,12 @@ _FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/
 }
 </script></html>'''
 _FAKE_HTML_BODY_NO_DATA = '''<html></html>'''
-_FAKE_HTML_RESPONSE = '<html>Empty</html>'
-_FAKE_ITEM_INFO_ALL = '''{
+_FAKE_ITEMS = [ {"title": "fake"} ]
+
+_FAKE_SINGLE_ITEM_INFO_ALL = '''{
+  "brand": [
+    "LALA"
+  ],
   "inventory": {
     "displayFlags": ["OUT_OF_STOCK"]
   },
@@ -41,18 +45,21 @@ _FAKE_ITEM_INFO_ALL = '''{
     "offerId": "A96CF1F55C9E412C9DA7B5458635707F",
     "offerPrice": 4.98
   },
-  "productId": "7L"
+  "productId": "7L",
+  "seeAllName": "Chocolate Milk",
+  "title": "LALA <mark>Milk</mark> Drinks"
 }'''
 
 # Some fields omitted, some fields left empty.
-_FAKE_ITEM_INFO_NONE = '''{
+_FAKE_SINGLE_ITEM_INFO_EMPTY = '''{
   "inventory": {},
   "primaryOffer": {}
 }'''
-_FAKE_ITEMS = [ {"title": "fake"} ]
-_FAKE_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz']
-_FAKE_ROW_DEFAULT = [ '', 'AVAILABLE', '20-06-06 22:34:01', '', '', '']
-_FAKE_TARGET_URL = 'http://walmartfake.com/'
+
+_FAKE_SINGLE_ITEM_ROW_ALL = ['7L', 'LALA Milk Drinks', 'LALA', 'Chocolate Milk']
+_FAKE_SINGLE_ITEM_ROW_DEFAULT = ['', '', '', '']
+_FAKE_SINGLE_INVENTORY_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz'] 
+_FAKE_SINGLE_INVENTORY_ROW_DEFAULT = [ '', 'AVAILABLE', '20-06-06 22:34:01', '', '', '']
 
 class FakeResponse(object):
   """Fake requests.Response object for requests.get()."""
@@ -81,15 +88,23 @@ class ScraperTest(unittest.TestCase):
     items = scraper.Scraper.get_items(BeautifulSoup(_FAKE_HTML_BODY_NO_DATA, 'html.parser'))
     self.assertEqual(items, [])
 
-  def test_get_item_info(self):
-    with freeze_time("2020-06-06 22:34:01"):
-      result = scraper.Scraper.get_item_info(json.loads(_FAKE_ITEM_INFO_ALL))
-      self.assertEqual(result, _FAKE_ROW_ALL)
+  def test_get_item(self):
+    result = scraper.Scraper.get_item_info(json.loads(_FAKE_SINGLE_ITEM_INFO_ALL))
+    self.assertEqual(result, _FAKE_SINGLE_ITEM_ROW_ALL)
 
-  def test_get_default_item_info(self):
+  def test_get_default_item(self):
+    result = scraper.Scraper.get_item_info(json.loads(_FAKE_SINGLE_ITEM_INFO_EMPTY))
+    self.assertEqual(result, _FAKE_SINGLE_ITEM_ROW_DEFAULT)
+
+  def test_get_inventory_info(self):
     with freeze_time("2020-06-06 22:34:01"):
-      result = scraper.Scraper.get_item_info(json.loads(_FAKE_ITEM_INFO_NONE))
-      self.assertEqual(result, _FAKE_ROW_DEFAULT)
+      result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_ALL))      
+      self.assertEqual(result, _FAKE_SINGLE_INVENTORY_ROW_ALL)
+
+  def test_get_default_inventory_info(self):
+    with freeze_time("2020-06-06 22:34:01"):
+      result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_EMPTY))
+      self.assertEqual(result, _FAKE_SINGLE_INVENTORY_ROW_DEFAULT)
 
 if __name__ == '__main__':
   unittest.main()

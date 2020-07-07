@@ -38,40 +38,56 @@ class Scraper:
       return data['searchContent']['preso']['items']
     return []
 
+
   def get_item_info(item):
     """From the JSON data of the item,
     Finds and returns the attributes of the item
-    (right now, in the order of productId, itemAvailability,
-    timeUpdated, price, ppu, unit) as a list.
+    for item purposes (in the order of itemId,
+    itemName, itemBrand, itemSubtype).
     """
-    row = []
-    row.append(item['productId']) if 'productId' in item else row.append('')
+    item_row = []
+    item_row.append(item['productId']) if 'productId' in item else item_row.append('')
+    item_row.append(item['title'].replace('<mark>', '').replace('</mark>', ''))\
+    if 'title' in item else item_row.append('')
+    item_row.append(item['brand'][0]) if 'brand' in item else item_row.append('')
+    item_row.append(item['seeAllName']) if 'seeAllName' in item else item_row.append('')
+    return item_row
+
+  def get_inventory_info(item):
+    """From the JSON data of the item, 
+    Finds and returns the attributes of the item
+    for inventory purposes (in the order of itemId,
+    itemAvailability, timeUpdated, price, ppu, unit).
+    """
+    inventory_row = []
+    inventory_row.append(item['productId']) if 'productId' in item else inventory_row.append('')    
+    
     if 'inventory' in item:
       if 'displayFlags' in item['inventory']:
-        row.append(item['inventory']['displayFlags'][0])
+        inventory_row.append(item['inventory']['displayFlags'][0])
       else:
-        row.append('AVAILABLE')
+        inventory_row.append('AVAILABLE')
     else:
-      row.append('')
+      inventory_row.append('')
 
-    row.append(datetime.now().strftime('%y-%m-%d %H:%M:%S'))
+    inventory_row.append(datetime.now().strftime('%y-%m-%d %H:%M:%S'))
 
     # TODO(carolynlwang): About 20% of the items have prices listed in a min/max format.
     # Right now, their prices don't end up in the database.
     if 'primaryOffer' in item:
       if 'offerPrice' in item['primaryOffer']:
-        row.append(item['primaryOffer']['offerPrice'])
+        inventory_row.append(item['primaryOffer']['offerPrice'])
       else:
-        row.append('')
+        inventory_row.append('')   
     if 'ppu' in item:
-      row.append(item['ppu']['amount']) if 'amount' in item['ppu']\
-      else row.append('')
-      row.append(item['ppu']['unit']) if 'unit' in item['ppu']\
-      else row.append('')
+      inventory_row.append(item['ppu']['amount']) if 'amount' in item['ppu']\
+      else inventory_row.append('')
+      inventory_row.append(item['ppu']['unit']) if 'unit' in item['ppu']\
+      else inventory_row.append('')
     else:
-      row.extend(['', ''])
+      inventory_row.extend(['', ''])
    
-    return row
+    return inventory_row
 
 def main(argv):
   if len(argv) > 1:
@@ -85,22 +101,38 @@ def main(argv):
   # Hard-coded store id, locations based on my own.
   stores = ['2486', '2119', '2280', '3123', '4174']
 
-  # Writes results into a csv file.
+  # Writes item and inventory results into a csv file.
   # First, write column names.
-  with open('inventory.csv', mode='w') as inventory_file:
-    writer = csv.writer(inventory_file, delimiter=',')
+  with open('inventories.csv', mode='w') as inventories_file:	
+    writer = csv.writer(inventories_file, delimiter=',')
     writer.writerow(['StoreId', 'ItemId', 'ItemAvailability', 'LastUpdated', 'Price', 'Ppu', 'Unit'])
+  with open('items.csv', mode='w') as items_file:
+    writer = csv.writer(items_file, delimiter=',')
+    writer.writerow(['ItemId', 'ItemName', 'ItemBrand', 'ItemSubtype', 'ItemType'])
 
+  # Keep a list of unique ItemIds
+  item_ids = []
+  
   for store in stores:
     for type in types:
       soup = Scraper.get_page('https://www.walmart.com/search/?grid=false&query=' + type + '&stores=' + store)
       items = Scraper.get_items(soup)
       for item in items:
-        info = [store] + Scraper.get_item_info(item)
-        # Write inventory data into the csv file.
-        with open('inventory.csv', mode='a+', newline='') as inventory_file:
-          writer = csv.writer(inventory_file, delimiter=',')
-          writer.writerow(info)
+        # Check if we have recorded this item before.
+        if 'productId' in item:
+          if item['productId'] not in item_ids:
+            item_ids.append(item['productId'])
+            item_info = Scraper.get_item_info(item)
+            item_info = item_info + [type]
+            with open('items.csv', mode='a+', newline='') as items_file:
+              writer = csv.writer(items_file, delimiter=',')    
+              writer.writerow(item_info)
+        
+        inventory_info = Scraper.get_inventory_info(item)
+        inventory_info = [store] + inventory_info 
+        with open('inventories.csv', mode='a+', newline='') as inventories_file:
+          writer = csv.writer(inventories_file, delimiter=',')
+          writer.writerow(inventory_info)
 
 if __name__ == '__main__':
   app.run(main)
