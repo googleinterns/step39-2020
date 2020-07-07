@@ -128,7 +128,7 @@ class ListPage extends Component {
       });
     }).catch((error) => {
       this.setState({
-        alert: (<Alert severity="error">{error.message}</Alert>)
+        alert: (<Alert severity="error">There was an error saving your list.</Alert>)
       })
     });   
   }
