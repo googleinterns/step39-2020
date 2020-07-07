@@ -14,19 +14,7 @@ class Header extends Component {
       super(props);
       this.state = {
           alert: null,
-          googleButton: this.props.store.get('loggedIn') ? (
-            <GoogleLogout
-              clientId={CLIENT_ID}
-              buttonText="Logout"
-              onLogoutSuccess={this.logoutSuccess}
-            />) : (
-            <GoogleLogin
-              clientId={CLIENT_ID}
-              buttonText="Login"
-              onSuccess={this.loginSuccess}
-              onFailure={this.loginFailure}
-              cookiePolicy={'single_host_origin'}
-            />),    
+          loggedIn: this.props.store.get('loggedIn'), 
       }
     }
 
@@ -41,15 +29,11 @@ class Header extends Component {
         this.props.store.set('loggedIn')(true);
         this.setState({
           alert: null,
-          googleButton: (<GoogleLogout
-            clientId={CLIENT_ID}
-            buttonText="Logout"
-            onLogoutSuccess={this.logoutSuccess}
-          />),
+          loggedIn: true,
         });
       }).catch((error) => {
         this.setState({
-          alert: (<Alert severity="error">{error.message}</Alert>)
+          alert: (<Alert severity="error">There was an error signing into your account. Please try again.</Alert>)
         })
       });   
     }
@@ -64,13 +48,8 @@ class Header extends Component {
       this.props.store.set('loggedIn')(false);
       this.props.store.set('userId')(-1);
       this.setState({
-        googleButton: (<GoogleLogin
-          clientId={CLIENT_ID}
-          buttonText="Login"
-          onSuccess={this.loginSuccess}
-          onFailure={this.loginFailure}
-          cookiePolicy={'single_host_origin'}
-        />),
+        alert: null,
+        loggedIn: false,
       });
     }
 
@@ -85,7 +64,20 @@ class Header extends Component {
                 <Typography id="typography" variant="h6">
                   Preferences
                 </Typography>
-                {this.state.googleButton}
+                {this.state.loggedIn ? 
+                <GoogleLogout
+                  display="none"
+                  clientId={CLIENT_ID}
+                  buttonText="Logout"
+                  onLogoutSuccess={this.logoutSuccess}
+                /> :
+                <GoogleLogin
+                  clientId={CLIENT_ID}
+                  buttonText="Login"
+                  onSuccess={this.loginSuccess}
+                  onFailure={this.loginFailure}
+                  cookiePolicy={'single_host_origin'}
+                />}
               </Toolbar>
             </AppBar>
             {this.state.alert}
