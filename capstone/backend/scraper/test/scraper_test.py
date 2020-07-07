@@ -84,12 +84,12 @@ class ScraperTest(unittest.TestCase):
 
   def test_get_item_info(self):
     with freeze_time("2020-06-06 22:34:01"):
-      result = scraper.Scraper.get_item_info(json.loads(_FAKE_ITEM_INFO_ALL))      
+      result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_ITEM_INFO_ALL))      
       self.assertEqual(result, _FAKE_ROW_ALL)
 
   def test_get_default_item_info(self):
     with freeze_time("2020-06-06 22:34:01"):
-      result = scraper.Scraper.get_item_info(json.loads(_FAKE_ITEM_INFO_NONE))
+      result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_ITEM_INFO_NONE))
       self.assertEqual(result, _FAKE_ROW_DEFAULT)
 
 if __name__ == '__main__':
