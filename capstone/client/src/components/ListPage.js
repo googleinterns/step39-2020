@@ -25,7 +25,8 @@ class ListPage extends Component {
     super(props);
     this.state = {
       selectedItemsList: null,
-      alert: null,
+      errorMessage: null,
+      successMessage: null,
       distanceValue: 4,
       listId: -1,
       listName: null,
@@ -59,7 +60,7 @@ class ListPage extends Component {
     if (arr.length === 0) {
       this.setState({
         selectedItemsList: null,
-        alert: (<Alert severity="error">Please select at least one item!</Alert>),
+        errorMessage: "Please select at least one item!",
       });
       return;
     }
@@ -73,7 +74,7 @@ class ListPage extends Component {
     ));
     this.setState({
       selectedItemsList: listItems,
-      alert: null,
+      errorMessage: null,
     });
   }
 
@@ -81,7 +82,7 @@ class ListPage extends Component {
     const arr = [...this.selectedItems];
     if (arr.length === 0) {
       this.setState({
-        alert: (<Alert severity="error">Please select at least one item!</Alert>),
+        errorMessage: "Please select at least one item!",
       });
     } else {
       this.setState({
@@ -91,7 +92,7 @@ class ListPage extends Component {
           error: true,
           errorText: "This is a required field."
         },
-        alert: null,
+        errorMessage: null,
       });
     }
   }
@@ -123,12 +124,12 @@ class ListPage extends Component {
       },
     ).then((res) => {
       this.setState({
-        alert: (<Alert severity="success">Your list has been saved!</Alert>),
+        successMessage: "Your list has been saved!",
         listId: res.data.userList.listId,
       });
     }).catch((error) => {
       this.setState({
-        alert: (<Alert severity="error">There was an error saving your list.</Alert>)
+        errorMessage: "There was an error saving your list.",
       })
     });   
   }
@@ -176,7 +177,8 @@ class ListPage extends Component {
 
     return (
       <div id="list-page-container">
-        {this.state.alert}
+        {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
+        {this.state.successMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
         <h1>Preferences</h1>
         <Grid container alignItems="stretch">
           <Grid id="distance-list-container" item component={Card} xs>
