@@ -3,18 +3,18 @@
 TODO(carolynlwang): Documentation and description.
 """
 
-from bs4 import BeautifulSoup
-
-print('__file__={0:<35} | __name__={1:<20} | __package__={2:<20}'.format(__file__,__name__,str(__package__)))
-
 from .. import scraper
+from bs4 import BeautifulSoup
+from datetime import datetime
+from freezegun import freeze_time
+import json
 import mock
 import requests
 import unittest
 
 _FAKE_TARGET_URL = 'http://walmart.com/search/?grid=false&query=milk&stores=2486'
 _FAKE_HTML_RESPONSE = '<html>Empty</html>'
-_FAKE_HTML_BODY= '''<html><script id="searchContent" type="application/json"> { 
+_FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/json"> { 
   "searchContent": { 
     "preso": {
       "items": [
@@ -26,7 +26,33 @@ _FAKE_HTML_BODY= '''<html><script id="searchContent" type="application/json"> {
   }
 }
 </script></html>'''
+_FAKE_HTML_BODY_NO_DATA = '''<html></html>'''
 _FAKE_ITEMS = [ {"title": "fake"} ]
+_FAKE_ITEM_INFO_ALL = '''{  
+  "inventory": {
+    "displayFlags": ["OUT_OF_STOCK"]
+  },
+  "ppu": {
+    "amount": 0.101,
+    "currencyCode": "USD",
+    "unit": "fl oz"
+  },
+  "primaryOffer": {
+    "currencyCode": "USD",
+    "offerId": "A96CF1F55C9E412C9DA7B5458635707F",
+    "offerPrice": 4.98
+  },
+  "productId": "7L"
+}'''
+
+# Some fields omitted, some fields left empty.
+_FAKE_ITEM_INFO_NONE = '''{
+  "inventory": {},
+  "primaryOffer": {}
+}'''
+
+_FAKE_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz'] 
+_FAKE_ROW_DEFAULT = [ '', 'AVAILABLE', '20-06-06 22:34:01', '', '', '']
 
 class FakeResponse(object):
   """Fake requests.Response object for requests.get()."""
@@ -46,8 +72,22 @@ class ScraperTest(unittest.TestCase):
     self.assertEqual(soup, fake_response.get_page())
 
   def test_get_items(self):
-    items = scraper.Scraper.get_items(BeautifulSoup(_FAKE_HTML_BODY, 'html.parser'))
+    items = scraper.Scraper.get_items(BeautifulSoup(_FAKE_HTML_BODY_HAS_DATA, 'html.parser'))
     self.assertEqual(items, _FAKE_ITEMS)
+
+  def test_get_no_items(self):
+    items = scraper.Scraper.get_items(BeautifulSoup(_FAKE_HTML_BODY_NO_DATA, 'html.parser'))
+    self.assertEqual(items, [])
+
+  def test_get_item_info(self):
+    with freeze_time("2020-06-06 22:34:01"):
+      result = scraper.Scraper.get_item_info(json.loads(_FAKE_ITEM_INFO_ALL))      
+      self.assertEqual(result, _FAKE_ROW_ALL)
+
+  def test_get_default_item_info(self):
+    with freeze_time("2020-06-06 22:34:01"):
+      result = scraper.Scraper.get_item_info(json.loads(_FAKE_ITEM_INFO_NONE))
+      self.assertEqual(result, _FAKE_ROW_DEFAULT)
 
 if __name__ == '__main__':
   unittest.main()
