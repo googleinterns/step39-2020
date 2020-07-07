@@ -29,15 +29,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
- @WebServlet("/api/v1/get-stores-with-items")
+ @WebServlet("/api/v1/get-stores-with-item-types")
  public class GetStoresWithItemTypesServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
     Gson g = new Gson();
-    String itemTypesString = request.getParameter("item_types");
-    List<String> itemTypes = Arrays.asList(itemTypesString.split("\\s*,\\s*"));
+    List<String> itemTypes = Arrays.asList(request.getParameterValues("item_types"));
     List<Store> stores = new ArrayList<Store>();
     try {
       stores = getStores(itemTypes);

@@ -47,4 +47,17 @@ class ServletTestUtil {
     }
     return new SetupObj(req, res, writer);
   }
+
+  public static SetupObj setupMockDataGetList(Map<String, String[]> params) throws IOException {
+    HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
+    HttpServletResponse res = Mockito.mock(HttpServletResponse.class);
+    StringWriter writer = new StringWriter();
+    Mockito.when(req.getMethod()).thenReturn("GET");
+    Mockito.when(res.getWriter()).thenReturn(new PrintWriter(writer));   
+    for (String key : params.keySet()) {
+      Mockito.when(req.getParameterValues(key)).thenReturn(params.get(key));
+    }
+    return new SetupObj(req, res, writer);
+  }
+
 }

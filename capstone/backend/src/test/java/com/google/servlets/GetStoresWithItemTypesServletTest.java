@@ -31,16 +31,11 @@ import org.mockito.Mockito;
 public class GetStoresWithItemTypesServletTest extends TestCase {
   private static final String ITEM_TYPES_KEY = "item_types";
 
-  @Before
-  public void setUp() {
-    //LibraryFunctions.setDatabase("step39-db");
-  }
-
   public void testGetStores() throws ServletException, IOException {
-    String ITEM_TYPES = "MILK";
-    HashMap<String, String> map = new HashMap<>();
+    String[] ITEM_TYPES = {"MILK"};
+    HashMap<String, String[]> map = new HashMap<>();
     map.put(ITEM_TYPES_KEY, ITEM_TYPES);
-    SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
+    SetupObj setupObj = ServletTestUtil.setupMockDataGetList(map);
 
     GetStoresWithItemTypesServlet servlet = Mockito.spy(GetStoresWithItemTypesServlet.class);
 
