@@ -33,9 +33,11 @@ class Scraper:
     Finds and returns the items in JSON format.
     """
     results = soup.find('script', type='application/json', id='searchContent')
-    data = json.loads(results.find(text=True).strip())
-    return data['searchContent']['preso']['items']
-	
+    if results is not None:
+      data = json.loads(results.find(text=True).strip())
+      return data['searchContent']['preso']['items']
+    return []
+
   def get_item_info(item):
     """From the JSON data of the item, 
     Finds and returns the attributes of the item
