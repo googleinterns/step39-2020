@@ -39,30 +39,30 @@ class Scraper:
     return []
 
   def get_item_info(item):
-    """From the JSON data of the item, 
+    """From the JSON data of the item,
     Finds and returns the attributes of the item
-    (right now, in the order of productId, itemAvailability, 
+    (right now, in the order of productId, itemAvailability,
     timeUpdated, price, ppu, unit) as a list.
     """
     row = []
     row.append(item['productId']) if 'productId' in item else row.append('')
     if 'inventory' in item:
       if 'displayFlags' in item['inventory']:
-        row.append(item['inventory']['displayFlags'][0]) 
-      else: 
+        row.append(item['inventory']['displayFlags'][0])
+      else:
         row.append('AVAILABLE')
     else:
       row.append('')
-    
+
     row.append(datetime.now().strftime('%y-%m-%d %H:%M:%S'))
-			
+
     # TODO(carolynlwang): About 20% of the items have prices listed in a min/max format.
-    # Right now, their prices don't end up in the database.   
+    # Right now, their prices don't end up in the database.
     if 'primaryOffer' in item:
       if 'offerPrice' in item['primaryOffer']:
         row.append(item['primaryOffer']['offerPrice'])
       else:
-        row.append('')   
+        row.append('')
     if 'ppu' in item:
       row.append(item['ppu']['amount']) if 'amount' in item['ppu']\
       else row.append('')
@@ -76,10 +76,10 @@ class Scraper:
 def main(argv):
   if len(argv) > 1:
     raise app.UsageError('Too many command-line arguments.')
-	
+
   # Hard-coded item types.
   types = ['milk', 'paper+towels', 'water', 'cookies', 'pencil',
-  'soda', 'cereal', 'chips', 'ketchup', 'flour', 'napkin', 
+  'soda', 'cereal', 'chips', 'ketchup', 'flour', 'napkin',
   'ramen', 'shampoo', 'sugar', 'olive+oil']
 
   # Hard-coded store id, locations based on my own.
@@ -87,17 +87,17 @@ def main(argv):
 
   # Writes results into a csv file.
   # First, write column names.
-  with open('inventory.csv', mode='w') as inventory_file:	
+  with open('inventory.csv', mode='w') as inventory_file:
     writer = csv.writer(inventory_file, delimiter=',')
     writer.writerow(['StoreId', 'ItemId', 'ItemAvailability', 'LastUpdated', 'Price', 'Ppu', 'Unit'])
-	
+
   for store in stores:
     for type in types:
       soup = Scraper.get_page('https://www.walmart.com/search/?grid=false&query=' + type + '&stores=' + store)
       items = Scraper.get_items(soup)
       for item in items:
         info = [store] + Scraper.get_item_info(item)
-        # Write inventory data into the csv file. 
+        # Write inventory data into the csv file.
         with open('inventory.csv', mode='a+', newline='') as inventory_file:
           writer = csv.writer(inventory_file, delimiter=',')
           writer.writerow(info)
