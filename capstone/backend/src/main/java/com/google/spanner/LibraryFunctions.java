@@ -36,20 +36,20 @@ public class LibraryFunctions {
   private static String DATABASE_INSTANCE = "capstone-instance";
   private static String DATABASE_NAME = "step39-db";
   
-  private static final String ADDRESS =          "Address";
-  private static final String EMAIL =            "Email";
-  private static final String ITEMID =           "ItemId";
-  private static final String ITEMNAMEANDBRAND = "ItemNameAndBrand";
-  private static final String ITEMTYPES =        "ItemTypes";
-  private static final String LISTID =           "ListId";
-  private static final String LISTNAME =         "DisplayName";
-  private static final String PRICE =            "Price";
-  private static final String STOREID =          "StoreId";
-  private static final String STORENAME =        "StoreName";
-  private static final String USERID =           "UserId";
-  private static final String USERLISTS =        "UserLists";
-  private static final String USERNAME =         "Username";
-  private static final String USERS =            "Users";
+  private static final String ADDRESS =             "Address";
+  private static final String EMAIL =               "Email";
+  private static final String ITEM_ID =             "ItemId";
+  private static final String ITEM_NAME_AND_BRAND = "ItemNameAndBrand";
+  private static final String ITEM_TYPES =          "ItemTypes";
+  private static final String LIST_ID =             "ListId";
+  private static final String DISPLAY_NAME =        "DisplayName";
+  private static final String PRICE =               "Price";
+  private static final String STORE_ID =            "StoreId";
+  private static final String STORE_NAME =          "StoreName";
+  private static final String USER_ID =             "UserId";
+  private static final String USER_LISTS =          "UserLists";
+  private static final String USERNAME =            "Username";
+  private static final String USERS =               "Users";
 
 
   private static DatabaseClient databaseClient = null;
@@ -75,14 +75,14 @@ public class LibraryFunctions {
         String displayName) throws SpannerException {
     DatabaseClient dbClient = initClient();
     List<Mutation> mutations = Arrays.asList(
-      Mutation.newInsertOrUpdateBuilder(USERLISTS)
-          .set(USERID)
+      Mutation.newInsertOrUpdateBuilder(USER_LISTS)
+          .set(USER_ID)
           .to(userId)
-          .set(LISTID)
+          .set(LIST_ID)
           .to(listId)
-          .set(ITEMTYPES)
+          .set(ITEM_TYPES)
           .toStringArray(itemTypes)
-          .set(LISTNAME)
+          .set(DISPLAY_NAME)
           .to(displayName)
           .build());
     dbClient.write(mutations);
@@ -99,8 +99,8 @@ public class LibraryFunctions {
     List<UserList> userLists = new ArrayList<>();
     try (ResultSet resultSet = dbClient.singleUse().executeQuery(s)) {
         while (resultSet.next()) {
-            userLists.add(new UserList(resultSet.getLong(LISTID), 
-            resultSet.getString(LISTNAME), resultSet.getStringList(ITEMTYPES)));
+            userLists.add(new UserList(resultSet.getLong(LIST_ID), 
+            resultSet.getString(DISPLAY_NAME), resultSet.getStringList(ITEM_TYPES)));
         }
     }
     return userLists;
@@ -109,7 +109,7 @@ public class LibraryFunctions {
   public static void createUser(int userId, String userName, String email) throws SpannerException {
     DatabaseClient dbClient = initClient();
     Mutation mutation = Mutation.newInsertBuilder(USERS)
-                            .set(USERID)
+                            .set(USER_ID)
                             .to(userId)
                             .set(USERNAME)
                             .to(userName)
@@ -158,15 +158,15 @@ public class LibraryFunctions {
       Statement itemStatement = Statement.newBuilder(query).bind("itemType").to(itemType).build();
       try (ResultSet itemInfo = dbClient.singleUse().executeQuery(itemStatement)) {
         while (itemInfo.next()) {
-          itemId = itemInfo.getLong(ITEMID);
-          itemName = itemInfo.getString(ITEMNAMEANDBRAND);
+          itemId = itemInfo.getLong(ITEM_ID);
+          itemName = itemInfo.getString(ITEM_NAME_AND_BRAND);
           query = "SELECT StoreId, Price FROM Inventory WHERE ItemAvailability=\"AVAILABLE\" AND ItemId=@itemId";
           long storeId;
           double price;
           Statement inventoryStatement = Statement.newBuilder(query).bind("itemId").to(itemId).build();
           try (ResultSet inventoryInfo = dbClient.singleUse().executeQuery(inventoryStatement)) {
             while (inventoryInfo.next()) {
-              storeId = inventoryInfo.getLong(STOREID);
+              storeId = inventoryInfo.getLong(STORE_ID);
               price = inventoryInfo.getDouble(PRICE);
               query = "SELECT Address, StoreName FROM Stores WHERE StoreId=@storeId";
               String address;
@@ -175,7 +175,7 @@ public class LibraryFunctions {
               try (ResultSet storeInfo = dbClient.singleUse().executeQuery(storeStatement)) {
                 while (storeInfo.next()) {
                   address = storeInfo.getString(ADDRESS);
-                  storeName = storeInfo.getString(STORENAME);
+                  storeName = storeInfo.getString(STORE_NAME);
                   if (first) {
                     Store newStore = new Store(storeId, storeName, address);
                     newStore.addItem(itemId, price, itemName);
