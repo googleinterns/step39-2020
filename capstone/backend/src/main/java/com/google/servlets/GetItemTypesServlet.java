@@ -20,8 +20,8 @@ import com.google.cloud.spanner.SpannerException;
 import com.google.gson.Gson;
 import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
@@ -29,9 +29,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
- @WebServlet("/api/v1/get-item-types")
- public class GetItemTypesServlet extends HttpServlet {
-
+@WebServlet("/api/v1/get-item-types")
+public class GetItemTypesServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
@@ -55,5 +54,4 @@ import javax.servlet.http.HttpServletResponse;
   public List<String> getItemTypes(int page) {
     return LibraryFunctions.getItemTypes(page);
   }
-
 }

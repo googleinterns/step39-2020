@@ -17,11 +17,10 @@
 package com.google.servlets;
 
 public class Item {
-
   private long itemId;
-  
+
   private float itemPrice;
-  
+
   private String itemName;
 
   public Item(long itemId, float itemPrice, String itemName) {
@@ -30,7 +29,7 @@ public class Item {
     this.itemName = itemName;
   }
 
-  public long getId(){
+  public long getId() {
     return itemId;
   }
 
@@ -41,5 +40,4 @@ public class Item {
   public String getName() {
     return itemName;
   }
-
 }
