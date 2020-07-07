@@ -1,6 +1,6 @@
 # Lint as: python3
 """
-
+Tests for scraper.py.
 """
 
 from .. import scraper
@@ -12,13 +12,12 @@ import mock
 import requests
 import unittest
 
-_FAKE_TARGET_URL = 'http://walmartfake.com/'
-_FAKE_HTML_RESPONSE = '<html>Empty</html>'
-_FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/json"> { 
-  "searchContent": { 
+
+_FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/json"> {
+  "searchContent": {
     "preso": {
       "items": [
-        { 
+        {
           "title": "fake"
         }
       ]
@@ -27,8 +26,8 @@ _FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/
 }
 </script></html>'''
 _FAKE_HTML_BODY_NO_DATA = '''<html></html>'''
-_FAKE_ITEMS = [ {"title": "fake"} ]
-_FAKE_ITEM_INFO_ALL = '''{  
+_FAKE_HTML_RESPONSE = '<html>Empty</html>'
+_FAKE_ITEM_INFO_ALL = '''{
   "inventory": {
     "displayFlags": ["OUT_OF_STOCK"]
   },
@@ -50,10 +49,10 @@ _FAKE_ITEM_INFO_NONE = '''{
   "inventory": {},
   "primaryOffer": {}
 }'''
-
-_FAKE_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz'] 
+_FAKE_ITEMS = [ {"title": "fake"} ]
+_FAKE_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz']
 _FAKE_ROW_DEFAULT = [ '', 'AVAILABLE', '20-06-06 22:34:01', '', '', '']
-
+_FAKE_TARGET_URL = 'http://walmartfake.com/'
 
 class FakeResponse(object):
   """Fake requests.Response object for requests.get()."""
@@ -84,7 +83,7 @@ class ScraperTest(unittest.TestCase):
 
   def test_get_item_info(self):
     with freeze_time("2020-06-06 22:34:01"):
-      result = scraper.Scraper.get_item_info(json.loads(_FAKE_ITEM_INFO_ALL))      
+      result = scraper.Scraper.get_item_info(json.loads(_FAKE_ITEM_INFO_ALL))
       self.assertEqual(result, _FAKE_ROW_ALL)
 
   def test_get_default_item_info(self):
