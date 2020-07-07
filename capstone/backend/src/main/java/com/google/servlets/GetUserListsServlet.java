@@ -36,7 +36,7 @@ public class GetUserListsServlet extends HttpServlet {
     long userId = Long.parseLong(userIdString);
     List<UserList> userLists;
     try {
-      userLists = LibraryFunctions.getUserLists(userId);
+      userLists = getUserLists(userId);
     } catch (SpannerException se){
       response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
         "An error occured while retriving data from the database.");
@@ -47,5 +47,9 @@ public class GetUserListsServlet extends HttpServlet {
     response.setContentType("application/json;");
     response.setStatus(HttpServletResponse.SC_OK);
     response.getWriter().println(g.toJson(responseBody));
+  }
+
+  public List<UserList> getUserLists(long userId) throws SpannerException {
+    return LibraryFunctions.getUserLists(userId);
   }
 }

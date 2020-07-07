@@ -5,6 +5,8 @@ import { Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Bu
   from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
+import { Store } from './Store';
+
 
 const items = [
   'Milk',
@@ -30,11 +32,10 @@ class ListPage extends Component {
       distanceValue: 4,
       listId: -1,
       listName: null,
-      userId: 1,
+      userId: this.props.store.get('userId'),
       listSaveDialog: {
         display: false,
       },
-    };
   }
 
   componentWillMount = () => {
@@ -230,4 +231,4 @@ class ListPage extends Component {
   }
 }
 
-export { ListPage };
+export const ListPageWithStore = Store.withStore(ListPage);

@@ -1,15 +1,20 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
-import { ListPage } from './ListPage.js';
+import { ListPageWithStore } from './ListPage.js';
+import { HeaderWithStore } from './Header.js';
+import { Store } from './Store';
 
 function WebRouter() {
   return (
     <div>
       <Router>
-        <Switch>
-          <Route exact path='/' component={() => <ListPage />} />
-        </Switch>
+        <Store.Container>
+          <HeaderWithStore />
+          <Switch>
+            <Route exact path='/' component={() => <ListPageWithStore />} />
+          </Switch>
+        </Store.Container>
       </Router>
     </div>
   )
