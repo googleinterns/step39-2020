@@ -179,6 +179,7 @@ public class LibraryFunctions {
         }
       }
       stores = newStores;
+      first = false;
     }
     return stores;
   }
