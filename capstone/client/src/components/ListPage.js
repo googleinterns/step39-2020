@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button, Grid, Card, Radio, RadioGroup } from '@material-ui/core';
+import { Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button, Grid, Card, 
+  Radio, RadioGroup, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } 
+  from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 
@@ -26,8 +28,11 @@ class ListPage extends Component {
       alert: null,
       distanceValue: 4,
       listId: -1,
-      listName: "First List",
+      listName: null,
       userId: 1,
+      listSaveDialog: {
+        display: false,
+      },
     };
   }
 
@@ -79,26 +84,73 @@ class ListPage extends Component {
         alert: (<Alert severity="error">Please select at least one item!</Alert>),
       });
     } else {
-      const response = axios.post(
-        '/api/v1/create-or-update-user-list-servlet',
-        { 
-          userId: this.state.userId,
-          userList: {
-            listId: this.state.listId,
-            displayName: this.state.listName,
-            itemsTypes: arr
-          }
+      this.setState({
+        listSaveDialog: {
+          display: true,
+          saveButtonDisabled: true,
+          error: true,
+          errorText: "This is a required field."
         },
-      ).then((res) => {
-        this.setState({
-          alert: (<Alert severity="success">Your list has been saved!</Alert>),
-          listId: res.data.userList.listId,
-        });
-      }).catch((error) => {
-        this.setState({
-          alert: (<Alert severity="error">{error}</Alert>)
-        })
-      });   
+        alert: null,
+      });
+    }
+  }
+
+  handleDialogCancel = () => {
+    this.setState({
+      listSaveDialog: {
+        display: false,
+      },
+    })
+  }
+
+  handleDialogSubmit = () => {
+    this.setState({
+      listSaveDialog: {
+        display: false,
+      },
+    });
+    const arr = [...this.selectedItems];
+    axios.post(
+      '/api/v1/create-or-update-user-list-servlet',
+      { 
+        userId: this.state.userId,
+        userList: {
+          listId: this.state.listId,
+          displayName: this.state.listName,
+          itemsTypes: arr
+        }
+      },
+    ).then((res) => {
+      this.setState({
+        alert: (<Alert severity="success">Your list has been saved!</Alert>),
+        listId: res.data.userList.listId,
+      });
+    }).catch((error) => {
+      this.setState({
+        alert: (<Alert severity="error">{error.message}</Alert>)
+      })
+    });   
+  }
+
+  onTextFieldChange = (event) => {
+    if (event.target.value.replace(/\s/g, '') === '') {
+      this.setState({
+        listSaveDialog: {
+          display: true,
+          error: true,
+          errorText: "This is a required field.",
+          saveButton: true,
+        },
+      });
+    } else {
+      this.setState({
+        listName: event.target.value,
+        listSaveDialog: {
+          display: true,
+          saveButtonDisabled: false,
+        },
+      });
     }
   }
 
@@ -145,6 +197,32 @@ class ListPage extends Component {
           </Grid>
         </Grid>
         <Button  onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
+        <Dialog open={this.state.listSaveDialog.display} onClose={this.handleDialogCancel} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Save List</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              To save a list containing the selected items to your account, please enter a list name. 
+            </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="list-name"
+                label="List Name"
+                helperText={this.state.listSaveDialog.errorText}
+                error={this.state.listSaveDialog.error}
+                onChange={this.onTextFieldChange}
+                fullWidth
+              />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleDialogCancel} color="primary">
+              Cancel
+            </Button>
+            <Button disabled={this.state.listSaveDialog.saveButtonDisabled} onClick={this.handleDialogSubmit} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
