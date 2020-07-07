@@ -1,6 +1,8 @@
 package com.google.servlets;
 
 import java.io.IOException;
+import java.util.Arrays;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
@@ -14,7 +16,8 @@ public class CreateOrUpdateUserlistServletTest extends TestCase {
   public void testDoPostSucceed() throws ServletException, IOException {
     SetupObj setupObj = ServletTestUtil.setupMockDataPost(CORRECT_REQUEST_STRING);
 
-    CreateOrUpdateUserlistServlet servlet = new CreateOrUpdateUserlistServlet();
+    CreateOrUpdateUserlistServlet servlet = Mockito.spy(CreateOrUpdateUserlistServlet.class);
+    Mockito.doNothing().when(servlet).writeUserLists(2, 3, Arrays.asList("Butter", "Juice", "Peanuts"), "List Name");
     servlet.doPost(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
