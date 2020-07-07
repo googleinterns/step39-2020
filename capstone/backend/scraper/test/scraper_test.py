@@ -1,6 +1,6 @@
 # Lint as: python3
 """
-TODO(carolynlwang): Documentation and description.
+
 """
 
 from .. import scraper
@@ -12,7 +12,7 @@ import mock
 import requests
 import unittest
 
-_FAKE_TARGET_URL = 'http://walmart.com/search/?grid=false&query=milk&stores=2486'
+_FAKE_TARGET_URL = 'http://walmartfake.com/'
 _FAKE_HTML_RESPONSE = '<html>Empty</html>'
 _FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/json"> { 
   "searchContent": { 
@@ -54,6 +54,7 @@ _FAKE_ITEM_INFO_NONE = '''{
 _FAKE_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz'] 
 _FAKE_ROW_DEFAULT = [ '', 'AVAILABLE', '20-06-06 22:34:01', '', '', '']
 
+
 class FakeResponse(object):
   """Fake requests.Response object for requests.get()."""
 
@@ -66,8 +67,10 @@ class FakeResponse(object):
     return BeautifulSoup(self.text, 'html.parser')
 
 class ScraperTest(unittest.TestCase):
-  def test_get_page(self): 
+  @mock.patch.object(requests, 'get')
+  def test_get_page(self, mocked_requests_get): 
     fake_response = FakeResponse(200, _FAKE_HTML_RESPONSE)
+    mocked_requests_get.return_value = fake_response
     soup = scraper.Scraper.get_page(_FAKE_TARGET_URL)
     self.assertEqual(soup, fake_response.get_page())
 

@@ -84,9 +84,7 @@ def main(argv):
 
   # Hard-coded store id, locations based on my own.
   stores = ['2486', '2119', '2280', '3123', '4174']
-	
 
-  
   # Writes results into a csv file.
   # First, write column names.
   with open('inventory.csv', mode='w') as inventory_file:	
