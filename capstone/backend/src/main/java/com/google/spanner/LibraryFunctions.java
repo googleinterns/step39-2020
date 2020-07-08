@@ -96,7 +96,7 @@ public class LibraryFunctions {
   public static void createUser(long userId, String userName, String email)
       throws SpannerException {
     DatabaseClient dbClient = initClient();
-    Mutation mutation = Mutation.newInsertBuilder(USERS)
+    Mutation mutation = Mutation.newInsertOrUpdateBuilder(USERS)
                             .set(USERID)
                             .to(userId)
                             .set(USERNAME)
