@@ -59,11 +59,11 @@ public final class LibraryFunctionsTest {
         @Override
         public Void run(TransactionContext transaction) throws Exception {
           String[] sql = {
-            "DELETE FROM Inventory WHERE Delete=1",
-            "DELETE FROM Items WHERE Delete=1",
-            "DELETE FROM Stores WHERE Delete=1",
-            "DELETE FROM UserLists WHERE Delete=1",
-            "DELETE FROM Users WHERE Delete=1"};
+            "DELETE FROM Inventory WHERE TRUE",
+            "DELETE FROM Items WHERE TRUE",
+            "DELETE FROM Stores WHERE TRUE",
+            "DELETE FROM UserLists WHERE TRUE",
+            "DELETE FROM Users WHERE TRUE"};
           for(String task : sql) {
             long rowCount = transaction.executeUpdate(Statement.of(task));
           }
@@ -79,31 +79,31 @@ public final class LibraryFunctionsTest {
         @Override
         public Void run(TransactionContext transaction) throws Exception {
           String[] sql = {
-            "INSERT INTO Items (ItemId, ItemNameAndBrand, ItemType, Delete) VALUES " +
-              "(1, 'Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count', 'MILK', 1), " +
-              "(2, 'Natrel Whole Milk, 32 fl oz', 'MILK', 1), " +
-              "(3, 'FIJI Natural Artesian Water,16.9 Fl Oz, 24 Ct', 'WATER', 1), " +
-              "(4, 'General Mills, Cheerios, Gluten Free, Breakfast Cereal, Family Size 18 oz Box', 'CEREAL', 1), " +
-              "(5, 'OZARKA Brand 100% Natural Spring Water, 16.9-ounce plastic bottles', 'WATER', 1) ", 
-            "INSERT INTO Stores (StoreId, Address, StoreName, Delete) VALUES " +
-              "(1, '3255 Mission College Blvd', 'Walmart', 1), " +
-              "(2, '4080 Stevens Creek Blvd', 'Target', 1), " +
-              "(3, '301 Ranch Dr', 'Whole Foods', 1) ", 
-            "INSERT INTO Inventory (StoreId, ItemId, ItemAvailability, Price, Delete) VALUES " +
-              "(1, 1, 'AVAILABLE', 11.98, 1), " +
-              "(1, 2, 'AVAILABLE', 10.3, 1), " +
-              "(1, 3, 'AVAILABLE', 17.2, 1), " +
-              "(1, 5, 'AVAILABLE', 9.98, 1), " +
-              "(2, 1, 'AVAILABLE', 10.38, 1), " +
-              "(2, 4, 'AVAILABLE', 3.64, 1), " +
-              "(3, 2, 'AVAILABLE', 9.44, 1), " +
-              "(3, 4, 'AVAILABLE', 5.43, 1) ", 
-            "INSERT INTO Users (UserId, Email, Username, Delete) VALUES " +
-              "(1, 'bzallen@google.com', 'brettallenyo', 1), " +
-              "(2, 'pinkpanther@gmail.com', 'Pink Panther', 1)", 
-            "INSERT INTO UserLists (UserId, ListId, DisplayName, ItemTypes, Delete) VALUES " +
-              "(1, 1, 'My List', ARRAY['Milk', 'Eggs', 'Bread'], 1), " +
-              "(2, 3, 'List Name', ARRAY['Butter', 'Juice', 'Peanuts'], 1) " };
+            "INSERT INTO Items (ItemId, ItemNameAndBrand, ItemType) VALUES " +
+              "(1, 'Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count', 'MILK'), " +
+              "(2, 'Natrel Whole Milk, 32 fl oz', 'MILK'), " +
+              "(3, 'FIJI Natural Artesian Water,16.9 Fl Oz, 24 Ct', 'WATER'), " +
+              "(4, 'General Mills, Cheerios, Gluten Free, Breakfast Cereal, Family Size 18 oz Box', 'CEREAL'), " +
+              "(5, 'OZARKA Brand 100% Natural Spring Water, 16.9-ounce plastic bottles', 'WATER') ", 
+            "INSERT INTO Stores (StoreId, Address, StoreName) VALUES " +
+              "(1, '3255 Mission College Blvd', 'Walmart'), " +
+              "(2, '4080 Stevens Creek Blvd', 'Target'), " +
+              "(3, '301 Ranch Dr', 'Whole Foods') ", 
+            "INSERT INTO Inventory (StoreId, ItemId, ItemAvailability, Price) VALUES " +
+              "(1, 1, 'AVAILABLE', 11.98), " +
+              "(1, 2, 'AVAILABLE', 10.3), " +
+              "(1, 3, 'AVAILABLE', 17.2), " +
+              "(1, 5, 'AVAILABLE', 9.98), " +
+              "(2, 1, 'AVAILABLE', 10.38), " +
+              "(2, 4, 'AVAILABLE', 3.64), " +
+              "(3, 2, 'AVAILABLE', 9.44), " +
+              "(3, 4, 'AVAILABLE', 5.43) ", 
+            "INSERT INTO Users (UserId, Email, Username) VALUES " +
+              "(1, 'bzallen@google.com', 'brettallenyo'), " +
+              "(2, 'pinkpanther@gmail.com', 'Pink Panther')", 
+            "INSERT INTO UserLists (UserId, ListId, DisplayName, ItemTypes) VALUES " +
+              "(1, 1, 'My List', ARRAY['Milk', 'Eggs', 'Bread']), " +
+              "(2, 3, 'List Name', ARRAY['Butter', 'Juice', 'Peanuts']) " };
           for(String task : sql) {
             long rowCount = transaction.executeUpdate(Statement.of(task));
           }
