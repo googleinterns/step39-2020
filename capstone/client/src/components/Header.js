@@ -33,7 +33,10 @@ class Header extends Component {
           loggedIn: this.props.store.get('loggedIn'), 
       }
     }
-
+    /*
+     * Obtains the id_token from the authResponse and makes a POST request to 
+     * /api/v1/create-user and saves the userId from the response in the store. 
+     */
     loginSuccess = (response) => {
       axios.post(
         '/api/v1/create-user',
@@ -60,6 +63,10 @@ class Header extends Component {
       })
     }
 
+    /* 
+     * Changes the value of loggedIn to false and resets the userId. Any error messages
+     * are also cleared. 
+     */
     logoutSuccess = () => {
       this.props.store.set('loggedIn')(false);
       this.props.store.set('userId')(-1);
