@@ -53,13 +53,15 @@ public final class LibraryFunctionsTest {
     Store store1 = new Store(1, "Walmart", "3255 Mission College Blvd");
     Store store2 = new Store(2, "Target", "4080 Stevens Creek Blvd");
     Store store3 = new Store(3, "Whole Foods", "301 Ranch Dr");
+    Store store4 = new Store(1, "Walmart", "3255 Mission College Blvd");
     store1.addItem(1, 11.98, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count");
     store2.addItem(1, 10.38, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count");
     store3.addItem(2, 9.44, "Natrel Whole Milk, 32 fl oz");
+    store4.addItem(2, 10.3, "Natrel Whole Milk, 32 fl oz");
     expected.add(store1);
     expected.add(store2);
     expected.add(store3);
-    Assert.assertEquals(3, actual.size());
+    Assert.assertEquals(4, actual.size());
     Collections.sort(actual);
     Collections.sort(expected);
     for(int i = 0; i < expected.size(); i++){
@@ -73,10 +75,19 @@ public final class LibraryFunctionsTest {
     List<Store> actual = LibraryFunctions.getStoresWithItems(itemTypes);
     List<Store> expected = new ArrayList<Store>();
     Store store1 = new Store(1, "Walmart", "3255 Mission College Blvd");
+    Store store2 = new Store(1, "Walmart", "3255 Mission College Blvd");
+    Store store3 = new Store(1, "Walmart", "3255 Mission College Blvd");
+    Store store4 = new Store(1, "Walmart", "3255 Mission College Blvd");
     store1.addItem(1, 11.98, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count");
     store1.addItem(3, 17.2, "FIJI Natural Artesian Water,16.9 Fl Oz, 24 Ct");
+    store2.addItem(1, 11.98, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count");
+    store2.addItem(5, 9.98, "OZARKA Brand 100% Natural Spring Water, 16.9-ounce plastic bottles");
+    store3.addItem(2, 10.3, "Natrel Whole Milk, 32 fl oz");
+    store3.addItem(3, 17.2, "FIJI Natural Artesian Water,16.9 Fl Oz, 24 Ct");
+    store4.addItem(2, 10.3, "Natrel Whole Milk, 32 fl oz");
+    store4.addItem(5, 9.98, "OZARKA Brand 100% Natural Spring Water, 16.9-ounce plastic bottles");
     expected.add(store1);
-    Assert.assertEquals(1, actual.size());
+    Assert.assertEquals(4, actual.size());
     Collections.sort(actual);
     Collections.sort(expected);
     for(int i = 0; i < expected.size(); i++){
