@@ -16,16 +16,102 @@
 
 package com.google.spanner;
 
+import com.google.cloud.spanner.TransactionContext;
+import com.google.cloud.spanner.TransactionRunner.TransactionCallable;
+import com.google.cloud.spanner.DatabaseClient;
+import com.google.cloud.spanner.DatabaseId;
+import com.google.cloud.spanner.Spanner;
+import com.google.cloud.spanner.SpannerException;
+import com.google.cloud.spanner.SpannerOptions;
+import com.google.cloud.spanner.Statement;
+
 import com.google.servlets.UserList;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public final class LibraryFunctionsTest {
+
+  private static String DATABASE_INSTANCE = "capstone-instance";
+  private static String DATABASE_NAME = "test-db";
+  private static DatabaseClient databaseClient = null;
+
+  @Before
+  public void setUp() {
+    LibraryFunctions.setDatabase(DATABASE_NAME);
+    SpannerOptions options = SpannerOptions.newBuilder().build();
+    Spanner spanner = options.getService();
+    DatabaseId db = DatabaseId.of(options.getProjectId(), DATABASE_INSTANCE, DATABASE_NAME);
+    databaseClient = spanner.getDatabaseClient(db);
+    insertData();
+  }
+
+  @After
+  public void tearDown() {
+    databaseClient.readWriteTransaction().run(
+      new TransactionCallable<Void>() {
+        @Override
+        public Void run(TransactionContext transaction) throws Exception {
+          String[] sql = {
+            "DELETE FROM Inventory WHERE Delete=1",
+            "DELETE FROM Items WHERE Delete=1",
+            "DELETE FROM Stores WHERE Delete=1",
+            "DELETE FROM UserLists WHERE Delete=1",
+            "DELETE FROM Users WHERE Delete=1"};
+          for(String task : sql) {
+            long rowCount = transaction.executeUpdate(Statement.of(task));
+          }
+          return null;
+        }
+      }
+    );
+  }
+
+  public void insertData() {
+    databaseClient.readWriteTransaction().run(
+      new TransactionCallable<Void>() {
+        @Override
+        public Void run(TransactionContext transaction) throws Exception {
+          String[] sql = {
+            "INSERT INTO Items (ItemId, ItemNameAndBrand, ItemType, Delete) VALUES " +
+              "(1, 'Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count', 'MILK', 1), " +
+              "(2, 'Natrel Whole Milk, 32 fl oz', 'MILK', 1), " +
+              "(3, 'FIJI Natural Artesian Water,16.9 Fl Oz, 24 Ct', 'WATER', 1), " +
+              "(4, 'General Mills, Cheerios, Gluten Free, Breakfast Cereal, Family Size 18 oz Box', 'CEREAL', 1), " +
+              "(5, 'OZARKA Brand 100% Natural Spring Water, 16.9-ounce plastic bottles', 'WATER', 1) ", 
+            "INSERT INTO Stores (StoreId, Address, StoreName, Delete) VALUES " +
+              "(1, '3255 Mission College Blvd', 'Walmart', 1), " +
+              "(2, '4080 Stevens Creek Blvd', 'Target', 1), " +
+              "(3, '301 Ranch Dr', 'Whole Foods', 1) ", 
+            "INSERT INTO Inventory (StoreId, ItemId, ItemAvailability, Price, Delete) VALUES " +
+              "(1, 1, 'AVAILABLE', 11.98, 1), " +
+              "(1, 2, 'AVAILABLE', 10.3, 1), " +
+              "(1, 3, 'AVAILABLE', 17.2, 1), " +
+              "(1, 5, 'AVAILABLE', 9.98, 1), " +
+              "(2, 1, 'AVAILABLE', 10.38, 1), " +
+              "(2, 4, 'AVAILABLE', 3.64, 1), " +
+              "(3, 2, 'AVAILABLE', 9.44, 1), " +
+              "(3, 4, 'AVAILABLE', 5.43, 1) ", 
+            "INSERT INTO Users (UserId, Email, Username, Delete) VALUES " +
+              "(1, 'bzallen@google.com', 'brettallenyo', 1), " +
+              "(2, 'pinkpanther@gmail.com', 'Pink Panther', 1)", 
+            "INSERT INTO UserLists (UserId, ListId, DisplayName, ItemTypes, Delete) VALUES " +
+              "(1, 1, 'My List', ARRAY['Milk', 'Eggs', 'Bread'], 1), " +
+              "(2, 3, 'List Name', ARRAY['Butter', 'Juice', 'Peanuts'], 1) " };
+          for(String task : sql) {
+            long rowCount = transaction.executeUpdate(Statement.of(task));
+          }
+          return null;
+        }
+      }
+    );
+  }
   
   @Test
   public void itemTypesCheck() {
