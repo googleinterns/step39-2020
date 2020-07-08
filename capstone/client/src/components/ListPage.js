@@ -57,6 +57,12 @@ class ListPage extends Component {
 
   componentWillMount = () => {
     this.selectedItems = new Set();
+    this.props.store.on('userId').subscribe(userId => {
+      this.setState({
+        userId: userId,
+      });
+    }
+    );
   }
 
   /* 
