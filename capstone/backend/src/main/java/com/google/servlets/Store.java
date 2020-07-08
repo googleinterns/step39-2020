@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Store {
-
   private float totalPrice;
 
   private long storeId;
@@ -31,7 +30,7 @@ public class Store {
 
   private String storeName;
 
-  public Store(long storeId, String storeName, String storeAddress){
+  public Store(long storeId, String storeName, String storeAddress) {
     this.storeId = storeId;
     this.storeName = storeName;
     this.storeAddress = storeAddress;
@@ -53,5 +52,4 @@ public class Store {
   public int getNumberOfItems() {
     return items.size();
   }
-
 }
