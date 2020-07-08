@@ -35,7 +35,7 @@ const items = [
 ];
 
 /*
- * This class displays a checkbox list containing the items returned from the Items API. 
+ * Displays a checkbox list containing the items returned from the Items API. 
  * The selected items are displayed below when the form is submitted. 
  */
 class ListPage extends Component {
@@ -57,16 +57,16 @@ class ListPage extends Component {
 
   componentWillMount = () => {
     this.selectedItems = new Set();
-    this.props.store.on('userId').subscribe(userId => {
+    this.props.store.on('userId').subscribe((userId) => {
       this.setState({
-        userId: userId,
+        userId,
       });
     }
     );
   }
 
   /* 
-   * This funciton adds an item to the selectedItems list if an item is checked and removes
+   * Adds an item to the selectedItems list if an item is checked and removes
    * an item if it is unchecked. 
    */
   handleItemChange = (event) => {
@@ -78,7 +78,7 @@ class ListPage extends Component {
   }
 
   /* 
-   * This function saves the most recently selected distance preferece. 
+   * Saves the most recently selected distance preferece. 
    */
   handleDistanceChange = (event) => {
     this.setState({
@@ -87,7 +87,7 @@ class ListPage extends Component {
   }
 
   /* 
-   * This funtion displays a list of the items selected from the checkbox list. 
+   * Displays a list of the items selected from the checkbox list. 
    * @TODO Change this function to make a GET request to obtain store recommendations based 
    * on the selected items.
    */
@@ -116,8 +116,8 @@ class ListPage extends Component {
 
 
   /* 
-   * This function displays a dialog prompting the user to specify a name for the 
-   * list that is going to be saved. 
+   * Displays a dialog prompting the user to specify a name for the list that 
+   * is going to be saved. 
    */
   onSave = () => {
     const arr = [...this.selectedItems];
@@ -147,8 +147,8 @@ class ListPage extends Component {
   }
 
   /* 
-   * This function obtains the selected itmes from the checkbox list and makes a POST
-   * request to /api/v1/create-or-update-user-list-servlet to save the specified list.
+   * Obtains the selected itmes from the checkbox list and makes a POST request to 
+   * /api/v1/create-or-update-user-list-servlet to save the specified list.
    */
   handleDialogSubmit = () => {
     this.setState({
@@ -180,7 +180,7 @@ class ListPage extends Component {
   }
 
   /*
-   * This function checks to see if the "List Name" field is empty. If the field is empty, an 
+   * Checks to see if the "List Name" field is empty. If the field is empty, an 
    * error message is displayed and the save button is disabled. 
    */
   onTextFieldChange = (event) => {

@@ -34,8 +34,8 @@ class Header extends Component {
       }
     }
     /*
-     * This function obtains the id_token from the authResponse and makes a POST request
-     * to /api/v1/create-user and saves the userId from the response in the store. 
+     * Obtains the id_token from the authResponse and makes a POST request to 
+     * /api/v1/create-user and saves the userId from the response in the store. 
      */
     loginSuccess = (response) => {
       axios.post(
@@ -64,7 +64,7 @@ class Header extends Component {
     }
 
     /* 
-     * This function changes the value of loggedIn to false and resets the userId. Any error messages
+     * Changes the value of loggedIn to false and resets the userId. Any error messages
      * are also cleared. 
      */
     logoutSuccess = () => {
