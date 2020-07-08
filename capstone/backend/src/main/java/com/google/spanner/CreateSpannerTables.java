@@ -65,8 +65,10 @@ public class CreateSpannerTables {
                     + ") PRIMARY KEY (StoreId)",
                 "CREATE TABLE Items ("
                     + "  ItemId            INT64,"
-                    + "  ItemNameAndBrand  STRING(MAX),"
-                    + "  ItemType          STRING(MAX)"
+                    + "  ItemName          STRING(MAX),"
+                    + "  ItemBrand         STRING(MAX),"
+                    + "  ItemType          STRING(MAX),"
+                    + "  ItemSubtype       STRING(MAX)"
                     + ") PRIMARY KEY (ItemId)",
                 "CREATE TABLE Inventories ("
                     + "  StoreId           INT64,"
@@ -74,6 +76,8 @@ public class CreateSpannerTables {
                     + "  ItemAvailability  STRING(MAX),"
                     + "  LastUpdated       TIMESTAMP OPTIONS (allow_commit_timestamp=true),"
                     + "  Price             FLOAT64,"
+                    + "  PPU               FLOAT64,"
+                    + "  Unit              STRING(MAX)"
                     + "  CONSTRAINT FK_ItemId FOREIGN KEY (ItemId) REFERENCES Items (ItemId)"
                     + ") PRIMARY KEY (StoreId, ItemId),"
                     + "INTERLEAVE IN PARENT Stores ON DELETE CASCADE"));
