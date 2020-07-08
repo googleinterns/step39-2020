@@ -30,7 +30,9 @@ import com.google.servlets.UserList;
 import java.lang.Exception;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LibraryFunctions {
   private static String DATABASE_INSTANCE = "capstone-instance";
@@ -40,6 +42,7 @@ public class LibraryFunctions {
   private static final String EMAIL =               "Email";
   private static final String ITEM_ID =             "ItemId";
   private static final String ITEM_NAME_AND_BRAND = "ItemNameAndBrand";
+  private static final String ITEM_TYPE =           "ItemType";
   private static final String ITEM_TYPES =          "ItemTypes";
   private static final String LIST_ID =             "ListId";
   private static final String DISPLAY_NAME =        "DisplayName";
@@ -146,42 +149,43 @@ public class LibraryFunctions {
    *
    */
   public static List<Store> getStoresWithItems(List<String> itemTypes) {
-    List<Store> stores = new ArrayList<Store>();
+    Map<Long, Store> stores = new HashMap<Long, Store>();
     DatabaseClient dbClient = initClient();
+    String itemTypesString = getSQLList(itemTypes);
     String query = "";
-    boolean first = true;
-    for (String itemType : itemTypes) {
-      List<Store> newStores = new ArrayList<Store>();
-      query = "SELECT a.ItemId, a.ItemNameAndBrand, b.StoreId, b.Price, c.Address, c.StoreName " +
+    query = "SELECT a.ItemId, a.ItemNameAndBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName " +
         "FROM Items a JOIN Inventory b ON a.ItemId = b.ItemId JOIN Stores c ON b.StoreId = c.StoreId " +
-        "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType = @itemType";
-      Statement allStatement = Statement.newBuilder(query).bind("itemType").to(itemType).build();
-      try(ResultSet allInfo = dbClient.singleUse().executeQuery(allStatement)) {
-        while(allInfo.next()) {
-          long itemId = allInfo.getLong(ITEM_ID);
-          String itemName = allInfo.getString(ITEM_NAME_AND_BRAND);
-          long storeId = allInfo.getLong(STORE_ID);
-          double itemPrice = allInfo.getDouble(PRICE);
-          String storeAddress = allInfo.getString(ADDRESS);
-          String storeName = allInfo.getString(STORE_NAME);
-          if(first) {
-            Store newStore = new Store(storeId, storeName, storeAddress);
-            newStore.addItem(itemId, itemPrice, itemName);
-            newStores.add(newStore);
-          } else {
-            for (int i = 0; i < stores.size(); i++) {
-              if (storeId == stores.get(i).getStoreId()) {
-                Store newStore = new Store(stores.get(i), itemId, itemPrice, itemName);
-                newStores.add(newStore);
-              }
-            }
-          }
+        "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType IN (" + itemTypesString + ")";
+    try(ResultSet allInfo = dbClient.singleUse().executeQuery(Statement.of(query))) {
+      while(allInfo.next()) {
+        long itemId = allInfo.getLong(ITEM_ID);
+        String itemName = allInfo.getString(ITEM_NAME_AND_BRAND);
+        String itemType = allInfo.getString(ITEM_TYPE);
+        long storeId = allInfo.getLong(STORE_ID);
+        double itemPrice = allInfo.getDouble(PRICE);
+        String storeAddress = allInfo.getString(ADDRESS);
+        String storeName = allInfo.getString(STORE_NAME);
+        if(stores.containsKey(storeId)) {
+          stores.get(storeId).addItem(itemId, itemPrice, itemName, itemType);
+        } else {
+          Store newStore = new Store(storeId, storeName, storeAddress);
+          stores.put(storeId, newStore);
         }
       }
-      stores = newStores;
-      first = false;
     }
-    return stores;
+    return new ArrayList<Store>(stores.values());
+  }
+
+  private static String getSQLList(List<String> words) {
+    String ret = "";
+    for(int i = 0; i < words.size(); i++) {
+      ret = ret + "'" + words.get(i) + "'";
+      if(i != words.size() - 1) {
+        ret = "', ";
+      }
+    }
+    ret = ret + "";
+    return ret;
   }
 
 }

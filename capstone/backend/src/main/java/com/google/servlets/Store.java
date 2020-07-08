@@ -16,16 +16,23 @@
 
 package com.google.servlets;
 
+import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Store implements Comparable<Store> {
 
-  private double totalPrice;
+  private double lowestPotentialPrice;
+
+  private int totalItemsFound;
 
   private long storeId;
 
-  private List<Item> items = new ArrayList<Item>();
+  private Map<String, List<Item>> items = new HashMap<String, List<Item>>();
+
+  private Map<String, Double> typeToPrice = new HashMap<String, Double>();
 
   private String storeAddress;
 
@@ -37,24 +44,24 @@ public class Store implements Comparable<Store> {
     this.storeAddress = storeAddress;
   }
 
-  public Store(Store otherStore, long itemId, double itemPrice, String itemName) {
-    this.storeId = otherStore.storeId;
-    this.storeName = otherStore.storeName;
-    this.storeAddress = otherStore.storeAddress;
-    for(Item item : otherStore.items){
-      this.items.add(item);
+  public void addItem(long itemId, double itemPrice, String itemName, String itemType) {
+    Item newItem = new Item(itemId, itemPrice, itemName, this.storeId);
+    if(items.containsKey(itemType)){
+      items.get(itemType).add(newItem);
+      if(itemPrice < typeToPrice.get(itemType)){
+        typeToPrice.put(itemType, itemPrice);
+        lowestPotentialPrice += itemPrice;
+      }
+    } else {
+      totalItemsFound++;
+      items.put(itemType, new ArrayList<Item>(Arrays.asList(newItem)));
+      typeToPrice.put(itemType, itemPrice);
+      lowestPotentialPrice += itemPrice;
     }
-    this.addItem(itemId, itemPrice, itemName);
   }
 
-  public void addItem(long itemId, double itemPrice, String itemName) {
-    Item newItem = new Item(itemId, itemPrice, itemName);
-    items.add(newItem);
-    totalPrice += itemPrice;
-  }
-
-  public int getNumberOfItems() {
-    return items.size();
+  public int getNumberOfItemsFound() {
+    return totalItemsFound;
   }
 
   public long getStoreId() {
@@ -63,9 +70,9 @@ public class Store implements Comparable<Store> {
 
   @Override
   public int compareTo(Store otherStore) {
-    if (this.totalPrice < otherStore.totalPrice) {
+    if (this.lowestPotentialPrice < otherStore.lowestPotentialPrice) {
       return -1;
-    } else if (this.totalPrice == otherStore.totalPrice) {
+    } else if (this.lowestPotentialPrice == otherStore.lowestPotentialPrice) {
       return 0;
     } else {
       return 1;
@@ -74,10 +81,12 @@ public class Store implements Comparable<Store> {
 
   public boolean equals(Store otherStore) {
     if(this.storeId == otherStore.storeId && this.storeName == otherStore.storeName &&
-        this.storeAddress == otherStore.storeAddress && this.totalPrice == otherStore.totalPrice) {
-      for(int i = 0; i < items.size(); i++){
-        if(!this.items.get(i).equals(otherStore.items.get(i))){
-          return false;
+        this.storeAddress == otherStore.storeAddress && this.lowestPotentialPrice == otherStore.lowestPotentialPrice) {
+      for(String key : items.keySet()){
+        for(int i = 0; i < items.get(i).size(); i++){
+          if(!this.items.get(key).get(i).equals(otherStore.items.get(key).get(i))){
+            return false;
+          }
         }
       }
     }
