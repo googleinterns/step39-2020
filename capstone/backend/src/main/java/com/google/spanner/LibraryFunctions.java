@@ -180,7 +180,7 @@ public class LibraryFunctions {
     for(int i = 0; i < words.size(); i++) {
       ret = ret + "'" + words.get(i) + "'";
       if(i != words.size() - 1) {
-        ret = "', ";
+        ret = ret + ", ";
       }
     }
     return ret;
