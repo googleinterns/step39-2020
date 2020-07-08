@@ -47,7 +47,7 @@ public class Item {
 
   public boolean equals(Item otherItem) {
     return this.itemId == otherItem.itemId && this.itemPrice == otherItem.itemPrice && 
-                            this.itemName == otherItem.itemName && this.storeId == otherItem.storeId;
+            this.itemName == otherItem.itemName && this.storeId == otherItem.storeId;
   }
 
 }

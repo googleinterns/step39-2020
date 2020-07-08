@@ -151,8 +151,7 @@ public class LibraryFunctions {
     Map<Long, Store> stores = new HashMap<Long, Store>();
     DatabaseClient dbClient = initClient();
     String itemTypesString = getSQLList(itemTypes);
-    String query = "";
-    query = "SELECT a.ItemId, a.ItemNameAndBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName " +
+    String query = "SELECT a.ItemId, a.ItemNameAndBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName " +
         "FROM Items a JOIN Inventory b ON a.ItemId = b.ItemId JOIN Stores c ON b.StoreId = c.StoreId " +
         "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType IN (" + itemTypesString + ")";
     try(ResultSet allInfo = dbClient.singleUse().executeQuery(Statement.of(query))) {
@@ -175,6 +174,16 @@ public class LibraryFunctions {
     return new ArrayList<Store>(stores.values());
   }
 
+  /*
+   * Given a list of Strings, this function converts the list to a single string
+   * where each item is surrounded by single quotes '' and separated by commas
+   *
+   * i.e. list{"word1", "word2"} --> "'word1', 'word2'"
+   *
+   * @param words list of Strings
+   * @return single string of original list
+   * 
+   */
   private static String getSQLList(List<String> words) {
     String ret = "";
     for(int i = 0; i < words.size(); i++) {
