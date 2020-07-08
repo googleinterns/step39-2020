@@ -17,8 +17,8 @@
 package com.google.servlets;
 
 public class Item {
-
   private long itemId;
+
 
   private long storeId;
   
@@ -33,7 +33,7 @@ public class Item {
     this.storeId = storeId;
   }
 
-  public long getId(){
+  public long getId() {
     return itemId;
   }
 

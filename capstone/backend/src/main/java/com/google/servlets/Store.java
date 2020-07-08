@@ -38,7 +38,7 @@ public class Store implements Comparable<Store> {
 
   private String storeName;
 
-  public Store(long storeId, String storeName, String storeAddress){
+  public Store(long storeId, String storeName, String storeAddress) {
     this.storeId = storeId;
     this.storeName = storeName;
     this.storeAddress = storeAddress;
@@ -92,5 +92,4 @@ public class Store implements Comparable<Store> {
     }
     return true;
   }
-
 }

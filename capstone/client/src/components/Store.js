@@ -14,26 +14,11 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import { createConnectedStore } from 'undux';
 
-import { ListPageWithStore } from './ListPage.js';
-import { HeaderWithStore } from './Header.js';
-import { Store } from './Store';
+let initialState = {
+  loggedIn: false,
+  userId: -1,
+};
 
-function WebRouter() {
-  return (
-    <div>
-      <Router>
-        <Store.Container>
-          <HeaderWithStore />
-          <Switch>
-            <Route exact path='/' component={() => <ListPageWithStore />} />
-          </Switch>
-        </Store.Container>
-      </Router>
-    </div>
-  )
-}
-
-export  { WebRouter };
+export const Store = createConnectedStore(initialState);
