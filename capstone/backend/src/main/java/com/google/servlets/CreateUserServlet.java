@@ -21,6 +21,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import com.google.cloud.spanner.ErrorCode;
 import com.google.cloud.spanner.SpannerException;
 import com.google.gson.Gson;
 import com.google.spanner.LibraryFunctions;
@@ -74,9 +75,11 @@ public class CreateUserServlet extends HttpServlet {
     try {
       createUser(userId, (String) payload.get("name"), payload.getEmail());
     } catch (SpannerException se) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+      if (se.getErrorCode() != ErrorCode.ALREADY_EXISTS) {
+        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
           "An error occured while adding a new user to the databse.");
       return;
+      }
     }
 
     ResponseBody responseBody = new ResponseBody(userId);
