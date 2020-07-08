@@ -25,6 +25,7 @@ import com.google.cloud.spanner.Spanner;
 import com.google.cloud.spanner.SpannerException;
 import com.google.cloud.spanner.SpannerOptions;
 import com.google.cloud.spanner.Statement;
+import com.google.cloud.spanner.Value;
 import com.google.servlets.Store;
 import com.google.servlets.UserList;
 import java.lang.Exception;
@@ -147,11 +148,12 @@ public class LibraryFunctions {
   public static List<Store> getStoresWithItems(List<String> itemTypes) {
     Map<Long, Store> stores = new HashMap<Long, Store>();
     DatabaseClient dbClient = initClient();
-    String itemTypesString = getSQLList(itemTypes);
+    Value itemListArray = Value.stringArray(itemTypes);
     String query = "SELECT a.ItemId, a.ItemNameAndBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName " +
         "FROM Items a JOIN Inventory b ON a.ItemId = b.ItemId JOIN Stores c ON b.StoreId = c.StoreId " +
-        "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType IN (" + itemTypesString + ")";
-    try(ResultSet allInfo = dbClient.singleUse().executeQuery(Statement.of(query))) {
+        "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType IN UNNEST(@itemTypes)";
+    Statement statement = Statement.newBuilder(query).bind("itemTypes").to(itemListArray).build();
+    try(ResultSet allInfo = dbClient.singleUse().executeQuery(statement)) {
       while(allInfo.next()) {
         long itemId = allInfo.getLong(ITEM_ID);
         String itemName = allInfo.getString(ITEM_NAME_AND_BRAND);
@@ -169,27 +171,6 @@ public class LibraryFunctions {
       }
     }
     return new ArrayList<Store>(stores.values());
-  }
-
-  /*
-   * Given a list of Strings, this function converts the list to a single string
-   * where each item is surrounded by single quotes '' and separated by commas
-   *
-   * i.e. list{"word1", "word2"} --> "'word1', 'word2'"
-   *
-   * @param words list of Strings
-   * @return single string of original list
-   * 
-   */
-  private static String getSQLList(List<String> words) {
-    String ret = "";
-    for(int i = 0; i < words.size(); i++) {
-      ret = ret + "'" + words.get(i) + "'";
-      if(i != words.size() - 1) {
-        ret = ret + ", ";
-      }
-    }
-    return ret;
   }
 
 }
