@@ -164,11 +164,12 @@ class ListPage extends Component {
         userList: {
           listId: this.state.listId,
           displayName: this.state.listName,
-          itemsTypes: arr
+          itemTypes: arr
         }
       },
     ).then((res) => {
       this.setState({
+        errorMessage: null,
         successMessage: "Your list has been saved!",
         listId: res.data.userList.listId,
       });
@@ -227,7 +228,7 @@ class ListPage extends Component {
     return (
       <div id="list-page-container">
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
-        {this.state.successMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
+        {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
         <h1>Preferences</h1>
         <Grid container alignItems="stretch">
           <Grid id="distance-list-container" item component={Card} xs>
