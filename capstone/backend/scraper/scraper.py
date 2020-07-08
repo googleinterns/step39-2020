@@ -50,7 +50,10 @@ class Scraper:
     item_row.append(item['productId']) if 'productId' in item else item_row.append('')
     item_row.append(item['title'].replace('<mark>', '').replace('</mark>', ''))\
     if 'title' in item else item_row.append('')
-    item_row.append(item['brand'][0]) if 'brand' in item else item_row.append('')
+    if 'brand' in item and len(item['brand']) > 0:
+      item_row.append(item['brand'][0])
+    else:
+      item_row.append('')
     item_row.append(item['seeAllName']) if 'seeAllName' in item else item_row.append('')
     return item_row
 

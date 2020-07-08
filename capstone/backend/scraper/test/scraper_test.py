@@ -53,12 +53,12 @@ _FAKE_SINGLE_ITEM_INFO_ALL = '''{
 
 # Some fields omitted, some fields left empty.
 _FAKE_SINGLE_ITEM_INFO_EMPTY = '''{
-  "inventory": {},
+  "brand": [],
   "primaryOffer": {}
 }'''
 
 _FAKE_SINGLE_INVENTORY_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz']
-_FAKE_SINGLE_INVENTORY_ROW_DEFAULT = [ '', 'AVAILABLE', '20-06-06 22:34:01', '', '', '']
+_FAKE_SINGLE_INVENTORY_ROW_DEFAULT = [ '', '', '20-06-06 22:34:01', '', '', '']
 _FAKE_SINGLE_ITEM_ROW_ALL = ['7L', 'LALA Milk Drinks', 'LALA', 'Chocolate Milk']
 _FAKE_SINGLE_ITEM_ROW_DEFAULT = ['', '', '', '']
 
