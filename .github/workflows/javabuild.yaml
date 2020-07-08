@@ -13,4 +13,6 @@ jobs:
         with:
           java-version: 8
       - name: Build with Maven
-        run: mvn package --file capstone/backend/pom.xml 
+        run: | 
+          gcloud congig set project step-39-2020
+          mvn package --file capstone/backend/pom.xml 
