@@ -1,6 +1,7 @@
 # Lint as: python3
 """
-Scrapes inventory data from the Walmart search result page
+Scrapes inventory and items data
+from the Walmart search result page
 using BeautifulSoup.
 """
 
@@ -54,14 +55,13 @@ class Scraper:
     return item_row
 
   def get_inventory_info(item):
-    """From the JSON data of the item, 
+    """From the JSON data of the item,
     Finds and returns the attributes of the item
     for inventory purposes (in the order of itemId,
     itemAvailability, timeUpdated, price, ppu, unit).
     """
     inventory_row = []
-    inventory_row.append(item['productId']) if 'productId' in item else inventory_row.append('')    
-    
+    inventory_row.append(item['productId']) if 'productId' in item else inventory_row.append('')
     if 'inventory' in item:
       if 'displayFlags' in item['inventory']:
         inventory_row.append(item['inventory']['displayFlags'][0])
@@ -78,7 +78,7 @@ class Scraper:
       if 'offerPrice' in item['primaryOffer']:
         inventory_row.append(item['primaryOffer']['offerPrice'])
       else:
-        inventory_row.append('')   
+        inventory_row.append('')
     if 'ppu' in item:
       inventory_row.append(item['ppu']['amount']) if 'amount' in item['ppu']\
       else inventory_row.append('')
@@ -103,7 +103,7 @@ def main(argv):
 
   # Writes item and inventory results into a csv file.
   # First, write column names.
-  with open('inventories.csv', mode='w') as inventories_file:	
+  with open('inventories.csv', mode='w') as inventories_file:
     writer = csv.writer(inventories_file, delimiter=',')
     writer.writerow(['StoreId', 'ItemId', 'ItemAvailability', 'LastUpdated', 'Price', 'Ppu', 'Unit'])
   with open('items.csv', mode='w') as items_file:
@@ -112,7 +112,7 @@ def main(argv):
 
   # Keep a list of unique ItemIds
   item_ids = []
-  
+
   for store in stores:
     for type in types:
       soup = Scraper.get_page('https://www.walmart.com/search/?grid=false&query=' + type + '&stores=' + store)
@@ -125,11 +125,11 @@ def main(argv):
             item_info = Scraper.get_item_info(item)
             item_info = item_info + [type]
             with open('items.csv', mode='a+', newline='') as items_file:
-              writer = csv.writer(items_file, delimiter=',')    
+              writer = csv.writer(items_file, delimiter=',')
               writer.writerow(item_info)
-        
+
         inventory_info = Scraper.get_inventory_info(item)
-        inventory_info = [store] + inventory_info 
+        inventory_info = [store] + inventory_info
         with open('inventories.csv', mode='a+', newline='') as inventories_file:
           writer = csv.writer(inventories_file, delimiter=',')
           writer.writerow(inventory_info)

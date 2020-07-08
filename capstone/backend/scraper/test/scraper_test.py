@@ -57,10 +57,10 @@ _FAKE_SINGLE_ITEM_INFO_EMPTY = '''{
   "primaryOffer": {}
 }'''
 
+_FAKE_SINGLE_INVENTORY_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz']
+_FAKE_SINGLE_INVENTORY_ROW_DEFAULT = [ '', 'AVAILABLE', '20-06-06 22:34:01', '', '', '']
 _FAKE_SINGLE_ITEM_ROW_ALL = ['7L', 'LALA Milk Drinks', 'LALA', 'Chocolate Milk']
 _FAKE_SINGLE_ITEM_ROW_DEFAULT = ['', '', '', '']
-_FAKE_SINGLE_INVENTORY_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz'] 
-_FAKE_SINGLE_INVENTORY_ROW_DEFAULT = [ '', 'AVAILABLE', '20-06-06 22:34:01', '', '', '']
 
 _FAKE_TARGET_URL = 'http://walmart.fake.com/'
 
@@ -77,7 +77,7 @@ class FakeResponse(object):
 
 class ScraperTest(unittest.TestCase):
   @mock.patch.object(requests, 'get')
-  def test_get_page(self, mocked_requests_get): 
+  def test_get_page(self, mocked_requests_get):
     fake_response = FakeResponse(200, _FAKE_HTML_RESPONSE)
     mocked_requests_get.return_value = fake_response
     soup = scraper.Scraper.get_page(_FAKE_TARGET_URL)
@@ -101,7 +101,7 @@ class ScraperTest(unittest.TestCase):
 
   def test_get_inventory_info(self):
     with freeze_time("2020-06-06 22:34:01"):
-      result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_ALL))      
+      result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_ALL))
       self.assertEqual(result, _FAKE_SINGLE_INVENTORY_ROW_ALL)
 
   def test_get_default_inventory_info(self):
