@@ -64,7 +64,7 @@ public final class LibraryFunctionsTest {
             "DELETE FROM Stores WHERE TRUE",
             "DELETE FROM UserLists WHERE TRUE",
             "DELETE FROM Users WHERE TRUE"};
-          for(String task : sql) {
+          for (String task : sql) {
             long rowCount = transaction.executeUpdate(Statement.of(task));
           }
           return null;
@@ -104,7 +104,7 @@ public final class LibraryFunctionsTest {
             "INSERT INTO UserLists (UserId, ListId, DisplayName, ItemTypes) VALUES " +
               "(1, 1, 'My List', ARRAY['Milk', 'Eggs', 'Bread']), " +
               "(2, 3, 'List Name', ARRAY['Butter', 'Juice', 'Peanuts']) " };
-          for(String task : sql) {
+          for (String task : sql) {
             long rowCount = transaction.executeUpdate(Statement.of(task));
           }
           return null;
