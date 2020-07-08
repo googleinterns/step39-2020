@@ -141,11 +141,10 @@ public class LibraryFunctions {
 
   /*
    * Provided a list of ItemTypes, this method will return a list of Stores
-   * with every permutation of possible items from any given store that 
-   * satisfies this list of ItemTypes.
+   * that contain one or more of the Item Types provided.
    *
    * @param itemTypes list of Strings that describes the desired Item Types
-   * @return a list of all potential stores and combinations that satisfy the Item Types
+   * @return a list of all stores that have one or more Item Type
    *
    */
   public static List<Store> getStoresWithItems(List<String> itemTypes) {
@@ -184,7 +183,6 @@ public class LibraryFunctions {
         ret = "', ";
       }
     }
-    ret = ret + "";
     return ret;
   }
 
