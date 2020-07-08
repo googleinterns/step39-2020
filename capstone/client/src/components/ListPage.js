@@ -1,6 +1,3 @@
-// Copyright 2019 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
 /*
  * Copyright 2020 Google Inc.
  *
@@ -51,7 +48,7 @@ class ListPage extends Component {
       distanceValue: 4,
       listId: -1,
       listName: null,
-      userId: this.props.store.get('userId'),
+      userId: -1,
       listSaveDialog: {
         display: false,
       },
@@ -62,6 +59,10 @@ class ListPage extends Component {
     this.selectedItems = new Set();
   }
 
+  /* 
+   * This funciton adds an item to the selectedItems list if an item is checked and removes
+   * an item if it is unchecked. 
+   */
   handleItemChange = (event) => {
     if (event.target.checked) {
       this.selectedItems.add(event.target.name);
@@ -70,12 +71,20 @@ class ListPage extends Component {
     }
   }
 
+  /* 
+   * This function saves the most recently selected distance preferece. 
+   */
   handleDistanceChange = (event) => {
     this.setState({
       distanceValue: parseInt(event.target.value),
     })
   }
 
+  /* 
+   * This funtion displays a list of the items selected from the checkbox list. 
+   * @TODO Change this function to make a GET request to obtain store recommendations based 
+   * on the selected items.
+   */
   onSubmit = () => {
     const arr = [...this.selectedItems];
     if (arr.length === 0) {
@@ -99,6 +108,11 @@ class ListPage extends Component {
     });
   }
 
+
+  /* 
+   * This function displays a dialog prompting the user to specify a name for the 
+   * list that is going to be saved. 
+   */
   onSave = () => {
     const arr = [...this.selectedItems];
     if (arr.length === 0) {
@@ -126,6 +140,10 @@ class ListPage extends Component {
     })
   }
 
+  /* 
+   * This function obtains the selected itmes from the checkbox list and makes a POST
+   * request to /api/v1/create-or-update-user-list-servlet to save the specified list.
+   */
   handleDialogSubmit = () => {
     this.setState({
       listSaveDialog: {
@@ -155,6 +173,10 @@ class ListPage extends Component {
     });   
   }
 
+  /*
+   * This function checks to see if the "List Name" field is empty. If the field is empty, an 
+   * error message is displayed and the save button is disabled. 
+   */
   onTextFieldChange = (event) => {
     if (event.target.value.trim() === '') {
       this.setState({
