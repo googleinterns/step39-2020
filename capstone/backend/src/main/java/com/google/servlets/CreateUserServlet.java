@@ -75,11 +75,9 @@ public class CreateUserServlet extends HttpServlet {
     try {
       createUser(userId, (String) payload.get("name"), payload.getEmail());
     } catch (SpannerException se) {
-      if (se.getErrorCode() != ErrorCode.ALREADY_EXISTS) {
-        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-          "An error occured while adding a new user to the databse.");
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+        "An error occured while adding a new user to the databse.");
       return;
-      }
     }
 
     ResponseBody responseBody = new ResponseBody(userId);
