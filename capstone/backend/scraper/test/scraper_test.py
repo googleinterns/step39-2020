@@ -26,6 +26,7 @@ _FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/
 }
 </script></html>'''
 _FAKE_HTML_BODY_NO_DATA = '''<html></html>'''
+_FAKE_HTML_RESPONSE = '''<html></html>'''
 _FAKE_ITEMS = [ {"title": "fake"} ]
 
 _FAKE_SINGLE_ITEM_INFO_ALL = '''{
@@ -60,6 +61,8 @@ _FAKE_SINGLE_ITEM_ROW_ALL = ['7L', 'LALA Milk Drinks', 'LALA', 'Chocolate Milk']
 _FAKE_SINGLE_ITEM_ROW_DEFAULT = ['', '', '', '']
 _FAKE_SINGLE_INVENTORY_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz'] 
 _FAKE_SINGLE_INVENTORY_ROW_DEFAULT = [ '', 'AVAILABLE', '20-06-06 22:34:01', '', '', '']
+
+_FAKE_TARGET_URL = 'http://walmart.fake.com/'
 
 class FakeResponse(object):
   """Fake requests.Response object for requests.get()."""
