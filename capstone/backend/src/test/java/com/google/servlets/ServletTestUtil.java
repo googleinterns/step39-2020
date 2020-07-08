@@ -75,5 +75,4 @@ class ServletTestUtil {
     }
     return new SetupObj(req, res, writer);
   }
-
 }

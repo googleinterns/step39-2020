@@ -47,8 +47,6 @@ import javax.servlet.http.HttpServletResponse;
     }
   }
 
-  public List<Store> getStores(List<String> itemTypes) {
-    return LibraryFunctions.getStoresWithItems(itemTypes);
-  }
+  public List<Store> getStores(List<String> itemTypes) { return LibraryFunctions.getStoresWithItems(itemTypes); }
 
 }
