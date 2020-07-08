@@ -1,6 +1,9 @@
 # Lint as: python3
 """
 Tests for scraper.py.
+To run: 
+First, navigate to step39-2020/capstone/backend/
+python3 -m scraper.test.scraper_test
 """
 
 from .. import scraper
@@ -57,10 +60,34 @@ _FAKE_SINGLE_ITEM_INFO_EMPTY = '''{
   "primaryOffer": {}
 }'''
 
-_FAKE_SINGLE_INVENTORY_ROW_ALL = [ '7L', 'OUT_OF_STOCK', '20-06-06 22:34:01', 4.98, 0.101, 'fl oz']
-_FAKE_SINGLE_INVENTORY_ROW_DEFAULT = [ '', '', '20-06-06 22:34:01', '', '', '']
-_FAKE_SINGLE_ITEM_ROW_ALL = ['7L', 'LALA Milk Drinks', 'LALA', 'Chocolate Milk']
-_FAKE_SINGLE_ITEM_ROW_DEFAULT = ['', '', '', '']
+_FAKE_SINGLE_INVENTORY_DICT_ALL = {
+  'ItemId': '7L', 
+  'ItemAvailability': 'OUT_OF_STOCK', 
+  'LastUpdated': '20-06-06 22:34:01', 
+  'Price': 4.98, 
+  'PPU': 0.101, 
+  'Unit': 'fl oz'
+}
+_FAKE_SINGLE_INVENTORY_DICT_DEFAULT = {
+  'ItemId': '', 
+  'ItemAvailability': '', 
+  'LastUpdated': '20-06-06 22:34:01', 
+  'Price': '', 
+  'PPU': '', 
+  'Unit': ''
+}
+_FAKE_SINGLE_ITEM_DICT_ALL = {
+  'ItemId': '7L', 
+  'ItemName':'LALA Milk Drinks', 
+  'ItemBrand': 'LALA', 
+  'ItemSubtype': 'Chocolate Milk'
+  }
+_FAKE_SINGLE_ITEM_DICT_DEFAULT = {
+  'ItemId': '',
+  'ItemName': '',
+  'ItemBrand': '',
+  'ItemSubtype': ''
+}
 
 _FAKE_TARGET_URL = 'http://walmart.fake.com/'
 
@@ -93,21 +120,21 @@ class ScraperTest(unittest.TestCase):
 
   def test_get_item(self):
     result = scraper.Scraper.get_item_info(json.loads(_FAKE_SINGLE_ITEM_INFO_ALL))
-    self.assertEqual(result, _FAKE_SINGLE_ITEM_ROW_ALL)
+    self.assertEqual(result, _FAKE_SINGLE_ITEM_DICT_ALL)
 
   def test_get_default_item(self):
     result = scraper.Scraper.get_item_info(json.loads(_FAKE_SINGLE_ITEM_INFO_EMPTY))
-    self.assertEqual(result, _FAKE_SINGLE_ITEM_ROW_DEFAULT)
+    self.assertEqual(result, _FAKE_SINGLE_ITEM_DICT_DEFAULT)
 
   def test_get_inventory_info(self):
     with freeze_time("2020-06-06 22:34:01"):
       result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_ALL))
-      self.assertEqual(result, _FAKE_SINGLE_INVENTORY_ROW_ALL)
+      self.assertEqual(result, _FAKE_SINGLE_INVENTORY_DICT_ALL)
 
   def test_get_default_inventory_info(self):
     with freeze_time("2020-06-06 22:34:01"):
       result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_EMPTY))
-      self.assertEqual(result, _FAKE_SINGLE_INVENTORY_ROW_DEFAULT)
+      self.assertEqual(result, _FAKE_SINGLE_INVENTORY_DICT_DEFAULT)
 
 if __name__ == '__main__':
   unittest.main()
