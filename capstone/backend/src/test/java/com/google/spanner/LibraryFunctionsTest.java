@@ -26,7 +26,7 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public final class LibraryFunctionsTest {
-  
+
   @Test
   public void itemTypesCheck() {
     List<String> actual = LibraryFunctions.getItemTypes(0);

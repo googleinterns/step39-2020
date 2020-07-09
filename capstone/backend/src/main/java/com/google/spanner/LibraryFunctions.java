@@ -16,7 +16,6 @@
 
 package com.google.spanner;
 
-import com.google.cloud.ServiceOptions;
 import com.google.cloud.spanner.DatabaseClient;
 import com.google.cloud.spanner.DatabaseId;
 import com.google.cloud.spanner.Mutation;
@@ -26,7 +25,6 @@ import com.google.cloud.spanner.SpannerException;
 import com.google.cloud.spanner.SpannerOptions;
 import com.google.cloud.spanner.Statement;
 import com.google.servlets.UserList;
-import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,19 +61,22 @@ public class LibraryFunctions {
     DATABASE_NAME = dbName;
   }
 
-  public static void writeUserLists(long userId, long listId, List<String> itemTypes,
-      String displayName) throws SpannerException {
+  public static void writeUserLists(
+      long userId, long listId, List<String> itemTypes, String displayName)
+      throws SpannerException {
     DatabaseClient dbClient = initClient();
-    List<Mutation> mutations = Arrays.asList(Mutation.newInsertOrUpdateBuilder(USERLISTS)
-                                                 .set(USERID)
-                                                 .to(userId)
-                                                 .set(LISTID)
-                                                 .to(listId)
-                                                 .set(ITEMTYPES)
-                                                 .toStringArray(itemTypes)
-                                                 .set(LISTNAME)
-                                                 .to(displayName)
-                                                 .build());
+    List<Mutation> mutations =
+        Arrays.asList(
+            Mutation.newInsertOrUpdateBuilder(USERLISTS)
+                .set(USERID)
+                .to(userId)
+                .set(LISTID)
+                .to(listId)
+                .set(ITEMTYPES)
+                .toStringArray(itemTypes)
+                .set(LISTNAME)
+                .to(displayName)
+                .build());
     dbClient.write(mutations);
   }
 
@@ -86,8 +87,11 @@ public class LibraryFunctions {
     List<UserList> userLists = new ArrayList<>();
     try (ResultSet resultSet = dbClient.singleUse().executeQuery(s)) {
       while (resultSet.next()) {
-        userLists.add(new UserList(resultSet.getLong(LISTID), resultSet.getString(LISTNAME),
-            resultSet.getStringList(ITEMTYPES)));
+        userLists.add(
+            new UserList(
+                resultSet.getLong(LISTID),
+                resultSet.getString(LISTNAME),
+                resultSet.getStringList(ITEMTYPES)));
       }
     }
     return userLists;
@@ -96,14 +100,15 @@ public class LibraryFunctions {
   public static void createUser(long userId, String userName, String email)
       throws SpannerException {
     DatabaseClient dbClient = initClient();
-    Mutation mutation = Mutation.newInsertOrUpdateBuilder(USERS)
-                            .set(USERID)
-                            .to(userId)
-                            .set(USERNAME)
-                            .to(userName)
-                            .set(EMAIL)
-                            .to(email)
-                            .build();
+    Mutation mutation =
+        Mutation.newInsertOrUpdateBuilder(USERS)
+            .set(USERID)
+            .to(userId)
+            .set(USERNAME)
+            .to(userName)
+            .set(EMAIL)
+            .to(email)
+            .build();
     dbClient.write(Arrays.asList(mutation));
   }
 
@@ -112,9 +117,9 @@ public class LibraryFunctions {
     List<String> itemTypes = new ArrayList<String>();
     String query = "SELECT DISTINCT ItemType FROM Items ORDER BY ItemType";
     try (ResultSet resultSet =
-             dbClient
-                 .singleUse() // Execute a single read or query against Cloud Spanner.
-                 .executeQuery(Statement.of(query))) {
+        dbClient
+            .singleUse() // Execute a single read or query against Cloud Spanner.
+            .executeQuery(Statement.of(query))) {
       for (int i = 0; resultSet.next() && i < (page + 1) * 10; i++) {
         if (i >= page * 10) {
           itemTypes.add(resultSet.getString(0));
