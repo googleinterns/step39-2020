@@ -17,16 +17,15 @@
 package com.google.servlets;
 
 import com.google.gson.Gson;
-import org.mockito.Mockito;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.mockito.Mockito;
 
 class ServletTestUtil {
   private ServletTestUtil() {}
@@ -36,7 +35,7 @@ class ServletTestUtil {
     try {
       g.fromJson(str, Object.class);
       return true;
-    } catch(com.google.gson.JsonSyntaxException e) { 
+    } catch (com.google.gson.JsonSyntaxException e) {
       return false;
     }
   }
@@ -57,7 +56,7 @@ class ServletTestUtil {
     HttpServletResponse res = Mockito.mock(HttpServletResponse.class);
     StringWriter writer = new StringWriter();
     Mockito.when(req.getMethod()).thenReturn("GET");
-    Mockito.when(res.getWriter()).thenReturn(new PrintWriter(writer));   
+    Mockito.when(res.getWriter()).thenReturn(new PrintWriter(writer));
     for (String key : params.keySet()) {
       Mockito.when(req.getParameter(key)).thenReturn(params.get(key));
     }
