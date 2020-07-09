@@ -25,7 +25,8 @@ class SetupObj {
   HttpServletResponse response;
   StringWriter writer;
 
-  public SetupObj(HttpServletRequest request, HttpServletResponse response, StringWriter writer) {
+  public SetupObj(HttpServletRequest request, HttpServletResponse response, 
+      StringWriter writer) {
     this.request = request;
     this.response = response;
     this.writer = writer;

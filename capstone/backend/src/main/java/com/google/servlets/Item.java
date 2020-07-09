@@ -19,10 +19,11 @@ package com.google.servlets;
 public class Item {
   private long itemId;
 
+
   private long storeId;
-
+  
   private double itemPrice;
-
+  
   private String itemName;
 
   public Item(long itemId, double itemPrice, String itemName, long storeId) {
@@ -45,9 +46,8 @@ public class Item {
   }
 
   public boolean equals(Item otherItem) {
-    return this.itemId == otherItem.itemId
-        && this.itemPrice == otherItem.itemPrice
-        && this.itemName == otherItem.itemName
-        && this.storeId == otherItem.storeId;
+    return this.itemId == otherItem.itemId && this.itemPrice == otherItem.itemPrice && 
+            this.itemName == otherItem.itemName && this.storeId == otherItem.storeId;
   }
+
 }

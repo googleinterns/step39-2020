@@ -29,6 +29,8 @@ import com.google.cloud.spanner.SpannerOptions;
 import com.google.spanner.admin.database.v1.CreateDatabaseMetadata;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.temporal.ChronoField;
 
 public class CreateSpannerTables {
   /*
@@ -43,11 +45,8 @@ public class CreateSpannerTables {
    */
   static void createDatabase(DatabaseAdminClient dbAdminClient, DatabaseId id) {
     OperationFuture<Database, CreateDatabaseMetadata> op =
-        dbAdminClient.createDatabase(
-            id.getInstanceId().getInstance(),
-            id.getDatabase(),
-            Arrays.asList(
-                "CREATE TABLE Users ("
+        dbAdminClient.createDatabase(id.getInstanceId().getInstance(), id.getDatabase(),
+            Arrays.asList("CREATE TABLE Users ("
                     + "  UserId    INT64,"
                     + "  Username  STRING(MAX),"
                     + "  Email     STRING(MAX)"
@@ -83,7 +82,7 @@ public class CreateSpannerTables {
       Database db = op.get();
     } catch (ExecutionException e) {
       // If the operation failed during execution, expose the cause.
-      throw (SpannerException) e.getCause();
+      throw(SpannerException) e.getCause();
     } catch (InterruptedException e) {
       // Throw when a thread is waiting, sleeping, or otherwise occupied,
       // and the thread is interrupted, either before or during the activity.
@@ -91,12 +90,8 @@ public class CreateSpannerTables {
     }
   }
 
-  private static void run(
-      DatabaseClient dbClient,
-      DatabaseAdminClient dbAdminClient,
-      InstanceAdminClient instanceAdminClient,
-      String command,
-      DatabaseId database) {
+  private static void run(DatabaseClient dbClient, DatabaseAdminClient dbAdminClient,
+      InstanceAdminClient instanceAdminClient, String command, DatabaseId database) {
     switch (command) {
       case "createdatabase":
         createDatabase(dbAdminClient, database);
@@ -127,10 +122,9 @@ public class CreateSpannerTables {
       // This will return the default project id based on the environment.
       String clientProject = spanner.getOptions().getProjectId();
       if (!db.getInstanceId().getProject().equals(clientProject)) {
-        System.err.println(
-            "Invalid project specified. Project in the database id should match the"
-                + "project name set in the environment variable GOOGLE_CLOUD_PROJECT. Expected: "
-                + clientProject);
+        System.err.println("Invalid project specified. Project in the database id should match the"
+            + "project name set in the environment variable GOOGLE_CLOUD_PROJECT. Expected: "
+            + clientProject);
         printUsageAndExit();
       }
 
