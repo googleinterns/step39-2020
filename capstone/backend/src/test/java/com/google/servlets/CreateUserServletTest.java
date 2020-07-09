@@ -65,6 +65,7 @@ public class CreateUserServletTest extends TestCase {
     CreateUserServlet servlet = new CreateUserServlet();
     servlet.doPost(setupObj.request, setupObj.response);
 
-    Mockito.verify(setupObj.response).sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
+    Mockito.verify(setupObj.response)
+        .sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
   }
-} 
+}

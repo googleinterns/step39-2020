@@ -16,15 +16,23 @@
 
 package com.google.servlets;
 
+import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Store {
-  private float totalPrice;
+public class Store implements Comparable<Store> {
+
+  private double lowestPotentialPrice;
+
+  private int totalItemsFound;
 
   private long storeId;
 
-  private List<Item> items = new ArrayList<Item>();
+  private Map<String, List<Item>> items = new HashMap<String, List<Item>>();
+
+  private Map<String, Double> typeToPrice = new HashMap<String, Double>();
 
   private String storeAddress;
 
@@ -36,20 +44,54 @@ public class Store {
     this.storeAddress = storeAddress;
   }
 
-  public Store(Store otherStore, long itemId, float itemPrice, String itemName) {
-    this.storeId = otherStore.storeId;
-    this.storeName = otherStore.storeName;
-    this.storeAddress = otherStore.storeAddress;
-    this.addItem(itemId, itemPrice, itemName);
+  public void addItem(long itemId, double itemPrice, String itemName, String itemType) {
+    Item newItem = new Item(itemId, itemPrice, itemName, this.storeId);
+    if (items.containsKey(itemType)) {
+      items.get(itemType).add(newItem);
+      if (itemPrice < typeToPrice.get(itemType)) {
+        typeToPrice.put(itemType, itemPrice);
+        lowestPotentialPrice += itemPrice;
+      }
+    } else {
+      totalItemsFound++;
+      items.put(itemType, new ArrayList<Item>(Arrays.asList(newItem)));
+      typeToPrice.put(itemType, itemPrice);
+      lowestPotentialPrice += itemPrice;
+    }
   }
 
-  public void addItem(long itemId, float itemPrice, String itemName) {
-    Item newItem = new Item(itemId, itemPrice, itemName);
-    items.add(newItem);
-    totalPrice += itemPrice;
+  public int getNumberOfItemsFound() {
+    return totalItemsFound;
   }
 
-  public int getNumberOfItems() {
-    return items.size();
+  public long getStoreId() {
+    return storeId;
+  }
+
+  @Override
+  public int compareTo(Store otherStore) {
+    if (this.lowestPotentialPrice < otherStore.lowestPotentialPrice) {
+      return -1;
+    } else if (this.lowestPotentialPrice == otherStore.lowestPotentialPrice) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+
+  public boolean equals(Store otherStore) {
+    if (this.storeId == otherStore.storeId
+        && this.storeName == otherStore.storeName
+        && this.storeAddress == otherStore.storeAddress
+        && this.lowestPotentialPrice == otherStore.lowestPotentialPrice) {
+      for (String key : items.keySet()) {
+        for (int i = 0; i < items.get(i).size(); i++) {
+          if (!this.items.get(key).get(i).equals(otherStore.items.get(key).get(i))) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 }
