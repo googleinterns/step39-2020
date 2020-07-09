@@ -22,9 +22,9 @@ public class Item {
   private long storeId;
 
   private double itemPrice;
-  
+
   private String itemBrand;
-  
+
   private String itemName;
 
   public Item(String itemId, double itemPrice, String itemName, String itemBrand, long storeId) {
@@ -52,7 +52,10 @@ public class Item {
   }
 
   public boolean equals(Item otherItem) {
-    return this.itemId.equals(otherItem.itemId) && this.itemPrice == otherItem.itemPrice && 
-            this.itemName.equals(otherItem.itemName) && this.storeId == otherItem.storeId && this.itemBrand.equals(otherItem.itemBrand);
+    return this.itemId.equals(otherItem.itemId)
+        && this.itemPrice == otherItem.itemPrice
+        && this.itemName.equals(otherItem.itemName)
+        && this.storeId == otherItem.storeId
+        && this.itemBrand.equals(otherItem.itemBrand);
   }
 }

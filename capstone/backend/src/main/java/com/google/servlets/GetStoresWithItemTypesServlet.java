@@ -20,17 +20,16 @@ import com.google.cloud.spanner.SpannerException;
 import com.google.gson.Gson;
 import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
- @WebServlet("/api/v1/get-stores-with-item-types")
- public class GetStoresWithItemTypesServlet extends HttpServlet {
+@WebServlet("/api/v1/get-stores-with-item-types")
+public class GetStoresWithItemTypesServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -47,6 +46,7 @@ import javax.servlet.http.HttpServletResponse;
     }
   }
 
-  public List<Store> getStores(List<String> itemTypes) { return LibraryFunctions.getStoresWithItems(itemTypes); }
-
+  public List<Store> getStores(List<String> itemTypes) {
+    return LibraryFunctions.getStoresWithItems(itemTypes);
+  }
 }

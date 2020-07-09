@@ -36,28 +36,12 @@ import java.util.Map;
 public class LibraryFunctions {
   private static String DATABASE_INSTANCE = "capstone-instance";
   private static String DATABASE_NAME = "step39-db";
-  
-  private static final String ADDRESS =             "Address";
-  private static final String EMAIL =               "Email";
-  private static final String ITEM_BRAND =          "ItemBrand";
-  private static final String ITEM_ID =             "ItemId";
-  private static final String ITEM_NAME =           "ItemName";
-  private static final String ITEM_TYPE =           "ItemType";
-  private static final String ITEM_TYPES =          "ItemTypes";
-  private static final String LIST_ID =             "ListId";
-  private static final String DISPLAY_NAME =        "DisplayName";
-  private static final String PRICE =               "Price";
-  private static final String STORE_ID =            "StoreId";
-  private static final String STORE_NAME =          "StoreName";
-  private static final String USER_ID =             "UserId";
-  private static final String USER_LISTS =          "UserLists";
-  private static final String USERNAME =            "Username";
-  private static final String USERS =               "Users";
 
   private static final String ADDRESS = "Address";
   private static final String EMAIL = "Email";
+  private static final String ITEM_BRAND = "ItemBrand";
   private static final String ITEM_ID = "ItemId";
-  private static final String ITEM_NAME_AND_BRAND = "ItemNameAndBrand";
+  private static final String ITEM_NAME = "ItemName";
   private static final String ITEM_TYPE = "ItemType";
   private static final String ITEM_TYPES = "ItemTypes";
   private static final String LIST_ID = "ListId";
@@ -169,12 +153,13 @@ public class LibraryFunctions {
     Map<Long, Store> stores = new HashMap<Long, Store>();
     DatabaseClient dbClient = initClient();
     Value itemListArray = Value.stringArray(itemTypes);
-    String query = "SELECT a.ItemId, a.ItemName, a.ItemBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName " +
-        "FROM Items a JOIN Inventories b ON a.ItemId = b.ItemId JOIN Stores c ON b.StoreId = c.StoreId " +
-        "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType IN UNNEST(@itemTypes)";
+    String query =
+        "SELECT a.ItemId, a.ItemName, a.ItemBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName "
+            + "FROM Items a JOIN Inventories b ON a.ItemId = b.ItemId JOIN Stores c ON b.StoreId = c.StoreId "
+            + "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType IN UNNEST(@itemTypes)";
     Statement statement = Statement.newBuilder(query).bind("itemTypes").to(itemListArray).build();
-    try(ResultSet allInfo = dbClient.singleUse().executeQuery(statement)) {
-      while(allInfo.next()) {
+    try (ResultSet allInfo = dbClient.singleUse().executeQuery(statement)) {
+      while (allInfo.next()) {
         String itemId = allInfo.getString(ITEM_ID);
         String itemName = allInfo.getString(ITEM_NAME);
         String itemBrand = allInfo.getString(ITEM_BRAND);
@@ -183,7 +168,7 @@ public class LibraryFunctions {
         double itemPrice = allInfo.getDouble(PRICE);
         String storeAddress = allInfo.getString(ADDRESS);
         String storeName = allInfo.getString(STORE_NAME);
-        if(stores.containsKey(storeId)) {
+        if (stores.containsKey(storeId)) {
           stores.get(storeId).addItem(itemId, itemPrice, itemName, itemBrand, itemType);
         } else {
           Store newStore = new Store(storeId, storeName, storeAddress);

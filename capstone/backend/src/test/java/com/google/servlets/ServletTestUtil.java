@@ -68,7 +68,7 @@ class ServletTestUtil {
     HttpServletResponse res = Mockito.mock(HttpServletResponse.class);
     StringWriter writer = new StringWriter();
     Mockito.when(req.getMethod()).thenReturn("GET");
-    Mockito.when(res.getWriter()).thenReturn(new PrintWriter(writer));   
+    Mockito.when(res.getWriter()).thenReturn(new PrintWriter(writer));
     for (String key : params.keySet()) {
       Mockito.when(req.getParameterValues(key)).thenReturn(params.get(key));
     }

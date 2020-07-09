@@ -16,16 +16,14 @@
 
 package com.google.servlets;
 
-import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
-import org.junit.Before;
 import org.mockito.Mockito;
 
 public class GetStoresWithItemTypesServletTest extends TestCase {
@@ -43,9 +41,11 @@ public class GetStoresWithItemTypesServletTest extends TestCase {
     Store store1 = new Store(1, "Walmart", "3255 Mission College Blvd");
     Store store2 = new Store(2, "Target", "4080 Stevens Creek Blvd");
     Store store3 = new Store(3, "Whole Foods", "301 Ranch Dr");
-    store1.addItem("1", 11.98, "Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "Horizon", "MILK");
+    store1.addItem(
+        "1", 11.98, "Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "Horizon", "MILK");
     store1.addItem("2", 10.3, "Whole Milk, 32 fl oz", "Natrel", "MILK");
-    store2.addItem("1", 10.38, "Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "Horizon", "MILK");
+    store2.addItem(
+        "1", 10.38, "Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "Horizon", "MILK");
     store3.addItem("2", 9.44, "Whole Milk, 32 fl oz", "Natrel", "MILK");
     fakeStores.add(store1);
     fakeStores.add(store2);
@@ -56,9 +56,10 @@ public class GetStoresWithItemTypesServletTest extends TestCase {
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
-    String expected = "[{\"lowestPotentialPrice\":22.28,\"totalItemsFound\":1,\"storeId\":1,\"items\":{\"MILK\":[{\"itemId\":\"1\",\"storeId\":1,\"itemPrice\":11.98,\"itemBrand\":\"Horizon\",\"itemName\":\"Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count\"},{\"itemId\":\"2\",\"storeId\":1,\"itemPrice\":10.3,\"itemBrand\":\"Natrel\",\"itemName\":\"Whole Milk, 32 fl oz\"}]},\"typeToPrice\":{\"MILK\":10.3},\"storeAddress\":\"3255 Mission College Blvd\",\"storeName\":\"Walmart\"}," +
-        "{\"lowestPotentialPrice\":10.38,\"totalItemsFound\":1,\"storeId\":2,\"items\":{\"MILK\":[{\"itemId\":\"1\",\"storeId\":2,\"itemPrice\":10.38,\"itemBrand\":\"Horizon\",\"itemName\":\"Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count\"}]},\"typeToPrice\":{\"MILK\":10.38},\"storeAddress\":\"4080 Stevens Creek Blvd\",\"storeName\":\"Target\"}," +
-        "{\"lowestPotentialPrice\":9.44,\"totalItemsFound\":1,\"storeId\":3,\"items\":{\"MILK\":[{\"itemId\":\"2\",\"storeId\":3,\"itemPrice\":9.44,\"itemBrand\":\"Natrel\",\"itemName\":\"Whole Milk, 32 fl oz\"}]},\"typeToPrice\":{\"MILK\":9.44},\"storeAddress\":\"301 Ranch Dr\",\"storeName\":\"Whole Foods\"}]";
+    String expected =
+        "[{\"lowestPotentialPrice\":22.28,\"totalItemsFound\":1,\"storeId\":1,\"items\":{\"MILK\":[{\"itemId\":\"1\",\"storeId\":1,\"itemPrice\":11.98,\"itemBrand\":\"Horizon\",\"itemName\":\"Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count\"},{\"itemId\":\"2\",\"storeId\":1,\"itemPrice\":10.3,\"itemBrand\":\"Natrel\",\"itemName\":\"Whole Milk, 32 fl oz\"}]},\"typeToPrice\":{\"MILK\":10.3},\"storeAddress\":\"3255 Mission College Blvd\",\"storeName\":\"Walmart\"},"
+            + "{\"lowestPotentialPrice\":10.38,\"totalItemsFound\":1,\"storeId\":2,\"items\":{\"MILK\":[{\"itemId\":\"1\",\"storeId\":2,\"itemPrice\":10.38,\"itemBrand\":\"Horizon\",\"itemName\":\"Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count\"}]},\"typeToPrice\":{\"MILK\":10.38},\"storeAddress\":\"4080 Stevens Creek Blvd\",\"storeName\":\"Target\"},"
+            + "{\"lowestPotentialPrice\":9.44,\"totalItemsFound\":1,\"storeId\":3,\"items\":{\"MILK\":[{\"itemId\":\"2\",\"storeId\":3,\"itemPrice\":9.44,\"itemBrand\":\"Natrel\",\"itemName\":\"Whole Milk, 32 fl oz\"}]},\"typeToPrice\":{\"MILK\":9.44},\"storeAddress\":\"301 Ranch Dr\",\"storeName\":\"Whole Foods\"}]";
     assertTrue("Wrong stores", result.contains(expected));
   }
 }
