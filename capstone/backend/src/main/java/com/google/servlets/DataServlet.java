@@ -22,7 +22,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. */
+/**
+ * Servlet that returns some example content.
+ */
 @WebServlet("/api/v1/test-servlet")
 public class DataServlet extends HttpServlet {
   @Override

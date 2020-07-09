@@ -1,3 +1,0 @@
-steps:
-- name: 'ubuntu'
-  args: ['echo', 'We do not want to use Cloud Build.']

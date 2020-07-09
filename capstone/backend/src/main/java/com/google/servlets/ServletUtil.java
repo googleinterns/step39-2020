@@ -18,6 +18,7 @@ package com.google.servlets;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.StringBuilder;
 import javax.servlet.http.HttpServletRequest;
 
 class ServletUtil {
