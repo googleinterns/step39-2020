@@ -41,8 +41,9 @@ public class LibraryFunctions {
   
   private static final String ADDRESS =             "Address";
   private static final String EMAIL =               "Email";
+  private static final String ITEM_BRAND =          "ItemBrand";
   private static final String ITEM_ID =             "ItemId";
-  private static final String ITEM_NAME_AND_BRAND = "ItemNameAndBrand";
+  private static final String ITEM_NAME =           "ItemName";
   private static final String ITEM_TYPE =           "ItemType";
   private static final String ITEM_TYPES =          "ItemTypes";
   private static final String LIST_ID =             "ListId";
@@ -149,23 +150,25 @@ public class LibraryFunctions {
     Map<Long, Store> stores = new HashMap<Long, Store>();
     DatabaseClient dbClient = initClient();
     Value itemListArray = Value.stringArray(itemTypes);
-    String query = "SELECT a.ItemId, a.ItemNameAndBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName " +
-        "FROM Items a JOIN Inventory b ON a.ItemId = b.ItemId JOIN Stores c ON b.StoreId = c.StoreId " +
+    String query = "SELECT a.ItemId, a.ItemName, a.ItemBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName " +
+        "FROM Items a JOIN Inventories b ON a.ItemId = b.ItemId JOIN Stores c ON b.StoreId = c.StoreId " +
         "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType IN UNNEST(@itemTypes)";
     Statement statement = Statement.newBuilder(query).bind("itemTypes").to(itemListArray).build();
     try(ResultSet allInfo = dbClient.singleUse().executeQuery(statement)) {
       while(allInfo.next()) {
-        long itemId = allInfo.getLong(ITEM_ID);
-        String itemName = allInfo.getString(ITEM_NAME_AND_BRAND);
+        String itemId = allInfo.getString(ITEM_ID);
+        String itemName = allInfo.getString(ITEM_NAME);
+        String itemBrand = allInfo.getString(ITEM_BRAND);
         String itemType = allInfo.getString(ITEM_TYPE);
         long storeId = allInfo.getLong(STORE_ID);
         double itemPrice = allInfo.getDouble(PRICE);
         String storeAddress = allInfo.getString(ADDRESS);
         String storeName = allInfo.getString(STORE_NAME);
         if(stores.containsKey(storeId)) {
-          stores.get(storeId).addItem(itemId, itemPrice, itemName, itemType);
+          stores.get(storeId).addItem(itemId, itemPrice, itemName, itemBrand, itemType);
         } else {
           Store newStore = new Store(storeId, storeName, storeAddress);
+          newStore.addItem(itemId, itemPrice, itemName, itemBrand, itemType);
           stores.put(storeId, newStore);
         }
       }

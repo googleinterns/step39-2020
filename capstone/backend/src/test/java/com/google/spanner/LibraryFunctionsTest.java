@@ -62,7 +62,7 @@ public final class LibraryFunctionsTest {
         @Override
         public Void run(TransactionContext transaction) throws Exception {
           String[] sql = {
-            "DELETE FROM Inventory WHERE TRUE",
+            "DELETE FROM Inventories WHERE TRUE",
             "DELETE FROM Items WHERE TRUE",
             "DELETE FROM Stores WHERE TRUE",
             "DELETE FROM UserLists WHERE TRUE",
@@ -82,25 +82,25 @@ public final class LibraryFunctionsTest {
         @Override
         public Void run(TransactionContext transaction) throws Exception {
           String[] sql = {
-            "INSERT INTO Items (ItemId, ItemNameAndBrand, ItemType) VALUES " +
-              "(1, 'Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count', 'MILK'), " +
-              "(2, 'Natrel Whole Milk, 32 fl oz', 'MILK'), " +
-              "(3, 'FIJI Natural Artesian Water,16.9 Fl Oz, 24 Ct', 'WATER'), " +
-              "(4, 'General Mills, Cheerios, Gluten Free, Breakfast Cereal, Family Size 18 oz Box', 'CEREAL'), " +
-              "(5, 'OZARKA Brand 100% Natural Spring Water, 16.9-ounce plastic bottles', 'WATER') ", 
+            "INSERT INTO Items (ItemId, ItemName, ItemBrand, ItemType) VALUES " +
+              "('1', 'Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count', 'Horizon', 'MILK'), " +
+              "('2', 'Whole Milk, 32 fl oz', 'Natrel', 'MILK'), " +
+              "('3', 'Natural Artesian Water,16.9 Fl Oz, 24 Ct', 'FIJI', 'WATER'), " +
+              "('4', 'Cheerios, Gluten Free, Breakfast Cereal, Family Size 18 oz Box', 'General Mills', 'CEREAL'), " +
+              "('5', '100% Natural Spring Water, 16.9-ounce plastic bottles', 'OZARKA', 'WATER') ", 
             "INSERT INTO Stores (StoreId, Address, StoreName) VALUES " +
               "(1, '3255 Mission College Blvd', 'Walmart'), " +
               "(2, '4080 Stevens Creek Blvd', 'Target'), " +
               "(3, '301 Ranch Dr', 'Whole Foods') ", 
-            "INSERT INTO Inventory (StoreId, ItemId, ItemAvailability, Price) VALUES " +
-              "(1, 1, 'AVAILABLE', 11.98), " +
-              "(1, 2, 'AVAILABLE', 10.3), " +
-              "(1, 3, 'AVAILABLE', 17.2), " +
-              "(1, 5, 'AVAILABLE', 9.98), " +
-              "(2, 1, 'AVAILABLE', 10.38), " +
-              "(2, 4, 'AVAILABLE', 3.64), " +
-              "(3, 2, 'AVAILABLE', 9.44), " +
-              "(3, 4, 'AVAILABLE', 5.43) ", 
+            "INSERT INTO Inventories (StoreId, ItemId, ItemAvailability, Price) VALUES " +
+              "(1, '1', 'AVAILABLE', 11.98), " +
+              "(1, '2', 'AVAILABLE', 10.3), " +
+              "(1, '3', 'AVAILABLE', 17.2), " +
+              "(1, '5', 'AVAILABLE', 9.98), " +
+              "(2, '1', 'AVAILABLE', 10.38), " +
+              "(2, '4', 'AVAILABLE', 3.64), " +
+              "(3, '2', 'AVAILABLE', 9.44), " +
+              "(3, '4', 'AVAILABLE', 5.43) ", 
             "INSERT INTO Users (UserId, Email, Username) VALUES " +
               "(1, 'bzallen@google.com', 'brettallenyo'), " +
               "(2, 'pinkpanther@gmail.com', 'Pink Panther')", 
@@ -139,10 +139,10 @@ public final class LibraryFunctionsTest {
     Store store1 = new Store(1, "Walmart", "3255 Mission College Blvd");
     Store store2 = new Store(2, "Target", "4080 Stevens Creek Blvd");
     Store store3 = new Store(3, "Whole Foods", "301 Ranch Dr");
-    store1.addItem(1, 11.98, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "MILK");
-    store1.addItem(2, 10.3, "Natrel Whole Milk, 32 fl oz", "MILK");
-    store2.addItem(1, 10.38, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "MILK");
-    store3.addItem(2, 9.44, "Natrel Whole Milk, 32 fl oz", "MILK");
+    store1.addItem("1", 11.98, "Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "Horizon", "MILK");
+    store1.addItem("2", 10.3, "Whole Milk, 32 fl oz", "Natrel", "MILK");
+    store2.addItem("1", 10.38, "Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "Horizon", "MILK");
+    store3.addItem("2", 9.44, "Whole Milk, 32 fl oz", "Natrel", "MILK");
     expected.add(store1);
     expected.add(store2);
     expected.add(store3);
@@ -162,12 +162,12 @@ public final class LibraryFunctionsTest {
     Store store1 = new Store(1, "Walmart", "3255 Mission College Blvd");
     Store store2 = new Store(2, "Target", "4080 Stevens Creek Blvd");
     Store store3 = new Store(3, "Whole Foods", "301 Ranch Dr");
-    store1.addItem(1, 11.98, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "MILK");
-    store1.addItem(2, 10.3, "Natrel Whole Milk, 32 fl oz", "MILK");
-    store1.addItem(3, 17.2, "FIJI Natural Artesian Water,16.9 Fl Oz, 24 Ct", "WATER");
-    store2.addItem(5, 9.98, "OZARKA Brand 100% Natural Spring Water, 16.9-ounce plastic bottles", "WATER");
-    store2.addItem(1, 10.38, "Horizon Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "MILK");
-    store3.addItem(2, 9.44, "Natrel Whole Milk, 32 fl oz", "MILK");
+    store1.addItem("1", 11.98, "Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "Horizon", "MILK");
+    store1.addItem("2", 10.3, "Whole Milk, 32 fl oz", "Natrel", "MILK");
+    store1.addItem("3", 17.2, "Natural Artesian Water,16.9 Fl Oz, 24 Ct", "FIJI", "WATER");
+    store2.addItem("5", 9.98, "100% Natural Spring Water, 16.9-ounce plastic bottles", "OZARKA", "WATER");
+    store2.addItem("1", 10.38, "Organic Whole Shelf-Stable Milk, 8 Oz., 12 Count", "Horizon", "MILK");
+    store3.addItem("2", 9.44, "Whole Milk, 32 fl oz", "Natrel", "MILK");
     expected.add(store1);
     expected.add(store2);
     expected.add(store3);
