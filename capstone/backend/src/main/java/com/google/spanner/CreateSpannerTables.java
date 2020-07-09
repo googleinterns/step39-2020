@@ -59,7 +59,7 @@ public class CreateSpannerTables {
                     + ") PRIMARY KEY (UserId, ListId),"
                     + "  INTERLEAVE IN PARENT Users ON DELETE CASCADE",
                 "CREATE TABLE Stores ("
-                    + "  StoreId      INT64,"
+                    + "  StoreId      STRING(MAX),"
                     + "  StoreName    STRING(MAX),"
                     + "  Address      STRING(MAX)"
                     + ") PRIMARY KEY (StoreId)",
@@ -71,7 +71,7 @@ public class CreateSpannerTables {
                     + "  ItemSubtype       STRING(MAX)"
                     + ") PRIMARY KEY (ItemId)",
                 "CREATE TABLE Inventories ("
-                    + "  StoreId           INT64,"
+                    + "  StoreId           STRING(MAX),"
                     + "  ItemId            INT64,"
                     + "  ItemAvailability  STRING(MAX),"
                     + "  LastUpdated       TIMESTAMP OPTIONS (allow_commit_timestamp=true),"
