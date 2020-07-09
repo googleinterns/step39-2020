@@ -16,8 +16,8 @@
 
 package com.google.servlets;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,11 +44,12 @@ public class Store implements Comparable<Store> {
     this.storeAddress = storeAddress;
   }
 
-  public void addItem(String itemId, double itemPrice, String itemName, String itemBrand, String itemType) {
+  public void addItem(
+      String itemId, double itemPrice, String itemName, String itemBrand, String itemType) {
     Item newItem = new Item(itemId, itemPrice, itemName, itemBrand, this.storeId);
-    if(items.containsKey(itemType)){
+    if (items.containsKey(itemType)) {
       items.get(itemType).add(newItem);
-      if(itemPrice < typeToPrice.get(itemType)){
+      if (itemPrice < typeToPrice.get(itemType)) {
         typeToPrice.put(itemType, itemPrice);
         lowestPotentialPrice += itemPrice;
       }
@@ -80,11 +81,13 @@ public class Store implements Comparable<Store> {
   }
 
   public boolean equals(Store otherStore) {
-    if(this.storeId == otherStore.storeId && this.storeName == otherStore.storeName &&
-        this.storeAddress == otherStore.storeAddress && this.lowestPotentialPrice == otherStore.lowestPotentialPrice) {
-      for(String key : items.keySet()){
-        for(int i = 0; i < items.get(i).size(); i++){
-          if(!this.items.get(key).get(i).equals(otherStore.items.get(key).get(i))){
+    if (this.storeId == otherStore.storeId
+        && this.storeName == otherStore.storeName
+        && this.storeAddress == otherStore.storeAddress
+        && this.lowestPotentialPrice == otherStore.lowestPotentialPrice) {
+      for (String key : items.keySet()) {
+        for (int i = 0; i < items.get(i).size(); i++) {
+          if (!this.items.get(key).get(i).equals(otherStore.items.get(key).get(i))) {
             return false;
           }
         }

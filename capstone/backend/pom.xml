@@ -118,6 +118,41 @@
           </execution>
         </executions>
       </plugin>
+      <!-- Plugin to ignore specific tests. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <configuration>
+          <excludes>
+            <exclude>**/spanner/**.java</exclude>
+            <exclude>**/servlets/GetStoresWithItemTypesServletTest.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <!-- Plugin to automatically format code. -->
+      <plugin>
+        <groupId>com.cosium.code</groupId>
+        <artifactId>git-code-format-maven-plugin</artifactId>
+        <version>2.5</version>
+        <executions>
+          <!-- On commit, format the modified java files -->
+          <execution>
+            <id>install-formatter-hook</id>
+            <goals>
+              <goal>install-hooks</goal>
+            </goals>
+          </execution>
+          <!-- On Maven verify phase, fail if any file
+          (including unmodified) is badly formatted -->
+          <execution>
+            <id>validate-code-format</id>
+            <goals>
+              <goal>validate-code-format</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <!-- Old plugin that is deprecated for deployment but can be used for local testing. 
       Enables usage of `mvn appengine:devserver` for local testing, which is in many of the walkthroughs. 
       Cannot deploy with `mvn appengine:update` because it's deprecated. -->

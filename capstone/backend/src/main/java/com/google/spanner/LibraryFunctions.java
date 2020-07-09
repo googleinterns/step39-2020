@@ -16,7 +16,6 @@
 
 package com.google.spanner;
 
-import com.google.cloud.ServiceOptions;
 import com.google.cloud.spanner.DatabaseClient;
 import com.google.cloud.spanner.DatabaseId;
 import com.google.cloud.spanner.Mutation;
@@ -28,34 +27,32 @@ import com.google.cloud.spanner.Statement;
 import com.google.cloud.spanner.Value;
 import com.google.servlets.Store;
 import com.google.servlets.UserList;
-import java.lang.Exception;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class LibraryFunctions {
   private static String DATABASE_INSTANCE = "capstone-instance";
   private static String DATABASE_NAME = "step39-db";
-  
-  private static final String ADDRESS =             "Address";
-  private static final String EMAIL =               "Email";
-  private static final String ITEM_BRAND =          "ItemBrand";
-  private static final String ITEM_ID =             "ItemId";
-  private static final String ITEM_NAME =           "ItemName";
-  private static final String ITEM_TYPE =           "ItemType";
-  private static final String ITEM_TYPES =          "ItemTypes";
-  private static final String LIST_ID =             "ListId";
-  private static final String DISPLAY_NAME =        "DisplayName";
-  private static final String PRICE =               "Price";
-  private static final String STORE_ID =            "StoreId";
-  private static final String STORE_NAME =          "StoreName";
-  private static final String USER_ID =             "UserId";
-  private static final String USER_LISTS =          "UserLists";
-  private static final String USERNAME =            "Username";
-  private static final String USERS =               "Users";
 
+  private static final String ADDRESS = "Address";
+  private static final String EMAIL = "Email";
+  private static final String ITEM_BRAND = "ItemBrand";
+  private static final String ITEM_ID = "ItemId";
+  private static final String ITEM_NAME = "ItemName";
+  private static final String ITEM_TYPE = "ItemType";
+  private static final String ITEM_TYPES = "ItemTypes";
+  private static final String LIST_ID = "ListId";
+  private static final String DISPLAY_NAME = "DisplayName";
+  private static final String PRICE = "Price";
+  private static final String STORE_ID = "StoreId";
+  private static final String STORE_NAME = "StoreName";
+  private static final String USER_ID = "UserId";
+  private static final String USER_LISTS = "UserLists";
+  private static final String USERNAME = "Username";
+  private static final String USERS = "Users";
 
   private static DatabaseClient databaseClient = null;
 
@@ -76,20 +73,22 @@ public class LibraryFunctions {
     DATABASE_NAME = dbName;
   }
 
-  public static void writeUserLists(long userId, long listId, List<String> itemTypes,
-      String displayName) throws SpannerException {
+  public static void writeUserLists(
+      long userId, long listId, List<String> itemTypes, String displayName)
+      throws SpannerException {
     DatabaseClient dbClient = initClient();
-    List<Mutation> mutations = Arrays.asList(
-      Mutation.newInsertOrUpdateBuilder(USER_LISTS)
-          .set(USER_ID)
-          .to(userId)
-          .set(LIST_ID)
-          .to(listId)
-          .set(ITEM_TYPES)
-          .toStringArray(itemTypes)
-          .set(DISPLAY_NAME)
-          .to(displayName)
-          .build());
+    List<Mutation> mutations =
+        Arrays.asList(
+            Mutation.newInsertOrUpdateBuilder(USER_LISTS)
+                .set(USER_ID)
+                .to(userId)
+                .set(LIST_ID)
+                .to(listId)
+                .set(ITEM_TYPES)
+                .toStringArray(itemTypes)
+                .set(DISPLAY_NAME)
+                .to(displayName)
+                .build());
     dbClient.write(mutations);
   }
 
@@ -99,10 +98,13 @@ public class LibraryFunctions {
     Statement s = Statement.newBuilder(query).bind("userId").to(userId).build();
     List<UserList> userLists = new ArrayList<>();
     try (ResultSet resultSet = dbClient.singleUse().executeQuery(s)) {
-        while (resultSet.next()) {
-            userLists.add(new UserList(resultSet.getLong(LIST_ID), 
-            resultSet.getString(DISPLAY_NAME), resultSet.getStringList(ITEM_TYPES)));
-        }
+      while (resultSet.next()) {
+        userLists.add(
+            new UserList(
+                resultSet.getLong(LIST_ID),
+                resultSet.getString(DISPLAY_NAME),
+                resultSet.getStringList(ITEM_TYPES)));
+      }
     }
     return userLists;
   }
@@ -110,14 +112,15 @@ public class LibraryFunctions {
   public static void createUser(long userId, String userName, String email)
       throws SpannerException {
     DatabaseClient dbClient = initClient();
-    Mutation mutation = Mutation.newInsertBuilder(USERS)
-                            .set(USER_ID)
-                            .to(userId)
-                            .set(USERNAME)
-                            .to(userName)
-                            .set(EMAIL)
-                            .to(email)
-                            .build();
+    Mutation mutation =
+        Mutation.newInsertBuilder(USERS)
+            .set(USER_ID)
+            .to(userId)
+            .set(USERNAME)
+            .to(userName)
+            .set(EMAIL)
+            .to(email)
+            .build();
     dbClient.write(Arrays.asList(mutation));
   }
 
@@ -126,9 +129,9 @@ public class LibraryFunctions {
     List<String> itemTypes = new ArrayList<String>();
     String query = "SELECT DISTINCT ItemType FROM Items ORDER BY ItemType";
     try (ResultSet resultSet =
-             dbClient
-                 .singleUse() // Execute a single read or query against Cloud Spanner.
-                 .executeQuery(Statement.of(query))) {
+        dbClient
+            .singleUse() // Execute a single read or query against Cloud Spanner.
+            .executeQuery(Statement.of(query))) {
       for (int i = 0; resultSet.next() && i < (page + 1) * 10; i++) {
         if (i >= page * 10) {
           itemTypes.add(resultSet.getString(0));
@@ -150,12 +153,13 @@ public class LibraryFunctions {
     Map<Long, Store> stores = new HashMap<Long, Store>();
     DatabaseClient dbClient = initClient();
     Value itemListArray = Value.stringArray(itemTypes);
-    String query = "SELECT a.ItemId, a.ItemName, a.ItemBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName " +
-        "FROM Items a JOIN Inventories b ON a.ItemId = b.ItemId JOIN Stores c ON b.StoreId = c.StoreId " +
-        "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType IN UNNEST(@itemTypes)";
+    String query =
+        "SELECT a.ItemId, a.ItemName, a.ItemBrand, a.ItemType, b.StoreId, b.Price, c.Address, c.StoreName "
+            + "FROM Items a JOIN Inventories b ON a.ItemId = b.ItemId JOIN Stores c ON b.StoreId = c.StoreId "
+            + "WHERE b.ItemAvailability = 'AVAILABLE' AND a.ItemType IN UNNEST(@itemTypes)";
     Statement statement = Statement.newBuilder(query).bind("itemTypes").to(itemListArray).build();
-    try(ResultSet allInfo = dbClient.singleUse().executeQuery(statement)) {
-      while(allInfo.next()) {
+    try (ResultSet allInfo = dbClient.singleUse().executeQuery(statement)) {
+      while (allInfo.next()) {
         String itemId = allInfo.getString(ITEM_ID);
         String itemName = allInfo.getString(ITEM_NAME);
         String itemBrand = allInfo.getString(ITEM_BRAND);
@@ -164,7 +168,7 @@ public class LibraryFunctions {
         double itemPrice = allInfo.getDouble(PRICE);
         String storeAddress = allInfo.getString(ADDRESS);
         String storeName = allInfo.getString(STORE_NAME);
-        if(stores.containsKey(storeId)) {
+        if (stores.containsKey(storeId)) {
           stores.get(storeId).addItem(itemId, itemPrice, itemName, itemBrand, itemType);
         } else {
           Store newStore = new Store(storeId, storeName, storeAddress);
@@ -175,5 +179,4 @@ public class LibraryFunctions {
     }
     return new ArrayList<Store>(stores.values());
   }
-
 }
