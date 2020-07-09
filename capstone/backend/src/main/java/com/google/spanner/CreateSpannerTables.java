@@ -76,7 +76,7 @@ public class CreateSpannerTables {
                     + "  ItemAvailability  STRING(MAX),"
                     + "  LastUpdated       TIMESTAMP OPTIONS (allow_commit_timestamp=true),"
                     + "  Price             FLOAT64,"
-                    + "  PPU               FLOAT64,"
+                    + "  PPU               FLOAT64," // Price per unit (e.g., 0.72 for the unit of fl oz)
                     + "  Unit              STRING(MAX)"
                     + "  CONSTRAINT FK_ItemId FOREIGN KEY (ItemId) REFERENCES Items (ItemId)"
                     + ") PRIMARY KEY (StoreId, ItemId),"
