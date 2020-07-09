@@ -17,11 +17,10 @@
 package com.google.servlets;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
@@ -65,6 +64,7 @@ public class CreateUserServletTest extends TestCase {
     CreateUserServlet servlet = new CreateUserServlet();
     servlet.doPost(setupObj.request, setupObj.response);
 
-    Mockito.verify(setupObj.response).sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
+    Mockito.verify(setupObj.response)
+        .sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
   }
-} 
+}

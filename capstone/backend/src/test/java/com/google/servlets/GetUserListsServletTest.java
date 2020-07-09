@@ -16,13 +16,13 @@
 
 package com.google.servlets;
 
-import org.mockito.Mockito;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
+import org.mockito.Mockito;
 
 public class GetUserListsServletTest extends TestCase {
   private static final String USER_ID_KEY = "userId";
@@ -35,7 +35,9 @@ public class GetUserListsServletTest extends TestCase {
     SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
 
     GetUserListsServlet servlet = Mockito.spy(GetUserListsServlet.class);
-    Mockito.doReturn(Arrays.asList(new UserList(2, "List Name", Arrays.asList("Milk", "Bread")))).when(servlet).getUserLists(2);
+    Mockito.doReturn(Arrays.asList(new UserList(2, "List Name", Arrays.asList("Milk", "Bread"))))
+        .when(servlet)
+        .getUserLists(2);
     servlet.doGet(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
@@ -52,6 +54,7 @@ public class GetUserListsServletTest extends TestCase {
     GetUserListsServlet servlet = new GetUserListsServlet();
     servlet.doGet(setupObj.request, setupObj.response);
 
-    Mockito.verify(setupObj.response).sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
+    Mockito.verify(setupObj.response)
+        .sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
   }
 }

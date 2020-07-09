@@ -21,35 +21,32 @@ import com.google.gson.Gson;
 import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/api/v1/get-item-types")
-public class GetItemTypesServlet extends HttpServlet {
+@WebServlet("/api/v1/get-stores-with-item-types")
+public class GetStoresWithItemTypesServlet extends HttpServlet {
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
     Gson g = new Gson();
-    String pageString = request.getParameter("page");
-    int pageInt = Integer.valueOf(pageString);
-    if (pageInt < 0) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page number: " + pageString);
-      return;
-    }
-    List<String> items = new ArrayList<String>();
+    List<String> itemTypes = Arrays.asList(request.getParameterValues("item_types"));
+    List<Store> stores = new ArrayList<Store>();
     try {
-      items = getItemTypes(pageInt);
+      stores = getStores(itemTypes);
       response.setStatus(HttpServletResponse.SC_OK);
-      response.getWriter().println(g.toJson(items));
+      response.getWriter().println(g.toJson(stores));
     } catch (SpannerException e) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
     }
   }
 
-  public List<String> getItemTypes(int page) {
-    return LibraryFunctions.getItemTypes(page);
+  public List<Store> getStores(List<String> itemTypes) {
+    return LibraryFunctions.getStoresWithItems(itemTypes);
   }
 }

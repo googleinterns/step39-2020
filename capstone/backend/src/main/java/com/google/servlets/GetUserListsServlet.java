@@ -54,7 +54,8 @@ public class GetUserListsServlet extends HttpServlet {
     try {
       userLists = getUserLists(userId);
     } catch (SpannerException se) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+      response.sendError(
+          HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
           "An error occured while retriving data from the database.");
       return;
     }

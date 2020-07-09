@@ -1,10 +1,9 @@
-CLANG_FORMAT=node_modules/clang-format/bin/linux_x64/clang-format --style=Google
+lint-css:
+	npm install stylelint stylelint-config-standard
+	npx stylelint "capstone/client/src/components/*.css"
 
-node_modules:
-	npm install clang-format 
-
-pretty: node_modules
-	find capstone/backend/src/main/java -iname *.java | xargs $(CLANG_FORMAT) -i
-
-package:
+lint-java:
+	cd capstone/backend; \
+	mvn git-code-format:format-code -Dgcf.globPattern=**/*; \
 	mvn package
+

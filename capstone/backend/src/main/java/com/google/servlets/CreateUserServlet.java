@@ -21,7 +21,6 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.cloud.spanner.ErrorCode;
 import com.google.cloud.spanner.SpannerException;
 import com.google.gson.Gson;
 import com.google.spanner.LibraryFunctions;
@@ -32,15 +31,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet that adds a new user to the database.
- */
+/** Servlet that adds a new user to the database. */
 @WebServlet("/api/v1/create-user")
 public class CreateUserServlet extends HttpServlet {
   private GoogleIdTokenVerifier verifier =
       new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory()).build();
 
-  private class RequestBody { String idTokenString; }
+  private class RequestBody {
+    String idTokenString;
+  }
 
   private class ResponseBody {
     long userId;
@@ -75,8 +74,9 @@ public class CreateUserServlet extends HttpServlet {
     try {
       createUser(userId, (String) payload.get("name"), payload.getEmail());
     } catch (SpannerException se) {
-      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-        "An error occured while adding a new user to the databse.");
+      response.sendError(
+          HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+          "An error occured while adding a new user to the databse.");
       return;
     }
 
