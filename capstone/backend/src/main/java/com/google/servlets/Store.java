@@ -44,9 +44,9 @@ public class Store implements Comparable<Store> {
     this.storeAddress = storeAddress;
   }
 
-  public void addItem(long itemId, double itemPrice, String itemName, String itemType) {
-    Item newItem = new Item(itemId, itemPrice, itemName, this.storeId);
-    if (items.containsKey(itemType)) {
+  public void addItem(String itemId, double itemPrice, String itemName, String itemBrand, String itemType) {
+    Item newItem = new Item(itemId, itemPrice, itemName, itemBrand, this.storeId);
+    if(items.containsKey(itemType)){
       items.get(itemType).add(newItem);
       if (itemPrice < typeToPrice.get(itemType)) {
         typeToPrice.put(itemType, itemPrice);
