@@ -1,10 +1,7 @@
-CLANG_FORMAT=node_modules/clang-format/bin/linux_x64/clang-format --style=Google
-
-node_modules:
-	npm install clang-format 
-
-pretty: node_modules
-	find capstone/backend/src/main/java -iname *.java | xargs $(CLANG_FORMAT) -i
-
+lint: 
+	npm install eslint eslint-plugin-react stylelint stylelint-config-standard
+	npx eslint "capstone/client/src/components/*.js"
+	npx stylelint "capstone/client/src/components/*.css"
 package:
+	cd capstone/backend; \
 	mvn package

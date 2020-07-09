@@ -41,7 +41,9 @@ public class GetItemTypesServletTest extends TestCase {
     SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
 
     GetItemTypesServlet servlet = Mockito.spy(GetItemTypesServlet.class);
-    Mockito.doReturn(Arrays.asList("CEREAL", "CHEESE", "MILK", "WATER")).when(servlet).getItemTypes(0);
+    Mockito.doReturn(Arrays.asList("CEREAL", "CHEESE", "MILK", "WATER"))
+        .when(servlet)
+        .getItemTypes(0);
     servlet.doGet(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
@@ -59,6 +61,7 @@ public class GetItemTypesServletTest extends TestCase {
     servlet.doGet(setupObj.request, setupObj.response);
 
     String result = setupObj.writer.toString();
-    Mockito.verify(setupObj.response).sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page number: -1");
+    Mockito.verify(setupObj.response)
+        .sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page number: -1");
   }
 }
