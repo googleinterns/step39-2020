@@ -60,21 +60,25 @@ public class CreateSpannerTables {
                     + ") PRIMARY KEY (UserId, ListId),"
                     + "  INTERLEAVE IN PARENT Users ON DELETE CASCADE",
                 "CREATE TABLE Stores ("
-                    + "  StoreId      INT64,"
+                    + "  StoreId      STRING(MAX),"
                     + "  StoreName    STRING(MAX),"
                     + "  Address      STRING(MAX)"
                     + ") PRIMARY KEY (StoreId)",
                 "CREATE TABLE Items ("
                     + "  ItemId            INT64,"
-                    + "  ItemNameAndBrand  STRING(MAX),"
-                    + "  ItemType          STRING(MAX)"
+                    + "  ItemName          STRING(MAX),"
+                    + "  ItemBrand         STRING(MAX),"
+                    + "  ItemType          STRING(MAX),"
+                    + "  ItemSubtype       STRING(MAX)"
                     + ") PRIMARY KEY (ItemId)",
                 "CREATE TABLE Inventories ("
-                    + "  StoreId           INT64,"
+                    + "  StoreId           STRING(MAX),"
                     + "  ItemId            INT64,"
                     + "  ItemAvailability  STRING(MAX),"
                     + "  LastUpdated       TIMESTAMP OPTIONS (allow_commit_timestamp=true),"
                     + "  Price             FLOAT64,"
+                    + "  PPU               FLOAT64," // Price per unit (e.g., 0.72 for the unit of fl oz)
+                    + "  Unit              STRING(MAX)"
                     + "  CONSTRAINT FK_ItemId FOREIGN KEY (ItemId) REFERENCES Items (ItemId)"
                     + ") PRIMARY KEY (StoreId, ItemId),"
                     + "INTERLEAVE IN PARENT Stores ON DELETE CASCADE"));
