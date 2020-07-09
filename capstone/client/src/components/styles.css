@@ -43,14 +43,14 @@ h1 {
   background-color: #667ef7;
   border-radius: 14px;
   color: azure;
-  margin: 5% 10% 3% 0;
+  margin: 5% 10% 1% 0;
 }
 
 #distance-list-container {
-  background-color: #70e1ed;
+  background-color: #667ef7;
   border-radius: 14px;
   color: azure;
-  margin: 5% 5% 3% 10%;
+  margin: 5% 5% 1% 10%;
 }
 
 #items-list {
@@ -59,6 +59,11 @@ h1 {
 
 #distance-list {
   margin-left: 5%;
+}
+
+
+#submit-button {
+  margin-bottom: 20px;
 }
 
 /* ListPage end */

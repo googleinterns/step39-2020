@@ -49,6 +49,8 @@ class ListPage extends Component {
       listId: -1,
       listName: null,
       userId: -1,
+      displayZipCodeInput: false,
+      location: null,
       listSaveDialog: {
         display: false,
       },
@@ -63,6 +65,18 @@ class ListPage extends Component {
       });
     }
     );
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.setState({
+        location: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        },
+      });
+    }, () => {
+      this.setState({
+        displayZipCodeInput: true,
+      });
+    });
   }
 
   /* 
@@ -242,13 +256,16 @@ class ListPage extends Component {
             <FormGroup id="items-list">
               {checkboxItems}
             </FormGroup>
-            <Button  onClick={this.onSave}  variant="contained">Save List</Button>
+            <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>
             <List>
               {this.state.selectedItemsList}
             </List>
           </Grid>
         </Grid>
-        <Button  onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
+        {this.state.displayZipCodeInput ? <TextField display={this.state.location} id="filled-basic" label="Zip Code" variant="filled" /> : null}
+        <br></br>
+        <br></br>
+        <Button id="submit-button" onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
         <Dialog open={this.state.listSaveDialog.display} onClose={this.handleDialogCancel} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Save List</DialogTitle>
           <DialogContent>

@@ -93,13 +93,16 @@ class Header extends Component {
                   clientId={CLIENT_ID}
                   buttonText="Logout"
                   onLogoutSuccess={this.logoutSuccess}
+                  icon={false}
                 /> :
                 <GoogleLogin
                   clientId={CLIENT_ID}
-                  buttonText="Login"
+                  buttonText="Sign in with Google"
                   onSuccess={this.loginSuccess}
                   onFailure={this.loginFailure}
                   cookiePolicy={'single_host_origin'}
+                  theme="dark"
+                  isSignedIn={true}
                 />}
               </Toolbar>
             </AppBar>
