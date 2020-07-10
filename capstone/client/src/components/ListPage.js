@@ -189,7 +189,7 @@ class ListPage extends Component {
 
   getItemTypes = () => {
     axios.get(
-      'https://step39-2020.uc.r.appspot.com/api/v1/get-item-types?page=0'
+      '/api/v1/get-item-types?page=0'
     ).then((res) => {
       this.setState({
         items: res.data,
