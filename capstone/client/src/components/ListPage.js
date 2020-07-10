@@ -189,12 +189,16 @@ class ListPage extends Component {
 
   getItemTypes = () => {
     axios.get(
-      '/api/v1/get-item-types?page=0'
+      'https://step39-2020.uc.r.appspot.com/api/v1/get-item-types?page=0'
     ).then((res) => {
       this.setState({
         items: res.data,
       })
-    });
+    }).catch((error) => {
+      this.setState({
+        errorMessage: "There was an error retrieving items.",
+      })
+    }); 
   }
 
   /*
