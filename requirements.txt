@@ -30,7 +30,6 @@ protobuf==3.12.2
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycrypto==2.6.1
-PyGObject==3.30.4
 python-crontab==2.5.1
 python-dateutil==2.8.1
 pytz==2020.1
