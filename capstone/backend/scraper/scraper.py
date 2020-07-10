@@ -98,8 +98,8 @@ def main(argv):
 
   # Hard-coded item types.
   types = ['milk', 'paper towels', 'water', 'cookies', 'pencil',
-   'soda', 'cereal', 'chips', 'ketchup', 'flour', 'napkin',
-   'ramen', 'shampoo', 'sugar', 'olive oil']
+  'soda', 'cereal', 'chips', 'ketchup', 'flour', 'napkin',
+  'ramen', 'shampoo', 'sugar', 'olive oil']
 
   # Hard-coded store id, locations based on my own.
   # The store information needs to exist in Spanner
@@ -120,7 +120,6 @@ def main(argv):
 
   # Column names for items
   items_cols = ['ItemId', 'ItemName', 'ItemBrand', 'ItemSubtype', 'ItemType']
-
 
   # Instantiate a client for read/write.
   spanner_client = spanner.Client()
