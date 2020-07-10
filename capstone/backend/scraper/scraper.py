@@ -97,9 +97,9 @@ def main(argv):
     raise app.UsageError('Too many command-line arguments.')
 
   # Hard-coded item types.
-  types = ['milk', 'paper+towels', 'water', 'cookies', 'pencil',
+  types = ['milk', 'paper towels', 'water', 'cookies', 'pencil',
   'soda', 'cereal', 'chips', 'ketchup', 'flour', 'napkin',
-  'ramen', 'shampoo', 'sugar', 'olive+oil']
+  'ramen', 'shampoo', 'sugar', 'olive oil']
 
   # Hard-coded store id, locations based on my own.
   # The store information needs to exist in Spanner
@@ -135,7 +135,7 @@ def main(argv):
 
   for store in stores:
     for type in types:
-      soup = Scraper.get_page('https://www.walmart.com/search/?grid=false&query=' + type + '&stores=' + store)
+      soup = Scraper.get_page('https://www.walmart.com/search/?grid=false&query=' + type.replace(' ', '+') + '&stores=' + store)
       items = Scraper.get_items(soup)
       for item in items:
         # Check if we have recorded this item before.
