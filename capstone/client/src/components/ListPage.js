@@ -23,17 +23,6 @@ import { Alert } from '@material-ui/lab';
 
 import { Store } from './Store';
 
-
-const items = [
-  'Milk',
-  'Bread',
-  'Butter',
-  'Orange Juice',
-  'Burger Buns',
-  'Taco Shells',
-  'Pinto Beans',
-];
-
 /*
  * Displays a checkbox list containing the items returned from the Items API. 
  * The selected items are displayed below when the form is submitted. 
@@ -46,6 +35,7 @@ class ListPage extends Component {
       errorMessage: null,
       successMessage: null,
       distanceValue: 4,
+      items: [],
       listId: -1,
       listName: null,
       userId: -1,
@@ -58,6 +48,9 @@ class ListPage extends Component {
   }
 
   componentWillMount = () => {
+    // Get ItemTypes from database
+    this.getItemTypes();
+    
     this.selectedItems = new Set();
     this.props.store.on('userId').subscribe((userId) => {
       this.setState({
@@ -161,7 +154,7 @@ class ListPage extends Component {
   }
 
   /* 
-   * Obtains the selected itmes from the checkbox list and makes a POST request to 
+   * Obtains the selected items from the checkbox list and makes a POST request to 
    * /api/v1/create-or-update-user-list-servlet to save the specified list.
    */
   handleDialogSubmit = () => {
@@ -194,6 +187,16 @@ class ListPage extends Component {
     });   
   }
 
+  getItemTypes = () => {
+    axios.get(
+      '/api/v1/get-item-types?page=0'
+    ).then((res) => {
+      this.setState({
+        items: res.data,
+      })
+    });
+  }
+
   /*
    * Checks to see if the "List Name" field is empty. If the field is empty, an 
    * error message is displayed and the save button is disabled. 
@@ -220,7 +223,7 @@ class ListPage extends Component {
   }
 
   render() {
-    const checkboxItems = items.map((item) => (
+    const checkboxItems = this.state.items.map((item) => (
       <FormControlLabel
         control={<Checkbox name={item} data-testid='checkbox item'/>}
         label={item}
