@@ -1,12 +1,10 @@
-name: Python Lint
-
-on: push
-
+on: [push, pull_request]
+name: Python Linting
 jobs:
   PythonLinting:
-    name: Python Pylin
+    name: Python linting
     runs-on: ubuntu-latest
     steps:
-      uses: actions/checkout@master
-      name: Konstruktoid Python linting
-      uses: konstruktoid/action-pylint@master
+      - uses: actions/checkout@master
+      - name: Konstruktoid Python linting
+        uses: konstruktoid/action-pylint@master
