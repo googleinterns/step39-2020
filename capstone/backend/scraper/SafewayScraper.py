@@ -8,9 +8,15 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+AVALIBILITY_KEY = 'avalibility'
 CHROME_DRIVER_PATH = '/Users/anudeepyakkala/Downloads/chromedriver'
 DATABASE_INSTANCE = 'capstone-instance'
 DATABASE_ID = 'step39-db'
+ID_KEY = 'id'
+NAME_KEY = 'name'
+PPU_KEY = 'ppu'
+PRICE_KEY = 'price'
+UNIT_KEY = 'unit'
 database = spanner.Client().instance(DATABASE_INSTANCE).database(DATABASE_ID)
 items_cols = ['ItemId', 'ItemName', 'ItemBrand', 'ItemSubtype', 'ItemType']
 inventories_cols = ['ItemId', 'ItemAvailability', 'Price', 'PPU', 'Unit', 'StoreId', 'LastUpdated']
@@ -20,7 +26,7 @@ store_cols = ['StoreId', 'Address', 'StoreName']
 def get_item_page_html(item_type, zipcode):
   try:
     base_url = 'https://www.safeway.com/shop/search-results.html?q=' + item_type
-    driver = webdriver.Chrome(executable_path='/Users/anudeepyakkala/Downloads/chromedriver')
+    driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH)
     driver.get(base_url)
     WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="openFulfillmentModalButton"]')))
     driver.find_element_by_xpath('//*[@id="openFulfillmentModalButton"]').click()
@@ -45,13 +51,13 @@ def get_items(soup):
   items = []
   for item in soup.findAll('product-item'):
     try: 
-      ppuString = item.find("span", {"class": "product-price-qty"}).text.replace(',', '')
+      ppuString = item.find('span', {'class': 'product-price-qty'}).text.replace(',', '')
       current = {
-        "name": item.find("a", {"class": "product-title"}).text,
-        "price": float(item.find("span", {"class": "product-price"}).text[11:]),
-        "ppu": float(ppuString[ppuString.index('$') + 1 : ppuString.index('/') - 1]),
-        "unit": ppuString[ppuString.index('/') + 2 : ppuString.index(')')],
-        "itemAvalibility": 'AVALIABLE'
+        NAME_KEY: item.find('a', {'class': 'product-title'}).text,
+        PRICE_KEY: float(item.find("span", {'class': 'product-price'}).text[11:]),
+        PPU_KEY: float(ppuString[ppuString.index('$') + 1 : ppuString.index('/') - 1]),
+        UNIT_KEY: ppuString[ppuString.index('/') + 2 : ppuString.index(')')],
+        AVALIBILITY_KEY: 'AVALIABLE'
       }
       items.append(current)
     except:
@@ -63,7 +69,7 @@ def item_exists(item_id):
     results = snapshot.execute_sql(
       'SELECT * FROM Items '
       'WHERE ItemId = @itemId',
-      params={"itemId": item_id},
+      params={'itemId': item_id},
       param_types={spanner.param_types.INT64}
     )
   return len(results) > 0
@@ -118,7 +124,8 @@ if __name__ == '__main__':
       soup = get_item_page_html(item_type,zipcode)
       items = get_items(soup)
       for item in items:
-        item['id'] = get_product_id(item['name'], zipcode)
-        write_item_info_to_items_table(item['id'], item['name'], '', '', item_type)
-        write_item_info_to_inventory_table(item['id'], item['itemAvalibility'], item['price'], item['ppu'], item['unit'], store_id)
+        item[ID_KEY] = get_product_id(item[NAME_KEY], zipcode)
+        write_item_info_to_items_table(item[ID_KEY], item[NAME_KEY], '', '', item_type)
+        write_item_info_to_inventory_table(item[ID_KEY], item[AVALIBILITY_KEY], item[PRICE_KEY], \
+          item[PPU_KEY], item[UNIT_KEY], store_id)
 
