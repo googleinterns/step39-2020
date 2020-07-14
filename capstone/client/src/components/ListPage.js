@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button, Grid, Card, 
+import { ButtonGroup, Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button, Grid, Card, 
   Radio, RadioGroup, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } 
   from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
@@ -46,6 +46,8 @@ class ListPage extends Component {
       errorMessage: null,
       successMessage: null,
       distanceValue: 4,
+      totalLists: 0,
+      userLists : null,
       listId: -1,
       listName: null,
       userId: -1,
@@ -57,6 +59,7 @@ class ListPage extends Component {
 
   componentWillMount = () => {
     this.selectedItems = new Set();
+    this.itemsToComponent = {};
     this.props.store.on('userId').subscribe((userId) => {
       this.setState({
         userId,
@@ -205,10 +208,48 @@ class ListPage extends Component {
     }
   }
 
+  selectList = (event) => {
+    if(this.selectedItems.size !== 0){
+      for(let val of this.selectedItems) {
+        this.itemsToComponent[val].click();
+      }
+    }
+    this.setState({
+      listId : this.state.userLists[event.target.name].listId,
+    });
+    for(const i in this.state.userLists[event.target.name].itemTypes) {
+      this.itemsToComponent[this.state.userLists[event.target.name].itemTypes[i]].click();
+    }
+  }
+
+  userLists() {
+    if(this.state.userId !== -1 && this.state.userLists == null) {
+      axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
+        .then(res => {
+          this.setState({
+            totalLists: res.data.userLists.length,
+            userLists: res.data.userLists
+          });
+        });
+    }
+    if(this.userLists !== null) {
+      var htmlString = '';
+      for (var i = 0; i < this.state.totalLists; i++) {
+        htmlString = htmlString + '<Button name="' + i + '">' + this.state.userLists[i].displayName + '</Button>';
+      }
+      return {
+        __html: htmlString
+      };
+    }
+    return {
+      __html: ''
+    };
+  }
+
   render() {
     const checkboxItems = items.map((item) => (
       <FormControlLabel
-        control={<Checkbox name={item} data-testid='checkbox item'/>}
+        control={<Checkbox name={item} ref={component => this.itemsToComponent[item] = component} data-testid='checkbox item'/>}
         label={item}
         key={item}
         onChange={this.handleItemChange}
@@ -230,6 +271,8 @@ class ListPage extends Component {
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
         {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
         <h1>Preferences</h1>
+        <ButtonGroup container id="user-lists" dangerouslySetInnerHTML={this.userLists()} onClick={this.selectList}>
+        </ButtonGroup>
         <Grid container alignItems="stretch">
           <Grid id="distance-list-container" item component={Card} xs>
             <p>I would like to choose from stores in a</p>
