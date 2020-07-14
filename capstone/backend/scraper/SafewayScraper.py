@@ -128,4 +128,3 @@ if __name__ == '__main__':
         write_item_info_to_items_table(item[ID_KEY], item[NAME_KEY], '', '', item_type)
         write_item_info_to_inventory_table(item[ID_KEY], item[AVALIBILITY_KEY], item[PRICE_KEY], \
           item[PPU_KEY], item[UNIT_KEY], store_id)
-
