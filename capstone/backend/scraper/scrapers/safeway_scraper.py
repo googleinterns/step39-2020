@@ -3,7 +3,10 @@ Scrapes inventory and items data from the Safeway search
 result page using Selenium and BeautifulSoup. 
 """
 
+import csv
 import hashlib
+import logging
+import sys
 import threading
 from bs4 import BeautifulSoup
 from google.cloud import spanner
@@ -13,20 +16,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from write_to_spanner import write_item_info_to_inventory_table, write_item_info_to_items_table, write_store_info_to_stores_table
 
 AVALIBILITY_KEY = 'availability'
 CHROME_DRIVER_PATH = '/Users/anudeepyakkala/Downloads/chromedriver'
-DATABASE_INSTANCE = 'capstone-instance'
-DATABASE_ID = 'step39-db'
 ID_KEY = 'id'
+LOG_FILE_NAME = 'safeway_scraper.log'
 NAME_KEY = 'name'
 PPU_KEY = 'ppu'
 PRICE_KEY = 'price'
 UNIT_KEY = 'unit'
-database = spanner.Client().instance(DATABASE_INSTANCE).database(DATABASE_ID)
-items_cols = ['ItemId', 'ItemName', 'ItemBrand', 'ItemSubtype', 'ItemType']
-inventories_cols = ['ItemId', 'ItemAvailability', 'Price', 'PPU', 'Unit', 'StoreId', 'LastUpdated']
-store_cols = ['StoreId', 'Address', 'StoreName']
+write_to_spanner = True
+logging.basicConfig(filename=LOG_FILE_NAME, level=logging.ERROR)
 
 
 def get_item_page_html(item_type, zipcode):
@@ -52,10 +53,11 @@ def get_item_page_html(item_type, zipcode):
     driver.quit()
     return soup
   except TimeoutException:
+    logging.error('Timed out when trying to obtain the item page for ' + item_type + '.')
     driver.quit() 
     return None
 
-def get_items(soup):
+def get_items(soup, item_type):
   """
   Obtains item information for each of the items from the provided 
   page source.
@@ -74,8 +76,8 @@ def get_items(soup):
         AVALIBILITY_KEY: 'AVAILABLE'
       }
       items.append(current)
-    except:
-      pass
+    except Exception as e:
+      logging.error('Unable to parse items from page source for ' + item_type + '.')
   return items
 
 def get_product_id(item_name, zipcode):
@@ -92,40 +94,6 @@ def get_store_address(soup):
   address = soup.find('span', {'class': 'reserve-nav__current-instore-text'}).text
   return address
 
-
-def write_item_info_to_items_table(item_id, item_name, item_brand, item_subtype, item_type):
-  """
-  Writes or updates an item to the Items table in the Spanner databse.
-  """
-  with database.batch() as batch:
-    batch.insert_or_update(
-      table = 'Items',
-      columns=items_cols,
-      values=[[item_id, item_name, item_brand, item_subtype, item_type]]
-    )
-
-def write_item_info_to_inventory_table(item_id, item_avalibility, price, ppu, unit, store_id):
-  """
-  Writes or updates an item to the Inventories table in the Spanner databse.
-  """
-  with database.batch() as batch:
-    batch.insert_or_update(
-      table='Inventories',
-      columns=inventories_cols,
-      values=[[item_id, item_avalibility, price, ppu, unit, store_id, spanner.COMMIT_TIMESTAMP]]
-    )
-
-def write_store_info_to_stores_table(store_id, address, store_name):
-  """
-  Writes or updates an Store to the Stores table in the Spanner databse.
-  """
-  with database.batch() as batch:
-    batch.insert_or_update(
-      table='Stores',
-      columns=store_cols,
-      values=[[store_id, address, store_name]]
-    )
-
 def scrape_store(zipcode):
   # Hard-coded item types.
   item_types = ['milk', 'paper towels', 'water', 'cookies', 'pencil',
@@ -137,14 +105,22 @@ def scrape_store(zipcode):
   write_store_info_to_stores_table(store_id, address, 'Safeway - ' + zipcode)
   for item_type in item_types:
     soup = get_item_page_html(item_type,zipcode)
-    items = get_items(soup)
+    items = get_items(soup, item_type)
     for item in items:
       item[ID_KEY] = get_product_id(item[NAME_KEY], zipcode)
-      write_item_info_to_items_table(item[ID_KEY], item[NAME_KEY], '', '', item_type)
-      write_item_info_to_inventory_table(item[ID_KEY], item[AVALIBILITY_KEY], item[PRICE_KEY], \
-        item[PPU_KEY], item[UNIT_KEY], store_id)
+      if (write_to_spanner):
+        write_item_info_to_items_table(item[ID_KEY], item[NAME_KEY], '', '', item_type)
+        write_item_info_to_inventory_table(item[ID_KEY], item[AVALIBILITY_KEY], item[PRICE_KEY], \
+          item[PPU_KEY], item[UNIT_KEY], store_id)
+      f = open('csv/safeway-' + zipcode + '.csv', 'a')
+      writer = csv.DictWriter(f, item.keys())
+      writer.writerow(item)
+      f.close()
 
 if __name__ == "__main__":
+  if (len(sys.argv) > 1) and (str(sys.argv[1]) == 'test'):
+    write_to_spanner = False
+
   # Hard-coded store zip codes.
   zipcodes = ['94582', '95014']
   for zipcode in zipcodes:
