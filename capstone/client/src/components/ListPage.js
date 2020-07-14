@@ -209,15 +209,15 @@ class ListPage extends Component {
   }
 
   selectList = (event) => {
-    if(this.selectedItems.size !== 0){
-      for(let val of this.selectedItems) {
+    if (this.selectedItems.size !== 0) {
+      for (let val of this.selectedItems) {
         this.itemsToComponent[val].click();
       }
     }
     this.setState({
       listId : this.state.userLists[event.target.name].listId,
     });
-    for(const i in this.state.userLists[event.target.name].itemTypes) {
+    for (const i in this.state.userLists[event.target.name].itemTypes) {
       this.itemsToComponent[this.state.userLists[event.target.name].itemTypes[i]].click();
     }
   }
