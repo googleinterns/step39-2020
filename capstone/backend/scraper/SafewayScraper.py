@@ -8,12 +8,12 @@ from bs4 import BeautifulSoup
 from google.cloud import spanner
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
-AVALIBILITY_KEY = 'avalibility'
+AVALIBILITY_KEY = 'availability'
 CHROME_DRIVER_PATH = '/Users/anudeepyakkala/Downloads/chromedriver'
 DATABASE_INSTANCE = 'capstone-instance'
 DATABASE_ID = 'step39-db'
@@ -30,7 +30,7 @@ store_cols = ['StoreId', 'Address', 'StoreName']
 
 def get_item_page_html(item_type, zipcode):
   """
-  Obtains the page source for the page containg all the items
+  Obtains the page source for the page containing all the items
   of the specified item_type for the store in the specified zipcode.
   """
   try:
@@ -70,7 +70,7 @@ def get_items(soup):
         PRICE_KEY: float(item.find("span", {'class': 'product-price'}).text[11:]),
         PPU_KEY: float(ppuString[ppuString.index('$') + 1 : ppuString.index('/') - 1]),
         UNIT_KEY: ppuString[ppuString.index('/') + 2 : ppuString.index(')')],
-        AVALIBILITY_KEY: 'AVALIABLE'
+        AVALIBILITY_KEY: 'AVAILABLE'
       }
       items.append(current)
     except:
