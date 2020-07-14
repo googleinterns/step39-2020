@@ -4,6 +4,7 @@ result page using Selenium and BeautifulSoup.
 """
 
 import hashlib
+import threading
 from bs4 import BeautifulSoup
 from google.cloud import spanner
 from selenium import webdriver
@@ -125,24 +126,27 @@ def write_store_info_to_stores_table(store_id, address, store_name):
       values=[[store_id, address, store_name]]
     )
 
-if __name__ == '__main__':
+def scrape_store(zipcode):
   # Hard-coded item types.
   item_types = ['milk', 'paper towels', 'water', 'cookies', 'pencil',
   'soda', 'cereal', 'chips', 'ketchup', 'flour', 'napkin',
   'ramen', 'shampoo', 'sugar', 'olive oil']
 
+  address = get_store_address(get_item_page_html('', zipcode))
+  store_id = int(hashlib.sha1(address.encode('utf-8')).hexdigest(), 16) % (10 ** 8)
+  write_store_info_to_stores_table(store_id, address, 'Safeway - ' + zipcode)
+  for item_type in item_types:
+    soup = get_item_page_html(item_type,zipcode)
+    items = get_items(soup)
+    for item in items:
+      item[ID_KEY] = get_product_id(item[NAME_KEY], zipcode)
+      write_item_info_to_items_table(item[ID_KEY], item[NAME_KEY], '', '', item_type)
+      write_item_info_to_inventory_table(item[ID_KEY], item[AVALIBILITY_KEY], item[PRICE_KEY], \
+        item[PPU_KEY], item[UNIT_KEY], store_id)
+
+if __name__ == "__main__":
   # Hard-coded store zip codes.
   zipcodes = ['94582', '95014']
-
   for zipcode in zipcodes:
-    address = get_store_address(get_item_page_html('', zipcode))
-    store_id = int(hashlib.sha1(address.encode('utf-8')).hexdigest(), 16) % (10 ** 8)
-    write_store_info_to_stores_table(store_id, address, 'Safeway - ' + zipcode)
-    for item_type in item_types:
-      soup = get_item_page_html(item_type,zipcode)
-      items = get_items(soup)
-      for item in items:
-        item[ID_KEY] = get_product_id(item[NAME_KEY], zipcode)
-        write_item_info_to_items_table(item[ID_KEY], item[NAME_KEY], '', '', item_type)
-        write_item_info_to_inventory_table(item[ID_KEY], item[AVALIBILITY_KEY], item[PRICE_KEY], \
-          item[PPU_KEY], item[UNIT_KEY], store_id)
+    thread = threading.Thread(target=scrape_store, args=(zipcode,))
+    thread.start()
