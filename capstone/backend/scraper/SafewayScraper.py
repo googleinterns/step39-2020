@@ -1,3 +1,8 @@
+""" 
+Scrapes inventory and items data from the Safeway search 
+result page using Selenium and BeautifulSoup. 
+"""
+
 import hashlib
 from bs4 import BeautifulSoup
 from google.cloud import spanner
@@ -24,6 +29,10 @@ store_cols = ['StoreId', 'Address', 'StoreName']
 
 
 def get_item_page_html(item_type, zipcode):
+  """
+  Obtains the page source for the page containg all the items
+  of the specified item_type for the store in the specified zipcode.
+  """
   try:
     base_url = 'https://www.safeway.com/shop/search-results.html?q=' + item_type
     driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH)
@@ -46,6 +55,10 @@ def get_item_page_html(item_type, zipcode):
     return None
 
 def get_items(soup):
+  """
+  Obtains item information for each of the items from the provided 
+  page source.
+  """
   if (soup == None):
     return []
   items = []
@@ -64,26 +77,25 @@ def get_items(soup):
       pass
   return items
 
-def item_exists(item_id):
-  with database.snapshot() as snapshot:
-    results = snapshot.execute_sql(
-      'SELECT * FROM Items '
-      'WHERE ItemId = @itemId',
-      params={'itemId': item_id},
-      param_types={spanner.param_types.INT64}
-    )
-  return len(results) > 0
-
 def get_product_id(item_name, zipcode):
+  """
+  Returns the productId for a specific item.
+  """
   s = 'Safeway' + zipcode + item_name
   return int(hashlib.sha1(s.encode('utf-8')).hexdigest(), 16) % (10 ** 8)
 
 def get_store_address(soup):
+  """
+  Returns address of the store given the page source.
+  """
   address = soup.find('span', {'class': 'reserve-nav__current-instore-text'}).text
   return address
 
 
 def write_item_info_to_items_table(item_id, item_name, item_brand, item_subtype, item_type):
+  """
+  Writes or updates an item to the Items table in the Spanner databse.
+  """
   with database.batch() as batch:
     batch.insert_or_update(
       table = 'Items',
@@ -92,6 +104,9 @@ def write_item_info_to_items_table(item_id, item_name, item_brand, item_subtype,
     )
 
 def write_item_info_to_inventory_table(item_id, item_avalibility, price, ppu, unit, store_id):
+  """
+  Writes or updates an item to the Inventories table in the Spanner databse.
+  """
   with database.batch() as batch:
     batch.insert_or_update(
       table='Inventories',
@@ -100,6 +115,9 @@ def write_item_info_to_inventory_table(item_id, item_avalibility, price, ppu, un
     )
 
 def write_store_info_to_stores_table(store_id, address, store_name):
+  """
+  Writes or updates an Store to the Stores table in the Spanner databse.
+  """
   with database.batch() as batch:
     batch.insert_or_update(
       table='Stores',
