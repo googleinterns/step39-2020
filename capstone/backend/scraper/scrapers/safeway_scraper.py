@@ -8,6 +8,8 @@ import hashlib
 import logging
 import sys
 import threading
+from absl import app
+from absl import flags
 from bs4 import BeautifulSoup
 from google.cloud import spanner
 from selenium import webdriver
@@ -18,6 +20,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from write_to_spanner import write_item_info_to_inventory_table, write_item_info_to_items_table, write_store_info_to_stores_table
 
+FLAGS = flags.FLAGS
+flags.DEFINE_boolean('test', False, 'Doesn\'t write items to Spaner.')
+
 AVALIBILITY_KEY = 'availability'
 CHROME_DRIVER_PATH = '/Users/anudeepyakkala/Downloads/chromedriver'
 ID_KEY = 'id'
@@ -26,7 +31,6 @@ NAME_KEY = 'name'
 PPU_KEY = 'ppu'
 PRICE_KEY = 'price'
 UNIT_KEY = 'unit'
-write_to_spanner = True
 logging.basicConfig(filename=LOG_FILE_NAME, level=logging.ERROR)
 
 
@@ -108,7 +112,7 @@ def scrape_store(zipcode):
     items = get_items(soup, item_type)
     for item in items:
       item[ID_KEY] = get_product_id(item[NAME_KEY], zipcode)
-      if (write_to_spanner):
+      if (not FLAGS.test):
         write_item_info_to_items_table(item[ID_KEY], item[NAME_KEY], '', '', item_type)
         write_item_info_to_inventory_table(item[ID_KEY], item[AVALIBILITY_KEY], item[PRICE_KEY], \
           item[PPU_KEY], item[UNIT_KEY], store_id)
@@ -117,12 +121,12 @@ def scrape_store(zipcode):
       writer.writerow(item)
       f.close()
 
-if __name__ == "__main__":
-  if (len(sys.argv) > 1) and (str(sys.argv[1]) == 'test'):
-    write_to_spanner = False
-
+def main(argv):
   # Hard-coded store zip codes.
   zipcodes = ['94582', '95014']
   for zipcode in zipcodes:
     thread = threading.Thread(target=scrape_store, args=(zipcode,))
     thread.start()
+
+if __name__ == "__main__":
+  app.run(main)
