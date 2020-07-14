@@ -23,17 +23,6 @@ import { Alert } from '@material-ui/lab';
 
 import { Store } from './Store';
 
-
-const items = [
-  'Milk',
-  'Bread',
-  'Butter',
-  'Orange Juice',
-  'Burger Buns',
-  'Taco Shells',
-  'Pinto Beans',
-];
-
 /*
  * Displays a checkbox list containing the items returned from the Items API. 
  * The selected items are displayed below when the form is submitted. 
@@ -48,9 +37,12 @@ class ListPage extends Component {
       distanceValue: 4,
       totalLists: 0,
       userLists : null,
+      items: [],
       listId: -1,
       listName: null,
       userId: -1,
+      displayZipCodeInput: false,
+      location: null,
       listSaveDialog: {
         display: false,
       },
@@ -58,6 +50,9 @@ class ListPage extends Component {
   }
 
   componentWillMount = () => {
+    // Get ItemTypes from database
+    this.getItemTypes();
+    
     this.selectedItems = new Set();
     this.itemsToComponent = {};
     this.props.store.on('userId').subscribe((userId) => {
@@ -66,6 +61,18 @@ class ListPage extends Component {
       });
     }
     );
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.setState({
+        location: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        },
+      });
+    }, () => {
+      this.setState({
+        displayZipCodeInput: true,
+      });
+    });
   }
 
   /* 
@@ -150,7 +157,7 @@ class ListPage extends Component {
   }
 
   /* 
-   * Obtains the selected itmes from the checkbox list and makes a POST request to 
+   * Obtains the selected items from the checkbox list and makes a POST request to 
    * /api/v1/create-or-update-user-list-servlet to save the specified list.
    */
   handleDialogSubmit = () => {
@@ -181,6 +188,20 @@ class ListPage extends Component {
         errorMessage: "There was an error saving your list.",
       })
     });   
+  }
+
+  getItemTypes = () => {
+    axios.get(
+      '/api/v1/get-item-types?page=0'
+    ).then((res) => {
+      this.setState({
+        items: res.data,
+      })
+    }).catch((error) => {
+      this.setState({
+        errorMessage: "There was an error retrieving items.",
+      })
+    }); 
   }
 
   /*
@@ -247,7 +268,7 @@ class ListPage extends Component {
   }
 
   render() {
-    const checkboxItems = items.map((item) => (
+    const checkboxItems = this.state.items.map((item) => (
       <FormControlLabel
         control={<Checkbox name={item} ref={component => this.itemsToComponent[item] = component} data-testid='checkbox item'/>}
         label={item}
@@ -285,13 +306,16 @@ class ListPage extends Component {
             <FormGroup id="items-list">
               {checkboxItems}
             </FormGroup>
-            <Button  onClick={this.onSave}  variant="contained">Save List</Button>
+            <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>
             <List>
               {this.state.selectedItemsList}
             </List>
           </Grid>
         </Grid>
-        <Button  onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
+        {this.state.displayZipCodeInput ? <TextField display={this.state.location} id="filled-basic" label="Zip Code" variant="filled" /> : null}
+        <br></br>
+        <br></br>
+        <Button id="submit-button" onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
         <Dialog open={this.state.listSaveDialog.display} onClose={this.handleDialogCancel} aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">Save List</DialogTitle>
           <DialogContent>

@@ -9,14 +9,12 @@ python3 -m scraper.test.scraper_test
 from .. import scraper
 from bs4 import BeautifulSoup
 from datetime import datetime
-from freezegun import freeze_time
 import json
 import mock
 import requests
 import unittest
 
-
-_FAKE_HTML_BODY_HAS_DATA= '''<html><script id="searchContent" type="application/json"> {
+_FAKE_HTML_BODY_HAS_DATA = '''<html><script id="searchContent" type="application/json"> {
   "searchContent": {
     "preso": {
       "items": [
@@ -63,7 +61,6 @@ _FAKE_SINGLE_ITEM_INFO_EMPTY = '''{
 _FAKE_SINGLE_INVENTORY_DICT_ALL = {
   'ItemId': '7L', 
   'ItemAvailability': 'OUT_OF_STOCK', 
-  'LastUpdated': '20-06-06 22:34:01', 
   'Price': 4.98, 
   'PPU': 0.101, 
   'Unit': 'fl oz'
@@ -71,9 +68,8 @@ _FAKE_SINGLE_INVENTORY_DICT_ALL = {
 _FAKE_SINGLE_INVENTORY_DICT_DEFAULT = {
   'ItemId': '', 
   'ItemAvailability': '', 
-  'LastUpdated': '20-06-06 22:34:01', 
-  'Price': '', 
-  'PPU': '', 
+  'Price': None, 
+  'PPU': None, 
   'Unit': ''
 }
 _FAKE_SINGLE_ITEM_DICT_ALL = {
@@ -127,14 +123,12 @@ class ScraperTest(unittest.TestCase):
     self.assertEqual(result, _FAKE_SINGLE_ITEM_DICT_DEFAULT)
 
   def test_get_inventory_info(self):
-    with freeze_time("2020-06-06 22:34:01"):
-      result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_ALL))
-      self.assertEqual(result, _FAKE_SINGLE_INVENTORY_DICT_ALL)
+    result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_ALL))
+    self.assertEqual(result, _FAKE_SINGLE_INVENTORY_DICT_ALL)
 
   def test_get_default_inventory_info(self):
-    with freeze_time("2020-06-06 22:34:01"):
-      result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_EMPTY))
-      self.assertEqual(result, _FAKE_SINGLE_INVENTORY_DICT_DEFAULT)
+    result = scraper.Scraper.get_inventory_info(json.loads(_FAKE_SINGLE_ITEM_INFO_EMPTY))
+    self.assertEqual(result, _FAKE_SINGLE_INVENTORY_DICT_DEFAULT)
 
 if __name__ == '__main__':
   unittest.main()

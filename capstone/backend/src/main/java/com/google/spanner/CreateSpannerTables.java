@@ -29,8 +29,6 @@ import com.google.cloud.spanner.SpannerOptions;
 import com.google.spanner.admin.database.v1.CreateDatabaseMetadata;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
-import org.threeten.bp.LocalDate;
-import org.threeten.bp.temporal.ChronoField;
 
 public class CreateSpannerTables {
   /*
@@ -45,8 +43,11 @@ public class CreateSpannerTables {
    */
   static void createDatabase(DatabaseAdminClient dbAdminClient, DatabaseId id) {
     OperationFuture<Database, CreateDatabaseMetadata> op =
-        dbAdminClient.createDatabase(id.getInstanceId().getInstance(), id.getDatabase(),
-            Arrays.asList("CREATE TABLE Users ("
+        dbAdminClient.createDatabase(
+            id.getInstanceId().getInstance(),
+            id.getDatabase(),
+            Arrays.asList(
+                "CREATE TABLE Users ("
                     + "  UserId    INT64,"
                     + "  Username  STRING(MAX),"
                     + "  Email     STRING(MAX)"
@@ -59,21 +60,25 @@ public class CreateSpannerTables {
                     + ") PRIMARY KEY (UserId, ListId),"
                     + "  INTERLEAVE IN PARENT Users ON DELETE CASCADE",
                 "CREATE TABLE Stores ("
-                    + "  StoreId      INT64,"
+                    + "  StoreId      STRING(MAX),"
                     + "  StoreName    STRING(MAX),"
                     + "  Address      STRING(MAX)"
                     + ") PRIMARY KEY (StoreId)",
                 "CREATE TABLE Items ("
                     + "  ItemId            INT64,"
-                    + "  ItemNameAndBrand  STRING(MAX),"
-                    + "  ItemType          STRING(MAX)"
+                    + "  ItemName          STRING(MAX),"
+                    + "  ItemBrand         STRING(MAX),"
+                    + "  ItemType          STRING(MAX),"
+                    + "  ItemSubtype       STRING(MAX)"
                     + ") PRIMARY KEY (ItemId)",
                 "CREATE TABLE Inventories ("
-                    + "  StoreId           INT64,"
+                    + "  StoreId           STRING(MAX),"
                     + "  ItemId            INT64,"
                     + "  ItemAvailability  STRING(MAX),"
                     + "  LastUpdated       TIMESTAMP OPTIONS (allow_commit_timestamp=true),"
                     + "  Price             FLOAT64,"
+                    + "  PPU               FLOAT64," // Price per unit (e.g., 0.72 for the unit of fl oz)
+                    + "  Unit              STRING(MAX)"
                     + "  CONSTRAINT FK_ItemId FOREIGN KEY (ItemId) REFERENCES Items (ItemId)"
                     + ") PRIMARY KEY (StoreId, ItemId),"
                     + "INTERLEAVE IN PARENT Stores ON DELETE CASCADE"));
@@ -82,7 +87,7 @@ public class CreateSpannerTables {
       Database db = op.get();
     } catch (ExecutionException e) {
       // If the operation failed during execution, expose the cause.
-      throw(SpannerException) e.getCause();
+      throw (SpannerException) e.getCause();
     } catch (InterruptedException e) {
       // Throw when a thread is waiting, sleeping, or otherwise occupied,
       // and the thread is interrupted, either before or during the activity.
@@ -90,8 +95,12 @@ public class CreateSpannerTables {
     }
   }
 
-  private static void run(DatabaseClient dbClient, DatabaseAdminClient dbAdminClient,
-      InstanceAdminClient instanceAdminClient, String command, DatabaseId database) {
+  private static void run(
+      DatabaseClient dbClient,
+      DatabaseAdminClient dbAdminClient,
+      InstanceAdminClient instanceAdminClient,
+      String command,
+      DatabaseId database) {
     switch (command) {
       case "createdatabase":
         createDatabase(dbAdminClient, database);
@@ -122,9 +131,10 @@ public class CreateSpannerTables {
       // This will return the default project id based on the environment.
       String clientProject = spanner.getOptions().getProjectId();
       if (!db.getInstanceId().getProject().equals(clientProject)) {
-        System.err.println("Invalid project specified. Project in the database id should match the"
-            + "project name set in the environment variable GOOGLE_CLOUD_PROJECT. Expected: "
-            + clientProject);
+        System.err.println(
+            "Invalid project specified. Project in the database id should match the"
+                + "project name set in the environment variable GOOGLE_CLOUD_PROJECT. Expected: "
+                + clientProject);
         printUsageAndExit();
       }
 

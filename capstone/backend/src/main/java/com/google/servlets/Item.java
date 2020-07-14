@@ -17,23 +17,25 @@
 package com.google.servlets;
 
 public class Item {
-  private long itemId;
-
+  private String itemId;
 
   private long storeId;
-  
+
   private double itemPrice;
-  
+
+  private String itemBrand;
+
   private String itemName;
 
-  public Item(long itemId, double itemPrice, String itemName, long storeId) {
+  public Item(String itemId, double itemPrice, String itemName, String itemBrand, long storeId) {
     this.itemId = itemId;
     this.itemPrice = itemPrice;
     this.itemName = itemName;
+    this.itemBrand = itemBrand;
     this.storeId = storeId;
   }
 
-  public long getId() {
+  public String getId() {
     return itemId;
   }
 
@@ -45,9 +47,15 @@ public class Item {
     return itemName;
   }
 
-  public boolean equals(Item otherItem) {
-    return this.itemId == otherItem.itemId && this.itemPrice == otherItem.itemPrice && 
-            this.itemName == otherItem.itemName && this.storeId == otherItem.storeId;
+  public String getBrand() {
+    return itemBrand;
   }
 
+  public boolean equals(Item otherItem) {
+    return this.itemId.equals(otherItem.itemId)
+        && this.itemPrice == otherItem.itemPrice
+        && this.itemName.equals(otherItem.itemName)
+        && this.storeId == otherItem.storeId
+        && this.itemBrand.equals(otherItem.itemBrand);
+  }
 }

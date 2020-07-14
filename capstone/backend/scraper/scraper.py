@@ -12,9 +12,13 @@ from absl import app
 from absl import flags
 from bs4 import BeautifulSoup
 from datetime import datetime
+from google.cloud import spanner
 from retrying import retry
 
 FLAGS = flags.FLAGS
+
+_DATABASE_INSTANCE = 'capstone-instance'
+_DATABASE_ID = 'step39-db'
 
 class Scraper:
   @retry(stop_max_attempt_number=3)
@@ -32,7 +36,7 @@ class Scraper:
   def get_items(soup):
     """
     Given a Walmart search result page's scrape results,
-    Finds and returns the items in JSON format.
+    finds and returns the items in JSON format.
     """
     results = soup.find('script', type='application/json', id='searchContent')
     if results is not None:
@@ -43,9 +47,8 @@ class Scraper:
 
   def get_item_info(item):
     """From the JSON data of the item,
-    Finds and returns the attributes of the item
-    for item purposes (itemId, itemName, 
-    itemBrand, itemSubtype).
+    finds and returns the attributes of the item
+    for item purposes (itemId, itemName, itemBrand, itemSubtype).
     """
     item_dict = {}
     item_dict['ItemId'] = item['productId'] if 'productId' in item else ''
@@ -60,7 +63,7 @@ class Scraper:
 
   def get_inventory_info(item):
     """From the JSON data of the item,
-    Finds and returns the attributes of the item
+    finds and returns the attributes of the item 
     for inventory purposes (itemId, itemAvailability, 
     timeUpdated, price, ppu, unit).
     """
@@ -74,19 +77,17 @@ class Scraper:
     else:
       inventory_dict['ItemAvailability'] = ''
 
-    inventory_dict['LastUpdated'] = datetime.now().strftime('%y-%m-%d %H:%M:%S')
-
     # TODO(carolynlwang): About 20% of the items have prices listed in a min/max format.
     # Right now, their prices don't end up in the database.
     if 'primaryOffer' in item and 'offerPrice' in item['primaryOffer']:
-        inventory_dict['Price'] = item['primaryOffer']['offerPrice']
+      inventory_dict['Price'] = float(item['primaryOffer']['offerPrice'])
     else:
-        inventory_dict['Price'] = ''
+        inventory_dict['Price'] = None
     if 'ppu' in item:
-      inventory_dict['PPU'] = item['ppu']['amount'] if 'amount' in item['ppu'] else ''
+      inventory_dict['PPU'] = item['ppu']['amount'] if 'amount' in item['ppu'] else None
       inventory_dict['Unit'] = item['ppu']['unit'] if 'unit' in item['ppu'] else ''
     else:
-      inventory_dict['PPU'] = ''
+      inventory_dict['PPU'] = None
       inventory_dict['Unit'] = ''
    
     return inventory_dict
@@ -96,34 +97,45 @@ def main(argv):
     raise app.UsageError('Too many command-line arguments.')
 
   # Hard-coded item types.
-  types = ['milk', 'paper+towels', 'water', 'cookies', 'pencil',
+  types = ['milk', 'paper towels', 'water', 'cookies', 'pencil',
   'soda', 'cereal', 'chips', 'ketchup', 'flour', 'napkin',
-  'ramen', 'shampoo', 'sugar', 'olive+oil']
+  'ramen', 'shampoo', 'sugar', 'olive oil']
 
   # Hard-coded store id, locations based on my own.
+  # The store information needs to exist in Spanner
+  # in order for batch writing of Inventories to work. 
   stores = ['2486', '2119', '2280', '3123', '4174']
 
+  """ Important to note: dict values are ordered 
+  by when they were put in (most recent last). 
+  So for the batch.replace() to work, you need 
+  the order of the items in this list to match the order 
+  that you put the information into the dictionary 
+  (e.g., if the last item you add to the dictionary is 
+  timeUpdated, it also needs to be the last item in this list
+  of column names).
+  """
   # Column names for inventories
-  inventories_cols = ['StoreId', 'ItemId', 'ItemAvailability', 'LastUpdated', 'Price', 'PPU', 'Unit']
+  inventories_cols = ['ItemId', 'ItemAvailability', 'Price', 'PPU', 'Unit', 'StoreId', 'LastUpdated']
 
   # Column names for items
-  items_cols = ['ItemId', 'ItemName', 'ItemBrand', 'ItemType', 'ItemSubtype']
-  
-  # Writes item and inventory results into a csv file.
-  # First, write column names.
-  with open('inventories.csv', mode='w') as inventories_file:
-    writer = csv.writer(inventories_file, delimiter=',')
-    writer.writerow(inventories_cols)
-  with open('items.csv', mode='w') as items_file:
-    writer = csv.writer(items_file, delimiter=',')
-    writer.writerow(items_cols)
+  items_cols = ['ItemId', 'ItemName', 'ItemBrand', 'ItemSubtype', 'ItemType']
+
+  # Instantiate a client for read/write.
+  spanner_client = spanner.Client()
+
+  # Get a Cloud Spanner instance by ID.
+  instance = spanner_client.instance(_DATABASE_INSTANCE)
+
+  # Get a Cloud Spanner database by ID.
+  database = instance.database(_DATABASE_ID)
 
   # Keep a list of unique ItemIds
   item_ids = []
 
   for store in stores:
     for type in types:
-      soup = Scraper.get_page('https://www.walmart.com/search/?grid=false&query=' + type + '&stores=' + store)
+      soup = Scraper.get_page('https://www.walmart.com/search/?grid=false&query=' + type.replace(' ', '+') + '&stores=' + store)
       items = Scraper.get_items(soup)
       for item in items:
         # Check if we have recorded this item before.
@@ -132,15 +144,31 @@ def main(argv):
             item_ids.append(item['productId'])
             item_info = Scraper.get_item_info(item)
             item_info['ItemType'] = type
-            with open('items.csv', mode='a+', newline='') as items_file:
-              writer = csv.DictWriter(items_file, delimiter=',', fieldnames = items_cols)
-              writer.writerow(item_info)
+            with database.batch() as batch:
+              """ batch.replace() inserts or updates one or more 
+              records in a table. Existing rows have values
+              for supplied columns overwritten; ther column values
+              set to null. 
+              """
+              batch.replace(
+                table = 'Items',
+                columns = items_cols,
+                values = [
+                  item_info.values()
+                ]
+              )
 
         inventory_info = Scraper.get_inventory_info(item)
-        inventory_info['StoreId'] = store 
-        with open('inventories.csv', mode='a+', newline='') as inventories_file:
-          writer = csv.DictWriter(inventories_file, delimiter=',', fieldnames = inventories_cols)
-          writer.writerow(inventory_info)
+        inventory_info['StoreId'] = int(store)
+        inventory_info['LastUpdated'] = spanner.COMMIT_TIMESTAMP
+        with database.batch() as batch:
+          batch.replace(
+            table = 'Inventories',
+            columns = inventories_cols,
+            values = [
+              inventory_info.values()
+            ]
+          )
 
 if __name__ == '__main__':
   app.run(main)
