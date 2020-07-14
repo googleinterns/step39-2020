@@ -124,21 +124,6 @@ public class LibraryFunctions {
     dbClient.write(Arrays.asList(mutation));
   }
 
-  public static List<String> getItemTypes() throws SpannerException {
-    DatabaseClient dbClient = initClient();
-    List<String> itemTypes = new ArrayList<String>();
-    String query = "SELECT DISTINCT ItemType FROM Items ORDER BY ItemType";
-    try (ResultSet resultSet =
-        dbClient
-            .singleUse() // Execute a single read or query against Cloud Spanner.
-            .executeQuery(Statement.of(query))) {
-      while (resultSet.next()) {
-        itemTypes.add(resultSet.getString(0));
-      }
-    }
-    return itemTypes;
-  }
-
   public static List<String> getItemTypes(int page) throws SpannerException {
     DatabaseClient dbClient = initClient();
     List<String> itemTypes = new ArrayList<String>();

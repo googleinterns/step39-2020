@@ -33,17 +33,16 @@ public class GetItemTypesServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
     Gson g = new Gson();
-    String pageString = request.getParameter("page");
-    int pageInt = Integer.valueOf(pageString);
-    if (pageInt < 0) {
-      response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page number: " + pageString);
-      return;
-    }
-    List<String> items = new ArrayList<String>();
+    int pageInt = 0;
+    List<String> totalItems = new ArrayList<String>();
     try {
-      items = getItemTypes(pageInt);
+      for (List<String> items = getItemTypes(pageInt);
+          items.size() > 0;
+          pageInt++, items = getItemTypes(pageInt)) {
+        totalItems.addAll(items);
+      }
       response.setStatus(HttpServletResponse.SC_OK);
-      response.getWriter().println(g.toJson(items));
+      response.getWriter().println(g.toJson(totalItems));
     } catch (SpannerException e) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
     }
