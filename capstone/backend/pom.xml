@@ -126,7 +126,6 @@
         <configuration>
           <excludes>
             <exclude>**/spanner/**.java</exclude>
-            <exclude>**/servlets/GetItemTypesServletTest.java</exclude>
             <exclude>**/servlets/GetStoresWithItemTypesServletTest.java</exclude>
           </excludes>
         </configuration>
