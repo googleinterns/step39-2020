@@ -126,6 +126,13 @@ public final class LibraryFunctionsTest {
   }
 
   @Test
+  public void allItemTypesCheck() {
+    List<String> actual = LibraryFunctions.getItemTypes();
+    List<String> expected = Arrays.asList("CEREAL", "MILK", "WATER");
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
   public void userListsCheck() {
     List<UserList> actual = LibraryFunctions.getUserLists(1);
     UserList userList = new UserList(1, "My List", Arrays.asList("Milk", "Eggs", "Bread"));
