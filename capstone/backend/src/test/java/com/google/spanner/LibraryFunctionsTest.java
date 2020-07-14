@@ -89,7 +89,15 @@ public final class LibraryFunctionsTest {
                       + "('2', 'Whole Milk, 32 fl oz', 'Natrel', 'MILK'), "
                       + "('3', 'Natural Artesian Water,16.9 Fl Oz, 24 Ct', 'FIJI', 'WATER'), "
                       + "('4', 'Cheerios, Gluten Free, Breakfast Cereal, Family Size 18 oz Box', 'General Mills', 'CEREAL'), "
-                      + "('5', '100% Natural Spring Water, 16.9-ounce plastic bottles', 'OZARKA', 'WATER') ",
+                      + "('5', '100% Natural Spring Water, 16.9-ounce plastic bottles', 'OZARKA', 'WATER'), "
+                      + "('6', 'Paper Mate Mechanical Pencils', 'PAPER MATE', 'PENCIL'), "
+                      + "('7', 'Keebler Vienna Fingers Creme Filled Sandwich Cookies', 'KEEBLER', 'COOKIES'), "
+                      + "('8', 'Pert Classic Clean 2 in 1 Shampoo & Conditioner, 33.8 fl oz', 'PERT', 'SHAMPOO'), "
+                      + "('9', 'Star Extra Virgin Olive Oil, 16.9 fl oz', 'STAR', 'OLIVE OIL'), "
+                      + "('10', 'Stevia In The Raw Zero Calorie Sweetener 9.7 oz. Stand-Up Bag', 'STEVIA IN THE RAW', 'SUGAR'), "
+                      + "('11', 'Nissin Souper Meal Chicken Flavor', 'NISSIN', 'RAMEN'), "
+                      + "('12', 'Carrington Farms Organic Casava Flour', 'CARRINGTON FARMS', 'FLOUR'), "
+                      + "('13', 'Coca-Cola Soda, 16.9 Fl Oz, 6 Count', 'COCA-COLA', 'SODA') ",
                   "INSERT INTO Stores (StoreId, Address, StoreName) VALUES "
                       + "(1, '3255 Mission College Blvd', 'Walmart'), "
                       + "(2, '4080 Stevens Creek Blvd', 'Target'), "
@@ -119,16 +127,39 @@ public final class LibraryFunctionsTest {
   }
 
   @Test
-  public void itemTypesCheck() {
+  public void itemTypesCheckOnePage() {
     List<String> actual = LibraryFunctions.getItemTypes(0);
-    List<String> expected = Arrays.asList("CEREAL", "MILK", "WATER");
+    List<String> expected =
+        Arrays.asList(
+            "CEREAL",
+            "COOKIES",
+            "FLOUR",
+            "MILK",
+            "OLIVE OIL",
+            "PENCIL",
+            "RAMEN",
+            "SHAMPOO",
+            "SODA",
+            "SUGAR");
     Assert.assertEquals(expected, actual);
   }
 
   @Test
   public void allItemTypesCheck() {
     List<String> actual = LibraryFunctions.getItemTypes();
-    List<String> expected = Arrays.asList("CEREAL", "MILK", "WATER");
+    List<String> expected =
+        Arrays.asList(
+            "CEREAL",
+            "COOKIES",
+            "FLOUR",
+            "MILK",
+            "OLIVE OIL",
+            "PENCIL",
+            "RAMEN",
+            "SHAMPOO",
+            "SODA",
+            "SUGAR",
+            "WATER");
     Assert.assertEquals(expected, actual);
   }
 
