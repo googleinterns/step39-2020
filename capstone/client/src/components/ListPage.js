@@ -189,11 +189,7 @@ class ListPage extends Component {
 
   getItemTypes = () => {
     axios.get(
-      '/api/v1/get-item-types', {
-        params: {
-          page: 0
-        }
-      } 
+      '/api/v1/get-item-types' 
     ).then((res) => {
       this.setState({
         items: res.data,
