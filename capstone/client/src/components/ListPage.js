@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button, Card, Checkbox, Dialog, DialogActions,DialogContent, DialogContentText, 
+import { Button, ButtonGroup, Card, Checkbox, Dialog, DialogActions,DialogContent, DialogContentText, 
   DialogTitle, FormGroup, FormControlLabel, Grid, List, ListItem, ListItemText,  
   Radio, RadioGroup, TextField } 
   from '@material-ui/core';
@@ -36,6 +36,8 @@ class ListPage extends Component {
       errorMessage: null,
       successMessage: null,
       distanceValue: 4,
+      totalLists: 0,
+      userLists : [],
       items: [],
       listId: -1,
       listName: null,
@@ -52,6 +54,7 @@ class ListPage extends Component {
     // Get ItemTypes from database.
     this.getItemTypes();
     this.selectedItems = new Set();
+    this.itemsToComponent = {};
     this.props.store.on('userId').subscribe((userId) => {
       this.setState({
         userId,
@@ -70,6 +73,15 @@ class ListPage extends Component {
         displayZipCodeInput: true,
       });
     });
+    if(this.state.userId !== -1) {
+      axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
+        .then(res => {
+          this.setState({
+            totalLists: res.data.userLists.length,
+            userLists: res.data.userLists
+          });
+        });
+    }
   }
 
   /* 
@@ -226,10 +238,43 @@ class ListPage extends Component {
     }
   }
 
+  selectList = (event) => {
+    if (this.selectedItems.size !== 0) {
+      for (let val of this.selectedItems) {
+        this.itemsToComponent[val].click();
+      }
+    }
+    var index = event.target.name;
+    if(event.target.className === "MuiButton-label"){
+      index = event.target.parentElement.name;
+    }
+    this.setState({
+      listId : this.state.userLists[index].listId,
+    });
+    for (const i in this.state.userLists[index].itemTypes) {
+      this.itemsToComponent[this.state.userLists[index].itemTypes[i]].click();
+    }
+  }
+
   render() {
+
+    if(this.state.userId !== -1 && this.state.userLists === []) {
+      axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
+        .then(res => {
+          this.setState({
+            totalLists: res.data.userLists.length,
+            userLists: res.data.userLists
+          });
+        });
+    }
+
+    const userListButtons = this.state.userLists.map((userList, index) => (
+    <Button name={index}>{userList.displayName}</Button>
+    ));
+
     const checkboxItems = this.state.items.map((item) => (
       <FormControlLabel
-        control={<Checkbox name={item} data-testid='checkbox item'/>}
+        control={<Checkbox name={item} ref={component => this.itemsToComponent[item] = component} data-testid='checkbox item'/>}
         label={item}
         key={item}
         onChange={this.handleItemChange}
@@ -251,6 +296,9 @@ class ListPage extends Component {
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
         {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
         <h1>Preferences</h1>
+        <ButtonGroup container id="user-lists" onClick={this.selectList}>
+          {userListButtons}
+        </ButtonGroup>
         <Grid container alignItems="stretch">
           <Grid id="distance-list-container" item component={Card} xs>
             <p>I would like to choose from stores in a</p>
