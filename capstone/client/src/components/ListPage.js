@@ -41,7 +41,7 @@ class ListPage extends Component {
       items: [],
       listId: -1,
       listName: null,
-      userId: 1,
+      userId: -1,
       displayZipCodeInput: false,
       location: null,
       listSaveDialog: {
@@ -74,9 +74,7 @@ class ListPage extends Component {
         displayZipCodeInput: true,
       });
     });
-    console.log("userId: " + this.state.userId);
     if(this.state.userId !== -1) {
-      console.log("got here");
       axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
         .then(res => {
           this.setState({
@@ -84,9 +82,7 @@ class ListPage extends Component {
             userLists: res.data.userLists
           });
         });
-        console.log(this.state.userLists);
     }
-    console.log("userLists: " + this.state.userLists);
   }
 
   /* 
@@ -249,12 +245,15 @@ class ListPage extends Component {
         this.itemsToComponent[val].click();
       }
     }
-    console.log(event.target);
+    var index = event.target.name;
+    if(event.target.className === "MuiButton-label"){
+      index = event.target.parentElement.name;
+    }
     this.setState({
-      listId : this.state.userLists[event.target.name].listId,
+      listId : this.state.userLists[index].listId,
     });
-    for (const i in this.state.userLists[event.target.name].itemTypes) {
-      this.itemsToComponent[this.state.userLists[event.target.name].itemTypes[i]].click();
+    for (const i in this.state.userLists[index].itemTypes) {
+      this.itemsToComponent[this.state.userLists[index].itemTypes[i]].click();
     }
   }
 
@@ -272,11 +271,8 @@ class ListPage extends Component {
     //<Button name={index} label={userList.displayName}/>
 
     const userListButtons = this.state.userLists.map((userList, index) => (
-    <Button name={index} label={userList.displayName}>{userList.displayName}</Button>
+    <Button name={index}>{userList.displayName}</Button>
     ));
-    console.log(userListButtons);
-
-    console.log("render userLists" + this.state.userLists);
 
     const checkboxItems = this.state.items.map((item) => (
       <FormControlLabel
