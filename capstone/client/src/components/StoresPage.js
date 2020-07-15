@@ -58,7 +58,16 @@ class StorePage extends Component {
     componentWillMount = () => {
         // Get Stores from database.
         this.getStores();
-      }
+    }
+
+    getStores = () => {
+      axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
+        .then(res => {
+          this.setState({
+            stores: res.data.stores
+          });
+        });
+    }
 
     render() {
 
