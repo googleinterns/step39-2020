@@ -41,7 +41,7 @@ class ListPage extends Component {
       items: [],
       listId: -1,
       listName: null,
-      userId: 1,
+      userId: -1,
       displayZipCodeInput: false,
       location: null,
       listSaveDialog: {
