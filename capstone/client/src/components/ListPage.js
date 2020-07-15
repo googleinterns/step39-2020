@@ -16,8 +16,9 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { ButtonGroup, Checkbox, FormGroup, FormControlLabel, List, ListItem, ListItemText, Button, Grid, Card, 
-  Radio, RadioGroup, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } 
+import { Button, ButtonGroup, Card, Checkbox, Dialog, DialogActions,DialogContent, DialogContentText, 
+  DialogTitle, FormGroup, FormControlLabel, Grid, List, ListItem, ListItemText,  
+  Radio, RadioGroup, TextField } 
   from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
@@ -50,9 +51,8 @@ class ListPage extends Component {
   }
 
   componentWillMount = () => {
-    // Get ItemTypes from database
+    // Get ItemTypes from database.
     this.getItemTypes();
-    
     this.selectedItems = new Set();
     this.itemsToComponent = {};
     this.props.store.on('userId').subscribe((userId) => {
@@ -88,7 +88,7 @@ class ListPage extends Component {
   }
 
   /* 
-   * Saves the most recently selected distance preferece. 
+   * Saves the most recently selected distance preference. 
    */
   handleDistanceChange = (event) => {
     this.setState({
@@ -187,12 +187,12 @@ class ListPage extends Component {
       this.setState({
         errorMessage: "There was an error saving your list.",
       })
-    });   
+    });
   }
 
   getItemTypes = () => {
     axios.get(
-      '/api/v1/get-item-types?page=0'
+      '/api/v1/get-item-types' 
     ).then((res) => {
       this.setState({
         items: res.data,

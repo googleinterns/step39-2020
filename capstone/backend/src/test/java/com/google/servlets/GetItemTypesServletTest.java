@@ -44,24 +44,11 @@ public class GetItemTypesServletTest extends TestCase {
     Mockito.doReturn(Arrays.asList("CEREAL", "CHEESE", "MILK", "WATER"))
         .when(servlet)
         .getItemTypes(0);
+    Mockito.doReturn(Arrays.asList()).when(servlet).getItemTypes(1);
     servlet.doGet(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
     assertTrue("Wrong item types", result.contains("[\"CEREAL\",\"CHEESE\",\"MILK\",\"WATER\"]"));
-  }
-
-  public void testBadPageNumber() throws ServletException, IOException {
-    String PAGE = "-1";
-    HashMap<String, String> map = new HashMap<>();
-    map.put(PAGE_KEY, PAGE);
-    SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
-
-    GetItemTypesServlet servlet = new GetItemTypesServlet();
-    servlet.doGet(setupObj.request, setupObj.response);
-
-    String result = setupObj.writer.toString();
-    Mockito.verify(setupObj.response)
-        .sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid page number: -1");
   }
 }

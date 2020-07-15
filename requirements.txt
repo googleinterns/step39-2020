@@ -30,7 +30,6 @@ protobuf==3.12.2
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycrypto==2.6.1
-PyGObject==3.30.4
 python-crontab==2.5.1
 python-dateutil==2.8.1
 pytz==2020.1
@@ -41,6 +40,7 @@ rsa==4.6
 SecretStorage==2.3.1
 six==1.12.0
 soupsieve==2.0.1
+selenium==3.141.0
 uritemplate==3.0.1
 urllib3==1.25.9
 zope.interface==5.1.0
