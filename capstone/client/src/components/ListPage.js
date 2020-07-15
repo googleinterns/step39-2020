@@ -22,6 +22,11 @@ import { Button, Card, Checkbox, Dialog, DialogActions,DialogContent, DialogCont
   from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });
+
 import { Store } from './Store';
 
 /*
@@ -36,7 +41,7 @@ class ListPage extends Component {
       errorMessage: null,
       successMessage: null,
       distanceValue: 4,
-      items: [],
+      items: [ ],
       listId: -1,
       listName: null,
       userId: -1,
@@ -46,6 +51,7 @@ class ListPage extends Component {
         display: false,
       },
     }
+    this.getItemTypes = this.getItemTypes.bind(this);
   }
 
   componentWillMount = () => {
@@ -58,7 +64,7 @@ class ListPage extends Component {
       });
     }
     );
-    navigator.geolocation.getCurrentPosition((position) => {
+     /*navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
         location: {
           latitude: position.coords.latitude,
@@ -69,7 +75,7 @@ class ListPage extends Component {
       this.setState({
         displayZipCodeInput: true,
       });
-    });
+    });*/
   }
 
   /* 
@@ -189,7 +195,7 @@ class ListPage extends Component {
 
   getItemTypes = () => {
     axios.get(
-      '/api/v1/get-item-types' 
+      'https://step39-2020.uc.r.appspot.com/api/v1/get-item-types' 
     ).then((res) => {
       this.setState({
         items: res.data,
@@ -200,6 +206,8 @@ class ListPage extends Component {
       })
     }); 
   }
+
+
 
   /*
    * Checks to see if the "List Name" field is empty. If the field is empty, an 
@@ -252,12 +260,7 @@ class ListPage extends Component {
         {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
         <h1>Preferences</h1>
         <Grid container alignItems="stretch">
-          <Grid id="distance-list-container" item component={Card} xs>
-            <p>I would like to choose from stores in a</p>
-            <RadioGroup id="distance-list" value={this.state.distanceValue}>
-              {distances} 
-            </RadioGroup>
-          </Grid>
+            
           <Grid id="items-list-container" item component={Card} xs>
             <p>Select items to add to your list</p>
             <FormGroup id="items-list">
@@ -305,3 +308,5 @@ class ListPage extends Component {
 }
 
 export const ListPageWithStore = Store.withStore(ListPage);
+export const foo = ListPage.prototype.getItemTypes;
+//export const f = { getItemTypes }
