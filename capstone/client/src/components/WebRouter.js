@@ -20,6 +20,7 @@ import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import { ListPageWithStore } from './ListPage.js';
 import { HeaderWithStore } from './Header.js';
 import { Store } from './Store';
+import { StorePageWithStore } from './StoresPage';
 
 function WebRouter() {
   return (
@@ -29,6 +30,7 @@ function WebRouter() {
           <HeaderWithStore />
           <Switch>
             <Route exact path='/' component={() => <ListPageWithStore />} />
+            <Route path='/storepage' component={() => <StorePageWithStore/>} />
           </Switch>
         </Store.Container>
       </Router>
