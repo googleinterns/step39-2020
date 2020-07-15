@@ -37,17 +37,18 @@ class ListPage extends Component {
       successMessage: null,
       distanceValue: 4,
       totalLists: 0,
-      userLists : null,
+      userLists : [],
       items: [],
       listId: -1,
       listName: null,
-      userId: -1,
+      userId: 1,
       displayZipCodeInput: false,
       location: null,
       listSaveDialog: {
         display: false,
       },
     }
+    this.selectList = this.selectList.bind(this);
   }
 
   componentWillMount = () => {
@@ -73,6 +74,19 @@ class ListPage extends Component {
         displayZipCodeInput: true,
       });
     });
+    console.log("userId: " + this.state.userId);
+    if(this.state.userId !== -1) {
+      console.log("got here");
+      axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
+        .then(res => {
+          this.setState({
+            totalLists: res.data.userLists.length,
+            userLists: res.data.userLists
+          });
+        });
+        console.log(this.state.userLists);
+    }
+    console.log("userLists: " + this.state.userLists);
   }
 
   /* 
@@ -235,6 +249,7 @@ class ListPage extends Component {
         this.itemsToComponent[val].click();
       }
     }
+    console.log(event.target);
     this.setState({
       listId : this.state.userLists[event.target.name].listId,
     });
@@ -243,8 +258,9 @@ class ListPage extends Component {
     }
   }
 
-  userLists() {
-    if(this.state.userId !== -1 && this.state.userLists == null) {
+  render() {
+
+    if(this.state.userId !== -1 && this.state.userLists === []) {
       axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
         .then(res => {
           this.setState({
@@ -253,21 +269,15 @@ class ListPage extends Component {
           });
         });
     }
-    if(this.userLists !== null) {
-      var htmlString = '';
-      for (var i = 0; i < this.state.totalLists; i++) {
-        htmlString = htmlString + '<Button name="' + i + '">' + this.state.userLists[i].displayName + '</Button>';
-      }
-      return {
-        __html: htmlString
-      };
-    }
-    return {
-      __html: ''
-    };
-  }
+    //<Button name={index} label={userList.displayName}/>
 
-  render() {
+    const userListButtons = this.state.userLists.map((userList, index) => (
+    <Button name={index} label={userList.displayName}>{userList.displayName}</Button>
+    ));
+    console.log(userListButtons);
+
+    console.log("render userLists" + this.state.userLists);
+
     const checkboxItems = this.state.items.map((item) => (
       <FormControlLabel
         control={<Checkbox name={item} ref={component => this.itemsToComponent[item] = component} data-testid='checkbox item'/>}
@@ -292,7 +302,8 @@ class ListPage extends Component {
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
         {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
         <h1>Preferences</h1>
-        <ButtonGroup container id="user-lists" dangerouslySetInnerHTML={this.userLists()} onClick={this.selectList}>
+        <ButtonGroup container id="user-lists" onClick={this.selectList}>
+          {userListButtons}
         </ButtonGroup>
         <Grid container alignItems="stretch">
           <Grid id="distance-list-container" item component={Card} xs>
