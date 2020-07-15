@@ -41,14 +41,13 @@ class ListPage extends Component {
       items: [],
       listId: -1,
       listName: null,
-      userId: -1,
+      userId: 1,
       displayZipCodeInput: false,
       location: null,
       listSaveDialog: {
         display: false,
       },
     }
-    this.selectList = this.selectList.bind(this);
   }
 
   componentWillMount = () => {
