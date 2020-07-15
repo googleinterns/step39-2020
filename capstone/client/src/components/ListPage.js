@@ -267,7 +267,6 @@ class ListPage extends Component {
           });
         });
     }
-    //<Button name={index} label={userList.displayName}/>
 
     const userListButtons = this.state.userLists.map((userList, index) => (
     <Button name={index}>{userList.displayName}</Button>
