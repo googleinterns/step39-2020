@@ -15,11 +15,7 @@
  */
 
 import React, { Component } from 'react';
-import { Grid, Card, Typography, List, ListItem, ListItemText, Button, ExpansionPanelActions } from '@material-ui/core';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Grid, Card, Typography, List, ListItem, ListItemText, Button } from '@material-ui/core';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
 
 import { Store } from './Store';
