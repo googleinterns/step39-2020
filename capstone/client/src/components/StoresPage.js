@@ -21,28 +21,6 @@ import { Map, GoogleApiWrapper } from 'google-maps-react';
 
 import { Store } from './Store';
 
-const stores = [{
-    name: 'Safeway',
-    address: '11050 Bollinger Canyon Rd, San Ramon',
-    totalItemsFound: 5,
-    items: [{name: 'O Organics Organic Whole Milk with Vitamin D - 1 Gallon', price: 4.55}, 
-      {name: 'Lucerne Milk Reduced Fat 2% Milkfat 1 Gallon - 128 Fl. Oz.', price: 2.55},
-      {name: 'Silk Almondmilk Original Unsweetened - Half Gallon', price: 4.33}],
-    distance: 3.1,
-    price: 8.96
-}, 
-{
-    name: 'Walmart',
-    address: '9100 Alcosta Blvd, San Ramon',
-    totalItemsFound: 2,
-    items: [{name: 'O Organics Organic Whole Milk with Vitamin D - 1 Gallon', price: 4.55}, 
-      {name: 'Lucerne Milk Reduced Fat 2% Milkfat 1 Gallon - 128 Fl. Oz.', price: 2.55},
-      {name: 'Silk Almondmilk Original Unsweetened - Half Gallon', price: 1.44}],
-    distance: 2.3,
-    price: 16.45,
-}
-]
-
 const itemList = [
     "Milk",
     "Bread"
