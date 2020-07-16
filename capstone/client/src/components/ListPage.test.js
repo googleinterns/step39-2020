@@ -17,9 +17,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { ListPageWithStore } from './ListPage.js';
-import { ListPage } from './ListPage.js';
 import { Store } from './Store';
-import { jssPreset } from '@material-ui/core';
 import axios from 'axios';
 
 

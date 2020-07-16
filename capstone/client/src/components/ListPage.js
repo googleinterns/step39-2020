@@ -45,7 +45,7 @@ class ListPage extends Component {
       listSaveDialog: {
         display: false,
       },
-    } 
+    }
   }
 
   componentWillMount = () => {
@@ -199,7 +199,6 @@ class ListPage extends Component {
       })
     }); 
   }
-
 
   /*
    * Checks to see if the "List Name" field is empty. If the field is empty, an 
