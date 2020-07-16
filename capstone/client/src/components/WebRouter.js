@@ -30,7 +30,7 @@ function WebRouter() {
           <HeaderWithStore />
           <Switch>
             <Route exact path='/' component={() => <ListPageWithStore />} />
-            <Route path='/storepage' component={() => <StorePageWithStore/>} />
+            <Route path='/stores' component={() => <StorePageWithStore/>} />
           </Switch>
         </Store.Container>
       </Router>
