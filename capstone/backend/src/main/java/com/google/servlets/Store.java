@@ -61,12 +61,24 @@ public class Store implements Comparable<Store> {
     }
   }
 
+  public String getStoreAddress() {
+    return storeAddress;
+  }
+
   public int getNumberOfItemsFound() {
     return totalItemsFound;
   }
 
   public long getStoreId() {
     return storeId;
+  }
+
+  public Map<String, List<Item>> getItems() {
+    return items;
+  }
+
+  public double getLowestPotentialPrice() {
+    return lowestPotentialPrice;
   }
 
   @Override
