@@ -20,6 +20,7 @@ import { Grid, Card} from '@material-ui/core';
 import { GoogleApiWrapper } from 'google-maps-react';
 
 import { Store } from './Store';
+import APIKey from './APIKey.js';
 import StoreOverviewCards from './StoreOverviewCards.js';
 import StoreDetailCards from './StoreDetailCards.js';
 
@@ -71,5 +72,5 @@ class StorePage extends Component {
 }
 
 export const StorePageWithStore = GoogleApiWrapper({
-  apiKey: ('AIzaSyAmMqit2VT4XMp0W2imrYduF8WmhLDPQgk')
+  apiKey: (APIKey.APIKey())
 })(Store.withStore(StorePage))
