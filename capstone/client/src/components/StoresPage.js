@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-import React, { Component } from 'react';
 import axios from 'axios';
-import { Grid, Card} from '@material-ui/core';
-import { GoogleApiWrapper } from 'google-maps-react';
+import { Card, Grid} from '@material-ui/core';
+import React, { Component } from 'react';
 
 import { Store } from './Store';
-import APIKey from './APIKey.js';
-import StoreOverviewCards from './StoreOverviewCards.js';
 import StoreDetailCards from './StoreDetailCards.js';
-import './styles.css';
+import StoreOverviewCards from './StoreOverviewCards.js';
 
+import './styles.css';
 
 const itemList = [
     "Milk",
@@ -35,14 +33,14 @@ class StorePage extends Component {
     constructor(props) {
       super(props)
       this.state = {
-          stores : []
+        stores : []
       }
       this.getStores = this.getStores.bind(this);
     }
 
     componentWillMount = () => {
-        // Get Stores from database.
-        this.getStores();
+      // Get Stores from database.
+      this.getStores();
     }
 
     getStores = () => {
@@ -55,7 +53,6 @@ class StorePage extends Component {
     }
 
     render() {
-
       return(
         <div>
           <h1>Store Recommendations</h1>
@@ -72,6 +69,4 @@ class StorePage extends Component {
     }
 }
 
-export const StorePageWithStore = GoogleApiWrapper({
-  apiKey: (APIKey.APIKey())
-})(Store.withStore(StorePage))
+export const StorePageWithStore = Store.withStore(StorePage)
