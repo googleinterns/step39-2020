@@ -38,7 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/api/v1/get-store-rankings")
 public class StoreRankingsServlet extends HttpServlet {
-  private static final String API_KEY = "AIzaSyBCbZO-bCdkNzuCehg4mEQsSnHS1k7Unco";
+  private static final String API_KEY = "INSERT_GOOGLE_API_KEY_HERE";
   private static final double AVALIABLE_ITEMS_WEIGHT = 3;
   private static final double DISTANCE_WEIGHT = -0.0005;
   private static final double PRICE_WEIGHT = -1;
