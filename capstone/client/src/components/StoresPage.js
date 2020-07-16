@@ -20,6 +20,9 @@ import { Grid, Card, Typography, List, ListItem, ListItemText, Button } from '@m
 import { Map, GoogleApiWrapper } from 'google-maps-react';
 
 import { Store } from './Store';
+import StoreOverviewCards from './StoreOverviewCards.js';
+import StoreDetailCards from './StoreDetailCards.js';
+
 
 const itemList = [
     "Milk",
@@ -32,7 +35,7 @@ class StorePage extends Component {
       this.state = {
           stores : []
       }
-      this.getStores();
+      this.getStores = this.getStores.bind(this);
     }
 
     componentWillMount = () => {
@@ -51,67 +54,15 @@ class StorePage extends Component {
 
     render() {
 
-      const storeOverviewCards = this.state.stores.map((store) => (
-          <div>
-            <Typography variant="h6">{store.storeName}</Typography>
-            <List>
-            <ListItem>
-                <ListItemText>
-                Has: {store.totalItemsFound}/{itemList.length}
-                </ListItemText>
-            </ListItem>
-            <ListItem>
-                <ListItemText>
-                Lowest Potential Price: ${store.lowestPotentialPrice}
-                </ListItemText>
-            </ListItem>
-            <ListItem>
-                <ListItemText>
-                Distance: 5 miles
-                </ListItemText>
-            </ListItem>
-            </List>
-            <Button variant="contained" color="primary">
-              Show more Information
-            </Button>
-          </div>
-      ));
-
-
-      const storeDetailCards = this.state.stores.map((store) => (
-        <div>
-          <Typography variant='h4'>{store.name}</Typography>
-          <Typography variant='h6'>Address: {store.address}</Typography>
-          <Grid container alignItems="stretch">
-            <Grid xs>
-              <Map google={this.props.google} zoom={14} style={{width: '25%', height: '25%'}}>
-              </Map>
-            </Grid>
-            <Grid xs>
-              <Typography variant='subtitle1'>Has:</Typography>
-              <List>
-              {Object.keys(store.items).map((itemType, item) => (
-                <ListItem>
-                  <ListItemText>
-                    {item.itemName} (${item.itemPrice})
-                  </ListItemText>
-                </ListItem>
-              ))}
-              </List>
-            </Grid>
-          </Grid>
-        </div>
-      ));
-
       return(
         <div>
           <h1>Store Recommendations</h1>
           <Grid container alignItems="stretch">
             <Grid item component={Card} xs>
-              {storeOverviewCards}
+              <StoreOverviewCards stores={this.state.stores}/>
             </Grid>
             <Grid item component={Card} xs>
-              {storeDetailCards[0]}
+              <StoreDetailCards stores={this.state.stores}/>
             </Grid>
           </Grid>
         </div>
