@@ -15,6 +15,7 @@
  */
 
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Grid, Card, Typography, List, ListItem, ListItemText, Button } from '@material-ui/core';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
 
@@ -51,8 +52,9 @@ class StorePage extends Component {
     constructor(props) {
       super(props)
       this.state = {
-          stores = []
+          stores : []
       }
+      this.getStores();
     }
 
     componentWillMount = () => {
@@ -64,30 +66,30 @@ class StorePage extends Component {
       axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
         .then(res => {
           this.setState({
-            stores: res.data.stores
+            stores: res.data
           });
         });
     }
 
     render() {
 
-      const storeOverviewCards = stores.map((store) => (
+      const storeOverviewCards = this.state.stores.map((store) => (
           <div>
-            <Typography variant="h6">{store.name}</Typography>
+            <Typography variant="h6">{store.storeName}</Typography>
             <List>
             <ListItem>
                 <ListItemText>
-                Has: {store.totalItemsFound}/6 items
+                Has: {store.totalItemsFound}/{itemList.length}
                 </ListItemText>
             </ListItem>
             <ListItem>
                 <ListItemText>
-                Price: ${store.price}
+                Lowest Potential Price: ${store.lowestPotentialPrice}
                 </ListItemText>
             </ListItem>
             <ListItem>
                 <ListItemText>
-                Distance: {store.distance} miles
+                Distance: 5 miles
                 </ListItemText>
             </ListItem>
             </List>
@@ -98,7 +100,7 @@ class StorePage extends Component {
       ));
 
 
-      const storeDetailCards = stores.map((store) => (
+      const storeDetailCards = this.state.stores.map((store) => (
         <div>
           <Typography variant='h4'>{store.name}</Typography>
           <Typography variant='h6'>Address: {store.address}</Typography>
@@ -110,10 +112,10 @@ class StorePage extends Component {
             <Grid xs>
               <Typography variant='subtitle1'>Has:</Typography>
               <List>
-              {store.items.map((item) => (
+              {Object.keys(store.items).map((itemType, item) => (
                 <ListItem>
                   <ListItemText>
-                    {item.name} (${item.price})
+                    {item.itemName} (${item.itemPrice})
                   </ListItemText>
                 </ListItem>
               ))}
