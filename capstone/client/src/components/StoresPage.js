@@ -30,43 +30,43 @@ const itemList = [
 ]
 
 class StorePage extends Component { 
-    constructor(props) {
-      super(props)
-      this.state = {
-        stores : []
-      }
-      this.getStores = this.getStores.bind(this);
+  constructor(props) {
+    super(props)
+    this.state = {
+      stores : []
     }
+    this.getStores = this.getStores.bind(this);
+  }
 
-    componentWillMount = () => {
-      // Get Stores from database.
-      this.getStores();
-    }
+  componentWillMount = () => {
+    // Get Stores from database.
+    this.getStores();
+  }
 
-    getStores = () => {
-      axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
-        .then(res => {
-          this.setState({
-            stores: res.data
-          });
+  getStores = () => {
+    axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
+      .then(res => {
+        this.setState({
+          stores: res.data
         });
-    }
+      });
+  }
 
-    render() {
-      return(
-        <div>
-          <h1>Store Recommendations</h1>
-          <Grid container alignItems="stretch">
-            <Grid item component={Card} xs>
-              <StoreOverviewCards stores={this.state.stores}/>
-            </Grid>
-            <Grid item component={Card} xs>
-              <StoreDetailCards stores={this.state.stores}/>
-            </Grid>
+  render() {
+    return(
+      <div>
+        <h1>Store Recommendations</h1>
+        <Grid container alignItems="stretch">
+          <Grid item component={Card} xs>
+            <StoreOverviewCards stores={this.state.stores}/>
           </Grid>
-        </div>
-      )
-    }
+          <Grid item component={Card} xs>
+            <StoreDetailCards stores={this.state.stores}/>
+          </Grid>
+        </Grid>
+      </div>
+    )
+  }
 }
 
 export const StorePageWithStore = Store.withStore(StorePage)
