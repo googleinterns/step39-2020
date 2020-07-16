@@ -16,50 +16,84 @@
 
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import { ListPage } from './ListPage.js';
+import { ListPageWithStore } from './ListPage.js';
+import { Store } from './Store';
+import axios from 'axios';
 
-test('select-all', () => {
-  render(<ListPage />);
-  expect(screen.queryAllByTestId('list item')).toHaveLength(0);
-  const checkboxElements = screen.getAllByTestId('checkbox item');
-  let numItems = 0;
-  checkboxElements.forEach((element) => {
-    const checkbox = element.querySelector('input[type="checkbox"]');
-    expect(checkbox.checked).toEqual(false);
-    fireEvent.click(checkbox)
-    expect(checkbox.checked).toEqual(true);
-    numItems++;
+ jest.mock('axios');
+ test('get-item-types-correctly', () => {
+  const items = ['milk', 'bread'];
+  const response = {data: items};
+  axios.get.mockResolvedValue(response);
+  render(<Store.Container> <ListPageWithStore /> </Store.Container>);
+  process.nextTick(() => {
+    const checkboxElements = screen.getAllByTestId('checkbox item');
+    expect(checkboxElements).toHaveLength(2);
+    expect(screen.getByLabelText(/milk/i));
+    expect(screen.getByLabelText(/bread/i));
+    expect(axios.get).toHaveBeenCalledWith('/api/v1/get-item-types');
   });
-  fireEvent.click(screen.getByText(/Submit/i));
-  const listElements = screen.getAllByTestId('list item');
-  expect(listElements).toHaveLength(numItems);
+});
+ 
+test('select-all', () => {
+  const items = ['milk', 'bread'];
+  const response = {data: items};
+  axios.get.mockResolvedValue(response);
+  render(<Store.Container> <ListPageWithStore /> </Store.Container>);
+  // Necessary for the mock response to return.
+  process.nextTick(() => {
+    expect(screen.queryAllByTestId('list item')).toHaveLength(0);
+    const checkboxElements = screen.getAllByTestId('checkbox item');
+    expect(checkboxElements).toHaveLength(2);
+    let numItems = 0;
+    checkboxElements.forEach((element) => {
+      const checkbox = element.querySelector('input[type="checkbox"]');
+      expect(checkbox.checked).toEqual(false);
+      fireEvent.click(checkbox)
+      expect(checkbox.checked).toEqual(true);
+      numItems++;
+    });
+    fireEvent.click(screen.getByText(/Find Stores/i));
+    const listElements = screen.getAllByTestId('list item');
+    expect(listElements).toHaveLength(numItems);
+  }); 
 });
 
 test('select-none', async () => {
-  render(<ListPage />);
-  expect(screen.queryAllByTestId('list item')).toHaveLength(0);
-  fireEvent.click(screen.getByText(/Submit/i));
-  const alert = await screen.findByRole('alert')
-  expect(alert).toHaveTextContent(/Please select at least one item!/i)
-  const listElements = screen.queryAllByTestId('list item');
-  expect(listElements).toHaveLength(0);
+  const items = ['milk', 'bread'];
+  const response = {data: items};
+  axios.get.mockResolvedValue(response);
+  render(<Store.Container> <ListPageWithStore /> </Store.Container>);
+  process.nextTick(async () => {
+    expect(screen.queryAllByTestId('list item')).toHaveLength(0);
+    fireEvent.click(screen.getByText(/Find Stores/i));
+    const alert = await screen.findByRole('alert')
+    expect(alert).toHaveTextContent(/Please select at least one item!/i)
+    const listElements = screen.queryAllByTestId('list item');
+    expect(listElements).toHaveLength(0);
+  });
 });
 
 test('select-milk-and-butter', () => {
-    render(<ListPage />);
+  const items = ['milk', 'bread'];
+  const response = {data: items};
+  axios.get.mockResolvedValue(response);
+  render(<Store.Container> <ListPageWithStore /> </Store.Container>);
+  process.nextTick(async () => {
     expect(screen.queryAllByTestId('list item')).toHaveLength(0);
-    const milkCheckbox = screen.getByLabelText(/Milk/i)
+    const milkCheckbox = screen.getByLabelText(/milk/i);
     expect(milkCheckbox.checked).toEqual(false);
     fireEvent.click(milkCheckbox);
     expect(milkCheckbox.checked).toEqual(true);
-    const butterCheckbox = screen.getByLabelText(/Butter/i)
+    const butterCheckbox = screen.getByLabelText(/bread/i);
     expect(butterCheckbox.checked).toEqual(false);
     fireEvent.click(butterCheckbox);
     expect(butterCheckbox.checked).toEqual(true);
-    fireEvent.click(screen.getByText(/Submit/i));
+    fireEvent.click(screen.getByText(/Find Stores/i));
 
     const listElements = screen.queryAllByTestId('list item');
     expect(listElements).toHaveLength(2);
-    expect(listElements[0]).toHaveTextContent(/Milk/i);
-    expect(listElements[1]).toHaveTextContent(/Butter/i);
-})
+    expect(listElements[0]).toHaveTextContent(/milk/i);
+    expect(listElements[1]).toHaveTextContent(/bread/i);
+  });
+}); 
