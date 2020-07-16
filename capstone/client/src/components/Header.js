@@ -20,6 +20,7 @@ import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { Menu } from '@material-ui/icons';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import { withRouter } from "react-router-dom";
 
 import { Store } from './Store';
 
@@ -85,7 +86,7 @@ class Header extends Component {
                   <Menu />
                 </IconButton>
                 <Typography id="typography" variant="h6">
-                  Preferences
+                  {this.props.location.pathname  === '/' ? 'Preferences' : 'Store Recommendations'}
                 </Typography>
                 {this.state.loggedIn ? 
                 <GoogleLogout
@@ -112,4 +113,4 @@ class Header extends Component {
     }
 }
 
-export const HeaderWithStore = Store.withStore(Header);
+export const HeaderWithStore = withRouter(Store.withStore(Header));
