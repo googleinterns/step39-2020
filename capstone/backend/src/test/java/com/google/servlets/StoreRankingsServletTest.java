@@ -59,10 +59,10 @@ public class StoreRankingsServletTest extends TestCase {
     fakeDistances.put(fakeStoreAddresses.get(1), 45);
     fakeDistances.put(fakeStoreAddresses.get(2), 60);
 
-    Mockito.when(servlet.getStores(Arrays.asList("MILK"))).thenReturn(fakeStores);
-    System.out.println("Here: " + fakeStoreAddresses.toString());
-    Mockito.when(servlet.getDistances(fakeStoreAddresses, Arrays.asList(1.234, 1.234)))
-        .thenReturn(fakeDistances);
+    Mockito.doReturn(fakeStores).when(servlet).getStores(Arrays.asList("MILK"));
+    Mockito.doReturn(fakeDistances)
+        .when(servlet)
+        .getDistances(fakeStoreAddresses, Arrays.asList(1.234, 1.234));
     servlet.doGet(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
