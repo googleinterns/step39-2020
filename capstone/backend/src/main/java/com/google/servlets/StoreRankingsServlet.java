@@ -41,6 +41,7 @@ public class StoreRankingsServlet extends HttpServlet {
   private static final String API_KEY = "INSERT_GOOGLE_API_KEY_HERE";
   private static final double AVALIABLE_ITEMS_WEIGHT = 3;
   private static final double DISTANCE_WEIGHT = -0.0005;
+  private static final double MILES_TO_METERS = 1609.34;
   private static final double PRICE_WEIGHT = -1;
   private Gson g = new Gson();
 
@@ -89,6 +90,13 @@ public class StoreRankingsServlet extends HttpServlet {
         getDistances(
             stores.stream().map(store -> store.getStoreAddress()).collect(Collectors.toList()),
             userPreferences.getLocation());
+    stores =
+        stores.stream()
+            .filter(
+                store ->
+                    (distances.get(store.getStoreAddress())
+                        < (userPreferences.getDistancePreference() * MILES_TO_METERS)))
+            .collect(Collectors.toList());
     rankStores(stores, distances);
     response.setContentType("application/json");
     response.setStatus(HttpServletResponse.SC_OK);
