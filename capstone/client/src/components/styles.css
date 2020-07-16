@@ -67,3 +67,12 @@ h1 {
 }
 
 /* ListPage end */
+
+/* StoreDetailCards start */
+
+#google-map {
+  height : 25%;
+  width : 25%;
+}
+
+/* StoreDetailCards end */
