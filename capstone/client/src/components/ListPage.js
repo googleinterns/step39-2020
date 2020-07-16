@@ -56,9 +56,8 @@ class ListPage extends Component {
       this.setState({
         userId,
       });
-    }
-    );
-    
+    });
+  
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
         location: {

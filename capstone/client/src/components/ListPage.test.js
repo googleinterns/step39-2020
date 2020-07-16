@@ -15,7 +15,6 @@
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
 import { render, fireEvent, screen } from '@testing-library/react';
 import { ListPageWithStore } from './ListPage.js';
 import { ListPage } from './ListPage.js';
