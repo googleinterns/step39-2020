@@ -23,6 +23,7 @@ import { Store } from './Store';
 import APIKey from './APIKey.js';
 import StoreOverviewCards from './StoreOverviewCards.js';
 import StoreDetailCards from './StoreDetailCards.js';
+import './styles.css';
 
 
 const itemList = [

@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react';
 import { Typography, List, ListItem, ListItemText, Button } from '@material-ui/core';
+import './styles.css';
 
 class StoreOverviewCards extends Component {
 

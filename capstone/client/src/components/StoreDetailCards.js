@@ -17,6 +17,7 @@
 import React, { Component } from 'react';
 import { Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core';
 import { Map } from 'google-maps-react';
+import './styles.css';
 
 class StoreDetailCards extends Component {
 
@@ -27,7 +28,7 @@ class StoreDetailCards extends Component {
               <Typography variant='h6'>Address: {store.address}</Typography>
               <Grid container alignItems="stretch">
                 <Grid xs>
-                  <Map google={this.props.google} zoom={14} style={{width: '25%', height: '25%'}}>
+                  <Map id="google-map" google={this.props.google} zoom={14}>
                   </Map>
                 </Grid>
                 <Grid xs>
