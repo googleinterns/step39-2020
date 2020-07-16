@@ -15,12 +15,9 @@
  */
 
 import React, { Component } from 'react';
-import { Grid, Card, Typography, List, ListItem, ListItemText, Button } from '@material-ui/core';
+import { Typography, List, ListItem, ListItemText, Button } from '@material-ui/core';
 
 class StoreOverviewCards extends Component {
-    constructor(props) {
-      super(props);
-    }
 
     render() {
         const storeOverviewCards = this.props.stores.map((store) => (

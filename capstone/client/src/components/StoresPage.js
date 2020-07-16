@@ -16,8 +16,8 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Grid, Card, Typography, List, ListItem, ListItemText, Button } from '@material-ui/core';
-import { Map, GoogleApiWrapper } from 'google-maps-react';
+import { Grid, Card} from '@material-ui/core';
+import { GoogleApiWrapper } from 'google-maps-react';
 
 import { Store } from './Store';
 import StoreOverviewCards from './StoreOverviewCards.js';

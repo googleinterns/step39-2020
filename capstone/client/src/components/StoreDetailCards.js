@@ -15,13 +15,10 @@
  */
 
 import React, { Component } from 'react';
-import { Grid, Card, Typography, List, ListItem, ListItemText, Button } from '@material-ui/core';
-import { Map, GoogleApiWrapper } from 'google-maps-react';
+import { Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { Map } from 'google-maps-react';
 
 class StoreDetailCards extends Component {
-    constructor(props) {
-      super(props);
-    }
 
     render() {
         const storeDetailCards = this.props.stores.map((store) => (
