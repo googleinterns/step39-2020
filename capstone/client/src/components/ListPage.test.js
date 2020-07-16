@@ -20,8 +20,7 @@ import { ListPageWithStore } from './ListPage.js';
 import { Store } from './Store';
 import axios from 'axios';
 
-
-jest.mock('axios');
+ jest.mock('axios');
  test('get-item-types-correctly', () => {
   const items = ['milk', 'bread'];
   const response = {data: items};
