@@ -37,11 +37,11 @@ class StorePage extends Component {
     }
 
     componentWillMount = () => {
-        // Get Stores from database.
-        this.getStores();
         this.setState((props) => ({
           items : this.props.store.state.items
         }))
+        // Get Stores from database.
+        this.getStores();
     }
 
     getStores = () => {
