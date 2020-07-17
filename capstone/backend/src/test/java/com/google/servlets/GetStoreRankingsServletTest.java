@@ -21,21 +21,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
+import org.apache.commons.lang3.tuple.Pair;
 import org.mockito.Mockito;
 
-public class GetStoresWithItemTypesServletTest extends TestCase {
-  private static final String ITEM_TYPES_KEY = "item_types";
+public class GetStoreRankingsServletTest extends TestCase {
+  private static final String USER_PREFERENCES_KEY = "user-preferences";
+  private static final String USER_PREFERENCES_STRING =
+      "{\"latitude\":1.234,\"longitude\":1.234,\"distancePreference\":4,\"selectedItemTypes\":[\"MILK\"]}";
 
-  public void testGetStores() throws ServletException, IOException {
-    String[] ITEM_TYPES = {"MILK"};
-    HashMap<String, String[]> map = new HashMap<>();
-    map.put(ITEM_TYPES_KEY, ITEM_TYPES);
-    SetupObj setupObj = ServletTestUtil.setupMockDataGetList(map);
+  public void testRankStores() throws ServletException, IOException {
+    HashMap<String, String> map = new HashMap<>();
+    map.put(USER_PREFERENCES_KEY, USER_PREFERENCES_STRING);
+    SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
 
-    GetStoresWithItemTypesServlet servlet = Mockito.spy(GetStoresWithItemTypesServlet.class);
+    GetStoreRankingsServlet servlet = Mockito.spy(GetStoreRankingsServlet.class);
 
     List<Store> fakeStores = new ArrayList<Store>();
     Store store1 = new Store(1, "Walmart", "3255 Mission College Blvd");
@@ -50,8 +53,17 @@ public class GetStoresWithItemTypesServletTest extends TestCase {
     fakeStores.add(store1);
     fakeStores.add(store2);
     fakeStores.add(store3);
+    List<String> fakeStoreAddresses =
+        fakeStores.stream().map(store -> store.getStoreAddress()).collect(Collectors.toList());
+    HashMap<String, Integer> fakeDistances = new HashMap<>();
+    fakeDistances.put(fakeStoreAddresses.get(0), 30);
+    fakeDistances.put(fakeStoreAddresses.get(1), 45);
+    fakeDistances.put(fakeStoreAddresses.get(2), 60);
 
-    Mockito.when(servlet.getStores(Arrays.asList("MILK"))).thenReturn(fakeStores);
+    Mockito.doReturn(fakeStores).when(servlet).getStores(Arrays.asList("MILK"));
+    Mockito.doReturn(fakeDistances)
+        .when(servlet)
+        .getDistances(fakeStoreAddresses, Pair.of(1.234, 1.234));
     servlet.doGet(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);

@@ -61,8 +61,8 @@ class ListPage extends Component {
       this.setState({
         userId,
       });
-    }
-    );
+    });
+  
     navigator.geolocation.getCurrentPosition((position) => {
       this.setState({
         location: {
@@ -195,8 +195,7 @@ class ListPage extends Component {
   }
 
   getItemTypes = () => {
-    axios.get(
-      '/api/v1/get-item-types' 
+    axios.get('/api/v1/get-item-types' 
     ).then((res) => {
       this.setState({
         items: res.data,
