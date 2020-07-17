@@ -16,8 +16,8 @@
 
 package com.google.servlets;
 
-import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class UserPreferences {
   private double latitude;
@@ -33,8 +33,8 @@ public class UserPreferences {
     return distancePreference;
   }
 
-  public List<Double> getLocation() {
-    return Arrays.asList(longitude, latitude);
+  public Pair<Double, Double> getLocation() {
+    return Pair.of(longitude, latitude);
   }
 
   public List<String> getSelectedItems() {

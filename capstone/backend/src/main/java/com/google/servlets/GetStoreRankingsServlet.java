@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,6 +36,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.tuple.Pair;
 
 @WebServlet("/api/v1/get-store-rankings")
 public class GetStoreRankingsServlet extends HttpServlet {
@@ -90,13 +92,15 @@ public class GetStoreRankingsServlet extends HttpServlet {
         getDistances(
             stores.stream().map(store -> store.getStoreAddress()).collect(Collectors.toList()),
             userPreferences.getLocation());
-    stores =
-        stores.stream()
-            .filter(
-                store ->
-                    (distances.get(store.getStoreAddress())
-                        < (userPreferences.getDistancePreference() * MILES_TO_METERS)))
-            .collect(Collectors.toList());
+    if (!distances.isEmpty()) {
+      stores =
+          stores.stream()
+              .filter(
+                  store ->
+                      (distances.get(store.getStoreAddress())
+                          < (userPreferences.getDistancePreference() * MILES_TO_METERS)))
+              .collect(Collectors.toList());
+    }
     rankStores(stores, distances);
     response.setContentType("application/json");
     response.setStatus(HttpServletResponse.SC_OK);
@@ -111,12 +115,14 @@ public class GetStoreRankingsServlet extends HttpServlet {
           public int compare(Store s1, Store s2) {
             double s1StoreScore =
                 s1.getNumberOfItemsFound() * AVALIABLE_ITEMS_WEIGHT
-                    + s1.getLowestPotentialPrice() * PRICE_WEIGHT
-                    + distances.get(s1.getStoreAddress()) * DISTANCE_WEIGHT;
+                    + s1.getLowestPotentialPrice() * PRICE_WEIGHT;
             double s2StoreScore =
                 s2.getNumberOfItemsFound() * AVALIABLE_ITEMS_WEIGHT
-                    + s2.getLowestPotentialPrice() * PRICE_WEIGHT
-                    + distances.get(s2.getStoreAddress()) * DISTANCE_WEIGHT;
+                    + s2.getLowestPotentialPrice() * PRICE_WEIGHT;
+            if (!distances.isEmpty()) {
+              s1StoreScore += distances.get(s1.getStoreAddress()) * DISTANCE_WEIGHT;
+              s2StoreScore += distances.get(s2.getStoreAddress()) * DISTANCE_WEIGHT;
+            }
             if (s1StoreScore < s2StoreScore) {
               return -1;
             } else if (s1StoreScore > s2StoreScore) {
@@ -128,12 +134,12 @@ public class GetStoreRankingsServlet extends HttpServlet {
         });
   }
 
-  public Map<String, Integer> getDistances(List<String> addresses, List<Double> userLocation)
-      throws IOException {
+  public Map<String, Integer> getDistances(
+      List<String> addresses, Pair<Double, Double> userLocation) throws IOException {
     HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory();
     StringBuilder sb =
         new StringBuilder("https://maps.googleapis.com/maps/api/distancematrix/json?origins=");
-    sb.append(userLocation.get(0) + "," + userLocation.get(1) + "&destinations=");
+    sb.append(userLocation.getLeft() + "," + userLocation.getRight() + "&destinations=");
     for (int i = 0; i < addresses.size(); i++) {
       sb.append(addresses.get(i).replace(' ', '+'));
       if (i == addresses.size() - 1) {
@@ -156,9 +162,7 @@ public class GetStoreRankingsServlet extends HttpServlet {
                       Integer.parseInt(
                           distanceResponse.rows.get(0).elements.get(i).distance.value)));
     } catch (NullPointerException | IndexOutOfBoundsException e) {
-      return IntStream.range(0, addresses.size())
-          .boxed()
-          .collect(Collectors.toMap(i -> addresses.get(i), i -> 0));
+      return new HashMap<String, Integer>();
     }
   }
 
