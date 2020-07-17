@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
 import org.mockito.Mockito;
 
-public class StoreRankingsServletTest extends TestCase {
+public class GetStoreRankingsServletTest extends TestCase {
   private static final String USER_PREFERENCES_KEY = "user-preferences";
   private static final String USER_PREFERENCES_STRING =
       "{\"latitude\":1.234,\"longitude\":1.234,\"distancePreference\":4,\"selectedItemTypes\":[\"MILK\"]}";
@@ -37,7 +37,7 @@ public class StoreRankingsServletTest extends TestCase {
     map.put(USER_PREFERENCES_KEY, USER_PREFERENCES_STRING);
     SetupObj setupObj = ServletTestUtil.setupMockDataGet(map);
 
-    StoreRankingsServlet servlet = Mockito.spy(StoreRankingsServlet.class);
+    GetStoreRankingsServlet servlet = Mockito.spy(GetStoreRankingsServlet.class);
 
     List<Store> fakeStores = new ArrayList<Store>();
     Store store1 = new Store(1, "Walmart", "3255 Mission College Blvd");
