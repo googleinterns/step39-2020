@@ -56,7 +56,7 @@ class StoreDetailCards extends Component {
     return (
         <StoresContext.Consumer> 
           {(context) => (
-            <div>{context.state.storeIndex}</div>
+            <div>{storeDetailCards[context.state.storeIndex]}</div>
           )}
         </StoresContext.Consumer>
     )

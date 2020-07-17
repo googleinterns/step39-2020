@@ -24,14 +24,34 @@ class StoreOverviewCards extends Component {
 
     render() {
         const storeOverviewCards = this.props.stores.map((store, index) => (
+            <div>
+              <Typography variant="h6">{store.storeName}</Typography>
+              <List>
+              <ListItem>
+                  <ListItemText>
+                  Has: {store.totalItemsFound}/6
+                  </ListItemText>
+              </ListItem>
+              <ListItem>
+                  <ListItemText>
+                  Lowest Potential Price: ${store.lowestPotentialPrice}
+                  </ListItemText>
+              </ListItem>
+              <ListItem>
+                  <ListItemText>
+                  Distance: 5 miles
+                  </ListItemText>
+              </ListItem>
+              </List>
               <StoresContext.Consumer>
                   {(context) => (
-              <Button variant="contained" color="primary" onClick={() => 
-                context.setStore(index)}>
-                Show more Information!
-              </Button>
+                    <Button variant="contained" color="primary" onClick={() => 
+                      context.setStore(index)}>
+                    Show more Information!
+                    </Button>
                   )}
               </StoresContext.Consumer>
+              </div>
         ));
         return (
             <div>
