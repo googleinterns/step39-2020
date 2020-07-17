@@ -52,10 +52,10 @@ class StorePage extends Component {
     this.state = {
       stores : []
     }
-    this.getStores = this.getStores.bind(this);
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
+    this.getStores = this.getStores.bind(this);
     // Get Stores from database.
     this.getStores();
   }

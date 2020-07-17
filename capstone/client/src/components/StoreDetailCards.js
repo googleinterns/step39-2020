@@ -23,14 +23,18 @@ import { StoresContext } from './StoresProvider.js';
 import './styles.css';
 
 class StoreDetailCards extends Component {
-  render() { 
+  render() {
+    const maps = {
+      height : "25%",
+      width : "25%"
+    }
     const storeDetailCards = this.props.stores.map((store) => (
       <div>
         <Typography variant='h4'>{store.storeName}</Typography>
         <Typography variant='h6'>Address: {store.address}</Typography>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
-            <Map id="google-map" google={this.props.google} zoom={14} style={{width: '25%', height: '25%'}}>
+            <Map id="google-map" google={this.props.google} style={maps} zoom={14}>
             </Map>
           </Grid>
           <Grid item component={Card} xs>
