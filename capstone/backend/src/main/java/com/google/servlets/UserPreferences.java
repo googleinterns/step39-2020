@@ -14,12 +14,30 @@
  * limitations under the License.
  */
 
-import { createConnectedStore } from 'undux';
+package com.google.servlets;
 
-let initialState = {
-  loggedIn: false,
-  userId: -1,
-  items : []
-};
+import java.util.List;
+import org.apache.commons.lang3.tuple.Pair;
 
-export const Store = createConnectedStore(initialState);
+public class UserPreferences {
+  private double latitude;
+  private double longitude;
+  private int distancePreference;
+  private List<String> selectedItemTypes;
+
+  public List<String> getSelectedItemTypes() {
+    return selectedItemTypes;
+  }
+
+  public int getDistancePreference() {
+    return distancePreference;
+  }
+
+  public Pair<Double, Double> getLocation() {
+    return Pair.of(longitude, latitude);
+  }
+
+  public List<String> getSelectedItems() {
+    return selectedItemTypes;
+  }
+}
