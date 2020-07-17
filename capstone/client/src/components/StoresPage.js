@@ -21,7 +21,7 @@ import React, { Component } from 'react';
 import { Store } from './Store';
 import StoreDetailCards from './StoreDetailCards.js';
 import StoreOverviewCards from './StoreOverviewCards.js';
-import StoresProvider from './StoresProvider.js';
+import { StoresProvider } from './StoresProvider.js';
 
 import './styles.css';
 
@@ -29,6 +29,22 @@ const itemList = [
     "Milk",
     "Bread"
 ]
+
+const storesCode = [{ 
+  storeName: 'Safeway', 
+  address: '11050 Bollinger Canyon Rd, San Ramon', 
+  totalItemsFound: 5, 
+  items: [{itemName: 'O Organics Organic Whole Milk with Vitamin D - 1 Gallon', itemPrice: 4.55, itemType: 'milk'}, 
+    {itemName: 'Lucerne Milk Reduced Fat 2% Milkfat 1 Gallon - 128 Fl. Oz.', itemPrice: 2.55, itemType: 'milk'}, 
+    {itemName: 'Silk Almondmilk Original Unsweetened - Half Gallon', itemPrice: 4.33, itemType: 'milk'}], 
+  distance: 3.1, price: 8.96}, 
+  { storeName: 'Walmart', 
+  address: '9100 Alcosta Blvd, San Ramon', 
+  totalItemsFound: 2, 
+  items: [{itemName: 'O Organics Organic Whole Milk with Vitamin D - 1 Gallon', itemPrice: 4.55, itemType: 'milk'}, 
+    {itemName: 'Lucerne Milk Reduced Fat 2% Milkfat 1 Gallon - 128 Fl. Oz.', itemPrice: 2.55, itemType: 'milk'}, 
+    {itemName: 'Silk Almondmilk Original Unsweetened - Half Gallon', itemPrice: 1.44, itemType: 'milk'}], 
+  distance: 2.3, price: 16.45,}]
 
 class StorePage extends Component { 
   constructor(props) {
@@ -45,11 +61,14 @@ class StorePage extends Component {
   }
 
   getStores = () => {
-    axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
+    /*axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
       .then(res => {
         this.setState({
           stores: res.data
         });
+      });*/
+      this.setState({
+        stores: storesCode
       });
   }
 

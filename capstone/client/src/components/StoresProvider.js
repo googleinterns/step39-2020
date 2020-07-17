@@ -20,4 +20,4 @@ class StoresProvider extends Component {
 }
 
 export const StoresContext = React.createContext()
-export default StoresProvider
+export { StoresProvider }
