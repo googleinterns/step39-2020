@@ -16,28 +16,22 @@
 
 package com.google.servlets;
 
+import com.google.auto.value.AutoValue;
 import java.util.List;
-import org.apache.commons.lang3.tuple.Pair;
 
-public class UserPreferences {
-  private double latitude;
-  private double longitude;
-  private int distancePreference;
-  private List<String> selectedItemTypes;
-
-  public List<String> getSelectedItemTypes() {
-    return selectedItemTypes;
+@AutoValue
+public abstract class UserPreferences {
+  public static UserPreferences create(
+      double longitude, double latitude, int distancePreference, List<String> selectedItemTypes) {
+    return new AutoValue_UserPreferences(
+        longitude, latitude, distancePreference, selectedItemTypes);
   }
 
-  public int getDistancePreference() {
-    return distancePreference;
-  }
+  public abstract double longitude();
 
-  public Pair<Double, Double> getLocation() {
-    return Pair.of(longitude, latitude);
-  }
+  public abstract double latitude();
 
-  public List<String> getSelectedItems() {
-    return selectedItemTypes;
-  }
+  public abstract int distancePreference();
+
+  public abstract List<String> selectedItemTypes();
 }

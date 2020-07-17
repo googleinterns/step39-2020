@@ -88,7 +88,7 @@ public class GetStoreRankingsServlet extends HttpServlet {
     }
     List<Store> stores = new ArrayList<Store>();
     try {
-      stores = getStores(userPreferences.getSelectedItemTypes());
+      stores = getStores(userPreferences.selectedItemTypes());
     } catch (SpannerException e) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
       return;
@@ -96,14 +96,14 @@ public class GetStoreRankingsServlet extends HttpServlet {
     Map<String, Integer> distances =
         getDistances(
             stores.stream().map(store -> store.getStoreAddress()).collect(Collectors.toList()),
-            userPreferences.getLocation());
+            Pair.of(userPreferences.longitude(), userPreferences.latitude()));
     if (!distances.isEmpty()) {
       stores =
           stores.stream()
               .filter(
                   store ->
                       (distances.get(store.getStoreAddress())
-                          < (userPreferences.getDistancePreference() * MILES_TO_METERS)))
+                          < (userPreferences.distancePreference() * MILES_TO_METERS)))
               .collect(Collectors.toList());
     }
     rankStores(stores, distances);
@@ -180,8 +180,8 @@ public class GetStoreRankingsServlet extends HttpServlet {
     UserPreferences userPreferences =
         g.fromJson(request.getParameter("user-preferences"), UserPreferences.class);
     if (userPreferences == null
-        || userPreferences.getSelectedItemTypes() == null
-        || userPreferences.getDistancePreference() == 0) {
+        || userPreferences.selectedItemTypes() == null
+        || userPreferences.distancePreference() == 0) {
       return null;
     }
     return userPreferences;
