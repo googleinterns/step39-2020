@@ -15,43 +15,51 @@
  */
 
 import React, { Component } from 'react';
-import { Grid, Typography, List, ListItem, ListItemText } from '@material-ui/core';
-import { Map } from 'google-maps-react';
+import { GoogleApiWrapper, Map } from 'google-maps-react';
+import { Card, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+
+import APIKey from './APIKey.js';
 import './styles.css';
 
 class StoreDetailCards extends Component {
-
-    render() {
-        const storeDetailCards = this.props.stores.map((store) => (
-            <div>
-              <Typography variant='h4'>{store.storeName}</Typography>
-              <Typography variant='h6'>Address: {store.address}</Typography>
-              <Grid container alignItems="stretch">
-                <Grid xs>
-                  <Map id="google-map" google={this.props.google} zoom={14}>
-                  </Map>
-                </Grid>
-                <Grid xs>
-                  <Typography variant='subtitle1'>Has:</Typography>
-                  <List>
-                  {Object.keys(store.items).map((itemType, item) => (
-                    <ListItem>
-                      <ListItemText>
-                        {item.itemName} (${item.itemPrice})
-                      </ListItemText>
-                    </ListItem>
-                  ))}
-                  </List>
-                </Grid>
-              </Grid>
-            </div>
-          ));
-        return (
-            <div>
-              {storeDetailCards[0]}
-            </div>
-        )
+  render() {
+    const maps = {
+      height : "25%",
+      width : "25%"
     }
+    const storeDetailCards = this.props.stores.map((store) => (
+      <div>
+        <Typography variant='h4'>{store.storeName}</Typography>
+        <Typography variant='h6'>Address: {store.address}</Typography>
+        <Grid container alignItems="stretch">
+          <Grid item component={Card} xs>
+            <Map id="google-map" google={this.props.google} style={maps} zoom={14}>
+            </Map>
+          </Grid>
+          <Grid item component={Card} xs>
+            <Typography variant='subtitle1'>Has:</Typography>
+            <List>
+              {store.items.map((item) => (
+                <ListItem key = {item.itemName}>
+                  <ListItemText>
+                    {item.itemName} (${item.itemPrice})
+                  </ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </Grid>
+        </Grid>
+      </div>
+    ));
+      
+    return (
+      <div>
+        {storeDetailCards[0]}
+      </div>
+    )
+  }
 }
 
-export default StoreDetailCards;
+export default GoogleApiWrapper({
+  apiKey: (APIKey.APIKey())
+})(StoreDetailCards)

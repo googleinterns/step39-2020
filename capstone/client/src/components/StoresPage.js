@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-import React, { Component } from 'react';
 import axios from 'axios';
-import { Grid, Card} from '@material-ui/core';
-import { GoogleApiWrapper } from 'google-maps-react';
+import { Card, Grid} from '@material-ui/core';
+import React, { Component } from 'react';
 
 import { Store } from './Store';
-import APIKey from './APIKey.js';
-import StoreOverviewCards from './StoreOverviewCards.js';
 import StoreDetailCards from './StoreDetailCards.js';
-import './styles.css';
+import StoreOverviewCards from './StoreOverviewCards.js';
 
+import './styles.css';
 
 const itemList = [
     "Milk",
@@ -32,46 +30,43 @@ const itemList = [
 ]
 
 class StorePage extends Component { 
-    constructor(props) {
-      super(props)
-      this.state = {
-          stores : []
-      }
-      this.getStores = this.getStores.bind(this);
+  constructor(props) {
+    super(props)
+    this.state = {
+      stores : []
     }
+  }
 
-    componentWillMount = () => {
-        // Get Stores from database.
-        this.getStores();
-    }
+  componentDidMount = () => {
+    this.getStores = this.getStores.bind(this);
+    // Get Stores from database.
+    this.getStores();
+  }
 
-    getStores = () => {
-      axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
-        .then(res => {
-          this.setState({
-            stores: res.data
-          });
+  getStores = () => {
+    axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
+      .then(res => {
+        this.setState({
+          stores: res.data
         });
-    }
+      });
+  }
 
-    render() {
-
-      return(
-        <div>
-          <h1>Store Recommendations</h1>
-          <Grid container alignItems="stretch">
-            <Grid item component={Card} xs>
-              <StoreOverviewCards stores={this.state.stores}/>
-            </Grid>
-            <Grid item component={Card} xs>
-              <StoreDetailCards stores={this.state.stores}/>
-            </Grid>
+  render() {
+    return(
+      <div>
+        <h1>Store Recommendations</h1>
+        <Grid container alignItems="stretch">
+          <Grid item component={Card} xs>
+            <StoreOverviewCards stores={this.state.stores}/>
           </Grid>
-        </div>
-      )
-    }
+          <Grid item component={Card} xs>
+            <StoreDetailCards stores={this.state.stores}/>
+          </Grid>
+        </Grid>
+      </div>
+    )
+  }
 }
 
-export const StorePageWithStore = GoogleApiWrapper({
-  apiKey: (APIKey.APIKey())
-})(Store.withStore(StorePage))
+export const StorePageWithStore = Store.withStore(StorePage)
