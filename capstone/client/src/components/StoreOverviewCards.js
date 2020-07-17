@@ -47,7 +47,7 @@ class StoreOverviewCards extends Component {
                   {(context) => (
                     <Button variant="contained" color="primary" onClick={() => 
                       context.setStore(index)}>
-                    Show more Information!
+                    Show more Information
                     </Button>
                   )}
               </StoresContext.Consumer>
