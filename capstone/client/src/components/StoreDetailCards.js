@@ -31,7 +31,7 @@ class StoreDetailCards extends Component {
     const storeDetailCards = this.props.stores.map((store) => (
       <div>
         <Typography variant='h4'>{store.storeName}</Typography>
-        <Typography variant='h6'>Address: {store.address}</Typography>
+        <Typography variant='h6'>Address: {store.storeAddress}</Typography>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
             <Map id="google-map" google={this.props.google} style={maps} zoom={14}>
@@ -40,12 +40,15 @@ class StoreDetailCards extends Component {
           <Grid item component={Card} xs>
             <Typography variant='subtitle1'>Has:</Typography>
             <List>
-              {store.items.map((item) => (
-                <ListItem key = {item.itemName}>
+              {Object.keys(store.items).map((itemType, i) => (
+                <div>{Object.keys(store.items[itemType]).map((index, i) => (
+                  <ListItem key = {i}>
                   <ListItemText>
-                    {item.itemName} (${item.itemPrice})
+                    {store.items[itemType][index].itemName} (${store.items[itemType][index].itemPrice})
                   </ListItemText>
                 </ListItem>
+                ))}
+                </div>
               ))}
             </List>
           </Grid>
