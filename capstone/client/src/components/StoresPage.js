@@ -21,6 +21,7 @@ import React, { Component } from 'react';
 import { Store } from './Store';
 import StoreDetailCards from './StoreDetailCards.js';
 import StoreOverviewCards from './StoreOverviewCards.js';
+import { StoresProvider } from './StoresProvider.js';
 
 import './styles.css';
 
@@ -55,14 +56,16 @@ class StorePage extends Component {
     return(
       <div>
         <h1>Store Recommendations</h1>
+        <StoresProvider>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
             <StoreOverviewCards stores={this.state.stores}/>
           </Grid>
           <Grid item component={Card} xs>
-            <StoreDetailCards stores={this.state.stores}/>
+            <StoreDetailCards stores={this.state.stores} style={{display: 'none'}}/>
           </Grid>
-        </Grid>
+        </Grid> 
+        </StoresProvider>
       </div>
     );
   }

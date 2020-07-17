@@ -19,6 +19,7 @@ import { GoogleApiWrapper, Map } from 'google-maps-react';
 import { Card, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 
 import APIKey from './APIKey.js';
+import { StoresContext } from './StoresProvider.js';
 import './styles.css';
 
 class StoreDetailCards extends Component {
@@ -53,9 +54,11 @@ class StoreDetailCards extends Component {
     ));
       
     return (
-      <div>
-        {storeDetailCards[0]}
-      </div>
+        <StoresContext.Consumer> 
+          {(context) => (
+            <div>{storeDetailCards[context.state.storeIndex]}</div>
+          )}
+        </StoresContext.Consumer>
     )
   }
 }

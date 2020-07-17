@@ -16,12 +16,14 @@
 
 import React, { Component } from 'react';
 import { Typography, List, ListItem, ListItemText, Button } from '@material-ui/core';
+
+import { StoresContext } from './StoresProvider.js';
 import './styles.css';
 
 class StoreOverviewCards extends Component {
 
     render() {
-        const storeOverviewCards = this.props.stores.map((store) => (
+        const storeOverviewCards = this.props.stores.map((store, index) => (
             <div>
               <Typography variant="h6">{store.storeName}</Typography>
               <List>
@@ -41,10 +43,15 @@ class StoreOverviewCards extends Component {
                   </ListItemText>
               </ListItem>
               </List>
-              <Button variant="contained" color="primary">
-                Show more Information
-              </Button>
-            </div>
+              <StoresContext.Consumer>
+                  {(context) => (
+                    <Button variant="contained" color="primary" onClick={() => 
+                      context.setStore(index)}>
+                    Show more Information
+                    </Button>
+                  )}
+              </StoresContext.Consumer>
+              </div>
         ));
         return (
             <div>
