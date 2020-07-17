@@ -26,16 +26,12 @@ import StoreDetailCards from './StoreDetailCards.js';
 import './styles.css';
 
 
-const itemList = [
-    "Milk",
-    "Bread"
-]
-
 class StorePage extends Component { 
     constructor(props) {
       super(props)
       this.state = {
-          stores : []
+          stores : [],
+          items : null,
       }
       this.getStores = this.getStores.bind(this);
     }
@@ -43,10 +39,13 @@ class StorePage extends Component {
     componentWillMount = () => {
         // Get Stores from database.
         this.getStores();
+        this.setState((props) => ({
+          items : this.props.store.state.items
+        }))
     }
 
     getStores = () => {
-      axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
+      axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : this.state.items }})
         .then(res => {
           this.setState({
             stores: res.data

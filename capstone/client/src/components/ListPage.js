@@ -15,9 +15,10 @@
  */
 
 import React, { Component } from 'react';
+import {Redirect} from 'react-router-dom';
 import axios from 'axios';
 import { Button, ButtonGroup, Card, Checkbox, Dialog, DialogActions,DialogContent, DialogContentText, 
-  DialogTitle, FormGroup, FormControlLabel, Grid, List, ListItem, ListItemText,  
+  DialogTitle, FormGroup, FormControlLabel, Grid, List,
   Radio, RadioGroup, TextField } 
   from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
@@ -47,6 +48,7 @@ class ListPage extends Component {
       listSaveDialog: {
         display: false,
       },
+      redirect : null,
     }
   }
 
@@ -112,6 +114,7 @@ class ListPage extends Component {
    */
   onSubmit = () => {
     const arr = [...this.selectedItems];
+    this.props.store.set('items')(arr);
     if (arr.length === 0) {
       this.setState({
         selectedItemsList: null,
@@ -119,16 +122,8 @@ class ListPage extends Component {
       });
       return;
     }
-    const listItems = arr.map((item) => (
-      <ListItem key={item}>
-        <ListItemText
-          primary={item}
-          data-testid='list item'
-          />
-      </ListItem>
-    ));
     this.setState({
-      selectedItemsList: listItems,
+      redirect : '/stores',
       errorMessage: null,
     });
   }
@@ -257,6 +252,11 @@ class ListPage extends Component {
   }
 
   render() {
+    if(this.state.redirect) {
+      return <Redirect to={{
+        pathname : this.state.redirect,
+      }}/>
+    }
 
     if(this.state.userId !== -1 && this.state.userLists === []) {
       axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
