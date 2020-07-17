@@ -30,20 +30,34 @@ class StorePage extends Component {
       this.state = {
           stores : [],
           items : null,
+          distanceValue : null,
+          latitude : null,
+          longitude : null,
       }
       this.getStores = this.getStores.bind(this);
     }
 
     componentWillMount = () => {
         this.setState((props) => ({
-          items : this.props.store.state.items
+          items : this.props.store.state.items,
+          distanceValue : this.props.store.state.distanceValue,
+          latitude : this.props.store.state.latitude,
+          longitude : this.props.store.state.longitude,
         }))
-        // Get Stores from database.
-        this.getStores();
+    }
+
+    componentDidMount = () => {
+      // Get Stores from database.
+      this.getStores();
     }
 
     getStores = () => {
-      axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : this.state.items }})
+      axios.get('/api/v1/get-store-rankings', { params : { 'user-preferences' : {
+        latitude : this.state.latitude,
+        longitude : this.state.longitude,
+        distancePreference : this.state.distanceValue,
+        selectedItemTypes : this.state.items,
+      } }})
         .then(res => {
           this.setState({
             stores: res.data

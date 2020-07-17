@@ -115,6 +115,9 @@ class ListPage extends Component {
   onSubmit = () => {
     const arr = [...this.selectedItems];
     this.props.store.set('items')(arr);
+    this.props.store.set('latitude')(this.state.location.latitude);
+    this.props.store.set('longitude')(this.state.location.longitude);
+    this.props.store.set('distanceValue')(this.state.distanceValue);
     if (arr.length === 0) {
       this.setState({
         selectedItemsList: null,

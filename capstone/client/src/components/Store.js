@@ -19,7 +19,10 @@ import { createConnectedStore } from 'undux';
 let initialState = {
   loggedIn: false,
   userId: -1,
-  items : []
+  items : [],
+  distanceValue : null,
+  latitude : null,
+  longitude : null,
 };
 
 export const Store = createConnectedStore(initialState);
