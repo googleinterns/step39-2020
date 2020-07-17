@@ -24,33 +24,32 @@ import StoreOverviewCards from './StoreOverviewCards.js';
 
 import './styles.css';
 
-const itemList = [
-    "Milk",
-    "Bread"
-]
-
 class StorePage extends Component { 
-  constructor(props) {
-    super(props)
-    this.state = {
-      stores : []
+    constructor(props) {
+      super(props)
+      this.state = {
+          stores : [],
+          items : null,
+      }
+      this.getStores = this.getStores.bind(this);
     }
-  }
 
-  componentDidMount = () => {
-    this.getStores = this.getStores.bind(this);
-    // Get Stores from database.
-    this.getStores();
-  }
+    componentWillMount = () => {
+        this.setState((props) => ({
+          items : this.props.store.state.items
+        }))
+        // Get Stores from database.
+        this.getStores();
+    }
 
-  getStores = () => {
-    axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : itemList }})
-      .then(res => {
-        this.setState({
-          stores: res.data
+    getStores = () => {
+      axios.get('/api/v1/get-stores-with-item-types', { params : { item_types : this.state.items }})
+        .then(res => {
+          this.setState({
+            stores: res.data
+          });
         });
-      });
-  }
+    }
 
   render() {
     return(
@@ -65,7 +64,7 @@ class StorePage extends Component {
           </Grid>
         </Grid>
       </div>
-    )
+    );
   }
 }
 
