@@ -24,6 +24,7 @@ import com.google.cloud.spanner.SpannerException;
 import com.google.gson.Gson;
 import com.google.spanner.LibraryFunctions;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,13 +38,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.http.client.utils.URIBuilder;
 
 @WebServlet("/api/v1/get-store-rankings")
 public class GetStoreRankingsServlet extends HttpServlet {
   private static final String API_KEY = "INSERT_GOOGLE_API_KEY_HERE";
   private static final double AVALIABLE_ITEMS_WEIGHT = 3;
+  private static final String DESTINATIONS_PARAM = "destinations";
   private static final double DISTANCE_WEIGHT = -0.0005;
+  private static final String API_KEY_PARAM = "key";
   private static final double MILES_TO_METERS = 1609.34;
+  private static final String ORIGINS_PARAM = "origins";
   private static final double PRICE_WEIGHT = -1;
   private Gson g = new Gson();
 
@@ -137,18 +142,23 @@ public class GetStoreRankingsServlet extends HttpServlet {
   public Map<String, Integer> getDistances(
       List<String> addresses, Pair<Double, Double> userLocation) throws IOException {
     HttpRequestFactory requestFactory = new NetHttpTransport().createRequestFactory();
-    StringBuilder sb =
-        new StringBuilder("https://maps.googleapis.com/maps/api/distancematrix/json?origins=");
-    sb.append(userLocation.getLeft() + "," + userLocation.getRight() + "&destinations=");
+    StringBuilder sb = new StringBuilder();
+
     for (int i = 0; i < addresses.size(); i++) {
-      sb.append(addresses.get(i).replace(' ', '+'));
-      if (i == addresses.size() - 1) {
-        sb.append("&key=" + API_KEY);
-      } else {
+      sb.append(addresses.get(i));
+      if (i != addresses.size() - 1) {
         sb.append("|");
       }
     }
-
+    try {
+      URIBuilder ub = new URIBuilder("https://maps.googleapis.com/maps/api/distancematrix/json");
+      ub.addParameter(ORIGINS_PARAM, userLocation.getLeft() + "," + userLocation.getRight());
+      ub.addParameter(DESTINATIONS_PARAM, sb.toString());
+      ub.addParameter(API_KEY_PARAM, API_KEY);
+      System.out.println(ub.toString());
+    } catch (URISyntaxException e) {
+      return new HashMap<>();
+    }
     HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(sb.toString()));
     String response = request.execute().parseAsString();
     DistanceResponse distanceResponse = g.fromJson(response, DistanceResponse.class);
@@ -162,7 +172,7 @@ public class GetStoreRankingsServlet extends HttpServlet {
                       Integer.parseInt(
                           distanceResponse.rows.get(0).elements.get(i).distance.value)));
     } catch (NullPointerException | IndexOutOfBoundsException e) {
-      return new HashMap<String, Integer>();
+      return new HashMap<>();
     }
   }
 

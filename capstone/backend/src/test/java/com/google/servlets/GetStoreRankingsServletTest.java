@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import junit.framework.TestCase;
+import org.apache.commons.lang3.tuple.Pair;
 import org.mockito.Mockito;
 
 public class GetStoreRankingsServletTest extends TestCase {
@@ -62,7 +63,7 @@ public class GetStoreRankingsServletTest extends TestCase {
     Mockito.doReturn(fakeStores).when(servlet).getStores(Arrays.asList("MILK"));
     Mockito.doReturn(fakeDistances)
         .when(servlet)
-        .getDistances(fakeStoreAddresses, Arrays.asList(1.234, 1.234));
+        .getDistances(fakeStoreAddresses, Pair.of(1.234, 1.234));
     servlet.doGet(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
