@@ -28,23 +28,15 @@ import './styles.css';
 class StorePage extends Component { 
     constructor(props) {
       super(props)
+      const params = new URLSearchParams(window.location.search);
       this.state = {
           stores : [],
-          items : null,
-          distanceValue : null,
-          latitude : null,
-          longitude : null,
+          items : params.getAll('items'),
+          distanceValue : params.get('distanceValue'),
+          latitude : params.get('latitude'),
+          longitude : params.get('longitude'),
       }
       this.getStores = this.getStores.bind(this);
-    }
-
-    componentWillMount = () => {
-        this.setState((props) => ({
-          items : this.props.store.state.items,
-          distanceValue : this.props.store.state.distanceValue,
-          latitude : this.props.store.state.latitude,
-          longitude : this.props.store.state.longitude,
-        }))
     }
 
     componentDidMount = () => {
