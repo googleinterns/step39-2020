@@ -28,7 +28,7 @@ public class Store implements Comparable<Store> {
 
   private int totalItemsFound;
 
-  private int totalUnavaliableItemsFound;
+  private int totalUnavailableItemsFound;
 
   private long storeId;
 
@@ -71,8 +71,8 @@ public class Store implements Comparable<Store> {
     return totalItemsFound;
   }
 
-  public int getTotalUnavaliableItemsFound() {
-    return totalUnavaliableItemsFound;
+  public int getTotalUnavailableItemsFound() {
+    return totalUnavailableItemsFound;
   }
 
   public long getStoreId() {

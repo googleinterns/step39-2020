@@ -128,10 +128,10 @@ public class GetStoreRankingsServlet extends HttpServlet {
               return -1;
             }
             double s1StoreScore =
-                s1.getTotalUnavaliableItemsFound() * UNAVALIABLE_ITEMS_WEIGHT
+                s1.getTotalUnavailableItemsFound() * UNAVALIABLE_ITEMS_WEIGHT
                     + s1.getLowestPotentialPrice() * PRICE_WEIGHT;
             double s2StoreScore =
-                s2.getTotalUnavaliableItemsFound() * UNAVALIABLE_ITEMS_WEIGHT
+                s2.getTotalUnavailableItemsFound() * UNAVALIABLE_ITEMS_WEIGHT
                     + s2.getLowestPotentialPrice() * PRICE_WEIGHT;
             if (!distances.isEmpty()) {
               s1StoreScore +=
