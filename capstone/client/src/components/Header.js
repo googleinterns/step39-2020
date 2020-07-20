@@ -86,7 +86,7 @@ class Header extends Component {
                   <Menu />
                 </IconButton>
                 <Typography id="typography" variant="h6">
-                  {this.props.location.pathname  === '/' ? 'Preferences' : 'Store Recommendations'}
+                  {this.props.title}
                 </Typography>
                 {this.state.loggedIn ? 
                 <GoogleLogout
