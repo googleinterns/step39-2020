@@ -167,8 +167,9 @@ public class GetStoreRankingsServlet extends HttpServlet {
         sb.append("|");
       }
     }
+    URIBuilder ub;
     try {
-      URIBuilder ub = new URIBuilder("https://maps.googleapis.com/maps/api/distancematrix/json");
+      ub = new URIBuilder("https://maps.googleapis.com/maps/api/distancematrix/json");
       ub.addParameter(ORIGINS_PARAM, userLocation.getLeft() + "," + userLocation.getRight());
       ub.addParameter(DESTINATIONS_PARAM, sb.toString());
       ub.addParameter(API_KEY_PARAM, API_KEY);
@@ -176,7 +177,7 @@ public class GetStoreRankingsServlet extends HttpServlet {
     } catch (URISyntaxException e) {
       return new HashMap<>();
     }
-    HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(sb.toString()));
+    HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(ub.toString()));
     String response = request.execute().parseAsString();
     DistanceResponse distanceResponse = g.fromJson(response, DistanceResponse.class);
     try {
