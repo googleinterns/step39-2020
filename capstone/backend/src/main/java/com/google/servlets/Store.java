@@ -28,6 +28,8 @@ public class Store implements Comparable<Store> {
 
   private int totalItemsFound;
 
+  private int totalUnavaliableItemsFound;
+
   private long storeId;
 
   private Map<String, List<Item>> items = new HashMap<String, List<Item>>();
@@ -67,6 +69,10 @@ public class Store implements Comparable<Store> {
 
   public int getNumberOfItemsFound() {
     return totalItemsFound;
+  }
+
+  public int getTotalUnavaliableItemsFound() {
+    return totalUnavaliableItemsFound;
   }
 
   public long getStoreId() {

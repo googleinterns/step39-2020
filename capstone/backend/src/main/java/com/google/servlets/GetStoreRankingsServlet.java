@@ -43,11 +43,12 @@ import org.apache.http.client.utils.URIBuilder;
 @WebServlet("/api/v1/get-store-rankings")
 public class GetStoreRankingsServlet extends HttpServlet {
   private static final String API_KEY = "INSERT_GOOGLE_API_KEY_HERE";
-  private static final double AVALIABLE_ITEMS_WEIGHT = 3;
+  private static final double AVERAGE_GAS_PRICE = 3.127;
+  private static final double AVERAGE_MILES_PER_GALLON = 25.2;
+  private static final double UNAVALIABLE_ITEMS_WEIGHT = 0.5;
   private static final String DESTINATIONS_PARAM = "destinations";
-  private static final double DISTANCE_WEIGHT = -0.0005;
   private static final String API_KEY_PARAM = "key";
-  private static final double MILES_TO_METERS = 1609.34;
+  private static final double MILES_METERS_CONVERSION = 1609.34;
   private static final String ORIGINS_PARAM = "origins";
   private static final double PRICE_WEIGHT = -1;
   private Gson g = new Gson();
@@ -103,7 +104,7 @@ public class GetStoreRankingsServlet extends HttpServlet {
               .filter(
                   store ->
                       (distances.get(store.getStoreAddress())
-                          < (userPreferences.getDistancePreference() * MILES_TO_METERS)))
+                          < (userPreferences.getDistancePreference() * MILES_METERS_CONVERSION)))
               .collect(Collectors.toList());
     }
     rankStores(stores, distances);
@@ -112,21 +113,37 @@ public class GetStoreRankingsServlet extends HttpServlet {
     response.getWriter().println(g.toJson(stores));
   }
 
+  /*
+   * Link to the ranking algorithm: https://drive.google.com/file/d/1sM57YGHXXgQkO9VPvhHz2GzbnYoznHxE/view?usp=sharing
+   */
   private void rankStores(List<Store> stores, Map<String, Integer> distances) {
     Collections.sort(
         stores,
         new Comparator<Store>() {
           @Override
           public int compare(Store s1, Store s2) {
+            if (s1.getNumberOfItemsFound() > s2.getNumberOfItemsFound()) {
+              return 1;
+            } else if (s1.getNumberOfItemsFound() < s2.getNumberOfItemsFound()) {
+              return -1;
+            }
             double s1StoreScore =
-                s1.getNumberOfItemsFound() * AVALIABLE_ITEMS_WEIGHT
+                s1.getTotalUnavaliableItemsFound() * UNAVALIABLE_ITEMS_WEIGHT
                     + s1.getLowestPotentialPrice() * PRICE_WEIGHT;
             double s2StoreScore =
-                s2.getNumberOfItemsFound() * AVALIABLE_ITEMS_WEIGHT
+                s2.getTotalUnavaliableItemsFound() * UNAVALIABLE_ITEMS_WEIGHT
                     + s2.getLowestPotentialPrice() * PRICE_WEIGHT;
             if (!distances.isEmpty()) {
-              s1StoreScore += distances.get(s1.getStoreAddress()) * DISTANCE_WEIGHT;
-              s2StoreScore += distances.get(s2.getStoreAddress()) * DISTANCE_WEIGHT;
+              s1StoreScore +=
+                  distances.get(s1.getStoreAddress())
+                      / MILES_METERS_CONVERSION
+                      / AVERAGE_MILES_PER_GALLON
+                      * AVERAGE_GAS_PRICE;
+              s2StoreScore +=
+                  distances.get(s2.getStoreAddress())
+                      / MILES_METERS_CONVERSION
+                      / AVERAGE_MILES_PER_GALLON
+                      * AVERAGE_GAS_PRICE;
             }
             if (s1StoreScore < s2StoreScore) {
               return -1;
