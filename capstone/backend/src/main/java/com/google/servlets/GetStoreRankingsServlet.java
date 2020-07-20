@@ -104,13 +104,20 @@ public class GetStoreRankingsServlet extends HttpServlet {
               .filter(
                   store ->
                       (distances.get(store.getStoreAddress())
-                          < (userPreferences.getDistancePreference() * MILES_METERS_CONVERSION)))
+                          > (userPreferences.getDistancePreference() / MILES_METERS_CONVERSION)))
               .collect(Collectors.toList());
     }
+    setDistances(stores, distances);
     rankStores(stores, distances);
     response.setContentType("application/json");
     response.setStatus(HttpServletResponse.SC_OK);
     response.getWriter().println(g.toJson(stores));
+  }
+
+  private void setDistances(List<Store> stores, Map<String, Integer> distances) {
+    for (Store store : stores) {
+      store.setDistanceFromUser(distances.get(store.getStoreAddress()) / MILES_METERS_CONVERSION);
+    }
   }
 
   /*

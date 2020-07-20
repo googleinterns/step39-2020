@@ -40,6 +40,8 @@ public class Store implements Comparable<Store> {
 
   private String storeName;
 
+  private double distanceFromUser;
+
   public Store(long storeId, String storeName, String storeAddress) {
     this.storeId = storeId;
     this.storeName = storeName;
@@ -85,6 +87,10 @@ public class Store implements Comparable<Store> {
 
   public double getLowestPotentialPrice() {
     return lowestPotentialPrice;
+  }
+
+  public void setDistanceFromUser(double distanceFromUser) {
+    this.distanceFromUser = distanceFromUser;
   }
 
   @Override
