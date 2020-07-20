@@ -99,8 +99,10 @@ def set_items_unavailable_default(transaction):
   availability statuses."""
   transaction.execute_update(
     "UPDATE Inventories "
-    "SET ItemAvailability = 'OUT_OF_STOCK' "
-    "WHERE ItemAvailability IS NOT NULL"
+    "SET ItemAvailability = \'OUT_OF_STOCK\' "
+    "WHERE StoreId IN UNNEST(@stores)",
+    params={'stores': [2486, 2119, 2280, 3123, 4174]},
+    param_types={'stores': spanner.param_types.Array(spanner.param_types.INT64)}
   )
 
 def main(argv):
