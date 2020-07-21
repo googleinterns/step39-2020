@@ -35,7 +35,7 @@ class StoreOverviewCards extends Component {
                     <ShoppingCartIcon color='primary' />
                   </ListItemIcon>
                   <ListItemText>
-                  Has: {store.totalItemsFound}/{this.props.numItems}
+                  Total Items Found: {store.totalItemsFound}/{this.props.numItems}
                   </ListItemText>
               </ListItem>
               <ListItem>
