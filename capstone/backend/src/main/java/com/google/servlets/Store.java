@@ -28,6 +28,8 @@ public class Store implements Comparable<Store> {
 
   private int totalItemsFound;
 
+  private int totalUnavailableItemsFound;
+
   private long storeId;
 
   private Map<String, List<Item>> items = new HashMap<String, List<Item>>();
@@ -37,6 +39,8 @@ public class Store implements Comparable<Store> {
   private String storeAddress;
 
   private String storeName;
+
+  private double distanceFromUser;
 
   public Store(long storeId, String storeName, String storeAddress) {
     this.storeId = storeId;
@@ -69,6 +73,10 @@ public class Store implements Comparable<Store> {
     return totalItemsFound;
   }
 
+  public int getTotalUnavailableItemsFound() {
+    return totalUnavailableItemsFound;
+  }
+
   public long getStoreId() {
     return storeId;
   }
@@ -79,6 +87,10 @@ public class Store implements Comparable<Store> {
 
   public double getLowestPotentialPrice() {
     return lowestPotentialPrice;
+  }
+
+  public void setDistanceFromUser(double distanceFromUser) {
+    this.distanceFromUser = distanceFromUser;
   }
 
   @Override
