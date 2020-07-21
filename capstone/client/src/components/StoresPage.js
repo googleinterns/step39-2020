@@ -55,7 +55,8 @@ class StorePage extends Component {
       } }})
         .then(res => {
           this.setState({
-            stores: res.data
+            stores: res.data,
+            originalStores : res.data
           });
         });
     }
