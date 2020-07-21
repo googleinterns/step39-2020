@@ -28,8 +28,9 @@ function WebRouter() {
       <Router>
         <Store.Container>
           <Switch>
-            <Route exact path="/" component={() => <div><HeaderWithStore title="Preferences"/><ListPageWithStore /></div>} />
-            <Route path="/stores" component={() => <div><HeaderWithStore title="Store Recommendations"/><StorePageWithStore/></div>} />
+            <Route exact path='/' component={() => <div><HeaderWithStore title="Preferences"/><ListPageWithStore /></div>} />
+            <Route path='/stores/:params' component={() => <div><HeaderWithStore title="Store Recommendations"/><StorePageWithStore/></div>} />
+            <Route path='/stores' component={() => <div><HeaderWithStore title="Store Recommendations"/><StorePageWithStore/></div>} />
           </Switch>
         </Store.Container>
       </Router>
