@@ -6,7 +6,7 @@ First, navigate to step39-2020/capstone/backend/
 python3 -m scraper.test.scraper_test
 """
 
-from .. import scraper
+from ..scrapers import scraper
 from bs4 import BeautifulSoup
 from datetime import datetime
 import json

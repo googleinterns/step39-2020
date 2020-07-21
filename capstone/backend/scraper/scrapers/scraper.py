@@ -92,6 +92,20 @@ class Scraper:
    
     return inventory_dict
 
+# TODO(carolynlwang): Add stores as a parameter, as opposed to hard-coded in params.
+def set_items_unavailable_default(transaction):
+  """ Sets all item availabilities to OUT_OF_STOCK.
+  This function marks items that no longer appear 
+  in stores out of stock, as opposed to their old 
+  availability statuses."""
+  transaction.execute_update(
+    "UPDATE Inventories "
+    "SET ItemAvailability = \'OUT_OF_STOCK\' "
+    "WHERE StoreId IN UNNEST(@stores)",
+    params={'stores': [2486, 2119, 2280, 3123, 4174]},
+    param_types={'stores': spanner.param_types.Array(spanner.param_types.INT64)}
+  )
+
 def main(argv):
   if len(argv) > 1:
     raise app.UsageError('Too many command-line arguments.')
@@ -130,6 +144,9 @@ def main(argv):
   # Get a Cloud Spanner database by ID.
   database = instance.database(_DATABASE_ID)
 
+  # Set all items to default OUT_OF_STOCK.
+  database.run_in_transaction(set_items_unavailable_default())
+
   # Keep a list of unique ItemIds
   item_ids = []
 
@@ -138,37 +155,39 @@ def main(argv):
       soup = Scraper.get_page('https://www.walmart.com/search/?grid=false&query=' + type.replace(' ', '+') + '&stores=' + store)
       items = Scraper.get_items(soup)
       for item in items:
-        # Check if we have recorded this item before.
-        if 'productId' in item:
-          if item['productId'] not in item_ids:
-            item_ids.append(item['productId'])
-            item_info = Scraper.get_item_info(item)
-            item_info['ItemType'] = type
-            with database.batch() as batch:
-              """ batch.replace() inserts or updates one or more 
-              records in a table. Existing rows have values
-              for supplied columns overwritten; ther column values
-              set to null. 
-              """
-              batch.replace(
-                table = 'Items',
-                columns = items_cols,
-                values = [
-                  item_info.values()
-                ]
-              )
-
-        inventory_info = Scraper.get_inventory_info(item)
-        inventory_info['StoreId'] = int(store)
-        inventory_info['LastUpdated'] = spanner.COMMIT_TIMESTAMP
-        with database.batch() as batch:
-          batch.replace(
-            table = 'Inventories',
-            columns = inventories_cols,
-            values = [
-              inventory_info.values()
-            ]
-          )
+        # If the price is null, do not record the item.
+        if 'primaryOffer' in item and 'offerPrice' in item['primaryOffer']:
+          # Check if we have recorded this item in another store before.
+          if 'productId' in item:
+            if item['productId'] not in item_ids:
+              item_ids.append(item['productId'])
+              item_info = Scraper.get_item_info(item)
+              item_info['ItemType'] = type
+              with database.batch() as batch:
+                """ batch.replace() inserts or updates one or more 
+                records in a table. Existing rows have values
+                for supplied columns overwritten; ther column values
+                set to null. 
+                """
+                batch.replace(
+                  table = 'Items',
+                  columns = items_cols,
+                  values = [
+                    item_info.values()
+                  ]
+                )
+        
+          inventory_info = Scraper.get_inventory_info(item)
+          inventory_info['StoreId'] = int(store)
+          inventory_info['LastUpdated'] = spanner.COMMIT_TIMESTAMP
+          with database.batch() as batch:
+            batch.replace(
+              table = 'Inventories',
+              columns = inventories_cols,
+              values = [
+                inventory_info.values()
+              ]
+            )
 
 if __name__ == '__main__':
   app.run(main)

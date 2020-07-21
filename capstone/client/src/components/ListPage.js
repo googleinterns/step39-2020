@@ -125,8 +125,13 @@ class ListPage extends Component {
       });
       return;
     }
+    let redirectAddress = '/stores/?';
+    for(let i = 0; i < arr.length; i++){
+      redirectAddress = redirectAddress + `items=${arr[i]}&`;
+    }
+    redirectAddress = redirectAddress + `latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}&distanceValue=${this.state.distanceValue}`;
     this.setState({
-      redirect : '/stores',
+      redirect : redirectAddress,
       errorMessage: null,
     });
   }

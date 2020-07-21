@@ -29,26 +29,18 @@ import './styles.css';
 class StorePage extends Component { 
     constructor(props) {
       super(props)
+      const params = new URLSearchParams(window.location.search);
       this.state = {
           originalStores: [],
           stores : [],
-          items : null,
-          distanceValue : null,
-          latitude : null,
-          longitude : null,
+          items : params.getAll('items'),
+          distanceValue : params.get('distanceValue'),
+          latitude : params.get('latitude'),
+          longitude : params.get('longitude'),
       }
       this.getStores = this.getStores.bind(this);
     }
-
-    componentWillMount = () => {
-        this.setState((props) => ({
-          items : this.props.store.state.items,
-          distanceValue : this.props.store.state.distanceValue,
-          latitude : this.props.store.state.latitude,
-          longitude : this.props.store.state.longitude,
-        }));
-    }
-
+  
     componentDidMount = () => {
       // Get Stores from database.
       this.getStores();
@@ -82,7 +74,7 @@ class StorePage extends Component {
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
             <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterchange}/>
-            <StoreOverviewCards stores={this.state.stores}/>
+            <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>
           </Grid>
           <Grid item component={Card} xs>
             <StoreDetailCards stores={this.state.stores} style={{display: 'none'}}/>
