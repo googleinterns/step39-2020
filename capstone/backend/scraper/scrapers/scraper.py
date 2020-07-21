@@ -92,6 +92,7 @@ class Scraper:
    
     return inventory_dict
 
+# TODO(carolynlwang): Add stores as a parameter, as opposed to hard-coded in params.
 def set_items_unavailable_default(transaction):
   """ Sets all item availabilities to OUT_OF_STOCK.
   This function marks items that no longer appear 
@@ -144,7 +145,7 @@ def main(argv):
   database = instance.database(_DATABASE_ID)
 
   # Set all items to default OUT_OF_STOCK.
-  database.run_in_transaction(set_items_unavailable_default)
+  database.run_in_transaction(set_items_unavailable_default())
 
   # Keep a list of unique ItemIds
   item_ids = []
