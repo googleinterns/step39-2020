@@ -15,7 +15,10 @@
  */
 
 import React, { Component } from 'react';
-import { Typography, List, ListItem, ListItemText, Button } from '@material-ui/core';
+import { Typography, List, ListItem, ListItemIcon, ListItemText, Button } from '@material-ui/core';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import DriveEtaIcon from '@material-ui/icons/DriveEta';
 
 import { StoresContext } from './StoresProvider.js';
 import './styles.css';
@@ -24,20 +27,29 @@ class StoreOverviewCards extends Component {
 
     render() {
         const storeOverviewCards = this.props.stores.map((store, index) => (
-            <div>
-              <Typography variant="h6">{store.storeName}</Typography>
+            <div id="store-overview-card">
+              <Typography variant="h6" component="h6">{store.storeName}</Typography>
               <List>
               <ListItem>
+                  <ListItemIcon>
+                    <ShoppingCartIcon color='primary' />
+                  </ListItemIcon>
                   <ListItemText>
-                  Has: {store.totalItemsFound}/6
+                  Total Items Found: {store.totalItemsFound}/{this.props.numItems}
                   </ListItemText>
               </ListItem>
               <ListItem>
+                  <ListItemIcon>
+                    <AttachMoneyIcon color='primary' />
+                  </ListItemIcon>
                   <ListItemText>
                   Lowest Potential Price: ${store.lowestPotentialPrice}
                   </ListItemText>
               </ListItem>
               <ListItem>
+                  <ListItemIcon>
+                    <DriveEtaIcon color='primary' />
+                  </ListItemIcon>
                   <ListItemText>
                   Distance: 5 miles
                   </ListItemText>
@@ -45,7 +57,7 @@ class StoreOverviewCards extends Component {
               </List>
               <StoresContext.Consumer>
                   {(context) => (
-                    <Button variant="contained" color="primary" onClick={() => 
+                    <Button id="show-more-info" variant="contained" color="primary" onClick={() => 
                       context.setStore(index)}>
                     Show more Information
                     </Button>

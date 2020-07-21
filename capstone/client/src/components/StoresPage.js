@@ -73,7 +73,7 @@ class StorePage extends Component {
         <StoresProvider>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
-            <StoreOverviewCards stores={this.state.stores}/>
+            <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>
           </Grid>
           <Grid item component={Card} xs>
             <StoreDetailCards stores={this.state.stores} style={{display: 'none'}}/>
