@@ -53,7 +53,7 @@ class FilterStores extends Component {
   }
 
   filterStores(selectedFilters) {
-    const stores = this.state.originalStores.filter(store => {
+    const stores = this.state.originalStores.filter((store) => {
       const storeItems = new Set();
       store.items.forEach((item) => storeItems.add(item.type));
       let containsAll = true;
