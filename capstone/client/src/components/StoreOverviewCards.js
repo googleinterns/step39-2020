@@ -39,7 +39,7 @@ class StoreOverviewCards extends Component {
               </ListItem>
               <ListItem>
                   <ListItemText>
-                  Distance: 5 miles
+                  Distance: {store.distance}
                   </ListItemText>
               </ListItem>
               </List>
