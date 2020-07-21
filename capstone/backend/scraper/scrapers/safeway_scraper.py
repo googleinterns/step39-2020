@@ -21,7 +21,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from write_to_spanner import write_item_info_to_inventory_table, write_item_info_to_items_table, write_store_info_to_stores_table
 
 FLAGS = flags.FLAGS
-flags.DEFINE_boolean('test', False, 'Doesn\'t write items to Spaner.')
+flags.DEFINE_boolean('test', False, 'Doesn\'t write items to Spanner.')
 
 AVALIBILITY_KEY = 'availability'
 CHROME_DRIVER_PATH = '/Users/anudeepyakkala/Downloads/chromedriver'
