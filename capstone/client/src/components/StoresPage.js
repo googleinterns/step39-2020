@@ -47,8 +47,11 @@ class StorePage extends Component {
           latitude : this.props.store.state.latitude,
           longitude : this.props.store.state.longitude,
         }));
-        // Get Stores from database.
-        this.getStores();
+    }
+
+    componentDidMount = () => {
+      // Get Stores from database.
+      this.getStores();
     }
 
     getStores = () => {
