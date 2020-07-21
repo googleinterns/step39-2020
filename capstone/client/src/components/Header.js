@@ -15,10 +15,9 @@
  */
 
 import React, { Component } from 'react';
-import { AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
-import { Menu } from '@material-ui/icons';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { withRouter } from "react-router-dom";
 
@@ -82,9 +81,6 @@ class Header extends Component {
           <div>
             <AppBar position="static">
               <Toolbar>
-                <IconButton edge="start" color="inherit" aria-label="menu">
-                  <Menu />
-                </IconButton>
                 <Typography id="typography" variant="h6">
                   {this.props.title}
                 </Typography>

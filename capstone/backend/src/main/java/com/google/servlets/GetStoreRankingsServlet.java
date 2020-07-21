@@ -106,8 +106,8 @@ public class GetStoreRankingsServlet extends HttpServlet {
                       (distances.get(store.getStoreAddress())
                           > (userPreferences.getDistancePreference() / MILES_METERS_CONVERSION)))
               .collect(Collectors.toList());
+      setDistances(stores, distances);
     }
-    setDistances(stores, distances);
     rankStores(stores, distances);
     response.setContentType("application/json");
     response.setStatus(HttpServletResponse.SC_OK);
