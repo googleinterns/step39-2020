@@ -34,7 +34,7 @@ public class UserPreferences {
   }
 
   public Pair<Double, Double> getLocation() {
-    return Pair.of(longitude, latitude);
+    return Pair.of(latitude, longitude);
   }
 
   public List<String> getSelectedItems() {
