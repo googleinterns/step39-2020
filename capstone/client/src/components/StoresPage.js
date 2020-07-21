@@ -15,10 +15,11 @@
  */
 
 import axios from 'axios';
-import { Card, Grid} from '@material-ui/core';
+import { Card, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import { Store } from './Store';
+import FilterStores from './FilterStores.js';
 import StoreDetailCards from './StoreDetailCards.js';
 import StoreOverviewCards from './StoreOverviewCards.js';
 import { StoresProvider } from './StoresProvider.js';
@@ -30,6 +31,7 @@ class StorePage extends Component {
       super(props)
       const params = new URLSearchParams(window.location.search);
       this.state = {
+          originalStores: [],
           stores : [],
           items : params.getAll('items'),
           distanceValue : params.get('distanceValue'),
@@ -38,7 +40,7 @@ class StorePage extends Component {
       }
       this.getStores = this.getStores.bind(this);
     }
-
+  
     componentDidMount = () => {
       // Get Stores from database.
       this.getStores();
@@ -58,6 +60,12 @@ class StorePage extends Component {
         });
     }
 
+  handleFilterchange = (stores) => {
+    this.setState({
+      stores,
+    });
+  }
+
   render() {
     return(
       <div>
@@ -65,6 +73,7 @@ class StorePage extends Component {
         <StoresProvider>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
+            <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterchange}/>
             <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>
           </Grid>
           <Grid item component={Card} xs>
