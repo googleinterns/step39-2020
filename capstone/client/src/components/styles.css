@@ -24,6 +24,10 @@ h1 {
   text-align: center;
 }
 
+h6 {
+  font-weight: 600;
+}
+
 /* Header start */
 
 #typography {
@@ -67,6 +71,20 @@ h1 {
 }
 
 /* ListPage end */
+
+/* StoreOverviewCards start */
+
+#show-more-info {
+  margin-left: 20%;
+  margin-right: 20%;
+  width: 60%;
+}
+
+#store-overview-card {
+  padding: 20px;
+}
+
+/* StoreOverviewCards end */
 
 /* StoreDetailCards start */
 
