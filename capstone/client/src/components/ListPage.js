@@ -124,7 +124,7 @@ class ListPage extends Component {
    */
   onSubmit = () => {
     if(this.state.displayZipCodeInput) {
-      if(this.state.zipCode.length !== 5 || isNaN(this.state.zipCode)){
+      if(!this.state.zipCode || this.state.zipCode.length !== 5 || isNaN(this.state.zipCode)){
         this.setState({
           errorMessage: "Invalid Zip Code"
         });
@@ -371,10 +371,9 @@ class ListPage extends Component {
               {this.state.selectedItemsList}
             </List>
           </Grid>
-        </Grid>
-        {this.state.displayZipCodeInput ? 
+        </Grid> 
           <TextField display={this.state.location} onChange={this.zipCodeChange} error={this.state.zipCodeError} 
-            helperText={this.state.zipCodeError ? 'Invalid Zip Code' : ' ' } id="filled-basic" label="Zip Code" variant="filled" /> : null}
+            helperText={this.state.zipCodeError ? 'Invalid Zip Code' : ' ' } id="filled-basic" label="Zip Code" variant="filled" />
         <br></br>
         <br></br>
         <Button id="submit-button" onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
