@@ -47,7 +47,7 @@ class StorePage extends Component {
     }
 
     getStores = () => {
-      axios.get('/api/v1/get-store-rankings', { params : { 'user-preferences' : {
+      axios.get('https://step39-2020.uc.r.appspot.com/api/v1/get-store-rankings', { params : { 'user-preferences' : {
         latitude : this.state.latitude,
         longitude : this.state.longitude,
         distancePreference : this.state.distanceValue,
