@@ -63,13 +63,12 @@ class StorePage extends Component {
         });
     }
 
+  handleFilterChange = (stores) => {
     goBack = () => {
       this.setState({
         redirect : "/",
       });
     }
-
-  handleFilterchange = (stores) => {
     this.setState({
       stores,
     });
@@ -92,7 +91,7 @@ class StorePage extends Component {
         <Button id="back-button" onClick={this.goBack} color="primary" variant="contained">Back To List</Button>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
-            <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterchange}/>
+            <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterChange}/>
             {overviewCards}
           </Grid>
           <Grid item component={Card} xs>
