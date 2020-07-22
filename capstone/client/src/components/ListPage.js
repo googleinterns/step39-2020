@@ -44,7 +44,7 @@ class ListPage extends Component {
       listName: null,
       userId: -1,
       displayZipCodeInput: false,
-      location: {
+      location: { // San Jose by default
         latitude: 37.338207,
         longitude: -121.886330,
       },
