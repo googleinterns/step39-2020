@@ -25,6 +25,8 @@ import { Alert } from '@material-ui/lab';
 
 import { Store } from './Store';
 
+const MAX_JAVA_INTEGER = 2147483647;
+
 /*
  * Displays a checkbox list containing the items returned from the Items API. 
  * The selected items are displayed below when the form is submitted. 
@@ -319,7 +321,7 @@ class ListPage extends Component {
               <FormControlLabel
                 control={<Radio name={"None"}/>}
                 label={"None"}
-                value={Number.MAX_SAFE_INTEGER}
+                value={MAX_JAVA_INTEGER}
                 key={"None"}
                 onChange={this.handleDistanceChange}
                />
