@@ -44,7 +44,7 @@ class StoreDetailCards extends Component {
                 <div>{Object.keys(store.items[itemType]).map((index, i) => (
                   <ListItem key = {i}>
                   <ListItemText>
-                    {store.items[itemType][index].itemName} (${store.items[itemType][index].itemPrice})
+                    {store.items[itemType][index].itemName} (${(store.items[itemType][index].itemPrice-.005).toFixed(2)})
                   </ListItemText>
                 </ListItem>
                 ))}
