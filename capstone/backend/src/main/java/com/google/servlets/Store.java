@@ -54,6 +54,7 @@ public class Store implements Comparable<Store> {
     if (items.containsKey(itemType)) {
       items.get(itemType).add(newItem);
       if (itemPrice < typeToPrice.get(itemType)) {
+        lowestPotentialPrice -= typeToPrice.get(itemType);
         typeToPrice.put(itemType, itemPrice);
         lowestPotentialPrice += itemPrice;
       }
