@@ -125,6 +125,7 @@ class ListPage extends Component {
    onSubmit = async () => {
     var latit = this.state.location.latitude;
     var longi = this.state.location.longitude;
+    var method = "location";
     if(this.state.zipCodeRequired && (!this.state.zipCode || this.state.zipCode.length !== 5 || isNaN(this.state.zipCode))){
       this.setState({
         errorMessage: "Invalid Zip Code"
@@ -136,6 +137,7 @@ class ListPage extends Component {
       const { lat, lng } = response.results[0].geometry.location;
       latit = lat;
       longi = lng;
+      method = "zipcode";
       this.setState({
         location : {latitude: lat, longitude: lng}
       });
@@ -160,7 +162,10 @@ class ListPage extends Component {
     for(let i = 0; i < arr.length; i++){
       redirectAddress = redirectAddress + `items=${arr[i]}&`;
     }
-    redirectAddress = redirectAddress + `latitude=${latit}&longitude=${longi}&distanceValue=${this.state.distanceValue}`;
+    redirectAddress = redirectAddress + `latitude=${latit}&longitude=${longi}&distanceValue=${this.state.distanceValue}&method=${method}`;
+    if(this.state.zipCode){
+      redirectAddress = redirectAddress + `&zipCode=${this.state.zipCode}`;
+    }
     this.setState({
       redirect : redirectAddress,
       errorMessage: null,

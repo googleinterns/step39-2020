@@ -24,6 +24,11 @@ h1 {
   text-align: center;
 }
 
+h5 {
+  color: #111;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
 h6 {
   font-weight: 600;
 }
