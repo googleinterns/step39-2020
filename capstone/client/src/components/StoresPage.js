@@ -38,6 +38,8 @@ class StorePage extends Component {
           distanceValue : params.get('distanceValue'),
           latitude : params.get('latitude'),
           longitude : params.get('longitude'),
+          method : params.get('method'),
+          zipCode : params.get('zipCode'),
           redirect : null,
       }
       this.getStores = this.getStores.bind(this);
@@ -62,14 +64,13 @@ class StorePage extends Component {
           });
         });
     }
+  goBack = () => {
+    this.setState({
+      redirect : "/",
+    });
+  }
 
-    goBack = () => {
-      this.setState({
-        redirect : "/",
-      });
-    }
-
-  handleFilterchange = (stores) => {
+  handleFilterChange = (stores) => {
     this.setState({
       stores,
     });
@@ -85,14 +86,17 @@ class StorePage extends Component {
     const overviewCards = (this.state.stores.length === 0) ? <CircularProgress id="stores-loading" color="action" /> : 
     <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>;
 
+  const method = (this.state.method === "location") ? <h5>Calculated from tracked location</h5> : <h5>Calculated from Zip Code: {this.state.zipCode}</h5>
+
     return(
       <div id="stores-page-container">
         <h1>Store Recommendations</h1>
+        {method}
         <StoresProvider>
         <Button id="back-button" onClick={this.goBack} color="primary" variant="contained">Back To List</Button>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
-            <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterchange}/>
+            <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterChange}/>
             {overviewCards}
           </Grid>
           <Grid item component={Card} xs>
