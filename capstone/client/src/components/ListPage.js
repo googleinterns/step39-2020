@@ -17,7 +17,7 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
-import { Button, ButtonGroup, Card, Checkbox, Dialog, DialogActions,DialogContent, DialogContentText, 
+import { Button, ButtonGroup, Card, Checkbox, CircularProgress, Dialog, DialogActions,DialogContent, DialogContentText, 
   DialogTitle, FormGroup, FormControlLabel, Grid, List,
   Radio, RadioGroup, TextField } 
   from '@material-ui/core';
@@ -279,7 +279,7 @@ class ListPage extends Component {
     <Button name={index}>{userList.displayName}</Button>
     ));
 
-    const checkboxItems = this.state.items.map((item) => (
+    const checkboxItems = (this.state.items.length === 0) ? <CircularProgress id="loading-spinner" color="action" /> : this.state.items.map((item) => (
       <FormControlLabel
         control={<Checkbox name={item} ref={component => this.itemsToComponent[item] = component} data-testid='checkbox item'/>}
         label={item}
