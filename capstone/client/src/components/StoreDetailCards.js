@@ -15,7 +15,10 @@
  */
 
 import React, { Component } from 'react';
-import { Card, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+
+import { GoogleApiWrapper, Map } from 'google-maps-react';
+import { Accordion,  AccordionDetails, AccordionSummary, Card, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { StoresContext } from './StoresProvider.js';
 import StoreMaps from './StoreMaps.js';
@@ -32,19 +35,25 @@ class StoreDetailCards extends Component {
             <StoreMaps store={store}/>
           </Grid>
           <Grid item component={Card} xs>
-            <Typography variant='subtitle1'>Has:</Typography>
-            <List>
+            <Typography variant='subtitle1'>This store has the following items:</Typography>
               {Object.keys(store.items).map((itemType, i) => (
-                <div>{Object.keys(store.items[itemType]).map((index, i) => (
-                  <ListItem key = {i}>
-                  <ListItemText>
-                    {store.items[itemType][index].itemName} (${(store.items[itemType][index].itemPrice-.005).toFixed(2)})
-                  </ListItemText>
-                </ListItem>
-                ))}
-                </div>
+                <Accordion>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant='subtitle1'>{itemType}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <List>
+                    {Object.keys(store.items[itemType].sort((a, b) => a.itemPrice - b.itemPrice)).map((index, i) => (
+                      <ListItem key = {i}>
+                        <ListItemText>
+                          {store.items[itemType][index].itemName} (${(store.items[itemType][index].itemPrice-.005).toFixed(2)})
+                        </ListItemText>
+                      </ListItem>
+                    ))}
+                    </List>
+                  </AccordionDetails>
+                </Accordion>
               ))}
-            </List>
           </Grid>
         </Grid>
       </div>
