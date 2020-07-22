@@ -103,8 +103,8 @@ public class GetStoreRankingsServlet extends HttpServlet {
           stores.stream()
               .filter(
                   store ->
-                      (distances.get(store.getStoreAddress())
-                          > (userPreferences.getDistancePreference() / MILES_METERS_CONVERSION)))
+                      ((distances.get(store.getStoreAddress()) / MILES_METERS_CONVERSION)
+                          < userPreferences.getDistancePreference()))
               .collect(Collectors.toList());
       setDistances(stores, distances);
     }
@@ -180,7 +180,6 @@ public class GetStoreRankingsServlet extends HttpServlet {
       ub.addParameter(ORIGINS_PARAM, userLocation.getLeft() + "," + userLocation.getRight());
       ub.addParameter(DESTINATIONS_PARAM, sb.toString());
       ub.addParameter(API_KEY_PARAM, API_KEY);
-      System.out.println(ub.toString());
     } catch (URISyntaxException e) {
       return new HashMap<>();
     }
