@@ -76,6 +76,20 @@ h6 {
 
 /* ListPage end */
 
+/* StoresPage start */
+
+#stores-page-container {
+  text-align: center;
+  color: azure;
+}
+
+#back-button {
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+/* StoresPage end */
+
 /* StoreOverviewCards start */
 
 #show-more-info {
