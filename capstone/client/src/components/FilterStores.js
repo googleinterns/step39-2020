@@ -125,7 +125,7 @@ class FilterStores extends Component {
   }
 
   render() {
-    const filter = this.state.items.map(item => (this.state.selectedFilters.has(item) ?
+    const filter = (this.state.items.length > 1) ? this.state.items.map(item => (this.state.selectedFilters.has(item) ?
       <Chip 
         key={item}
         label={item}
@@ -139,7 +139,7 @@ class FilterStores extends Component {
         clickable
         onClick={this.onFilterAdd}
       />
-    ));
+    )) : null;
 
     if(!this.state.maxSet && this.props.originalStores.length > 0){
       this.getMaxCost();
