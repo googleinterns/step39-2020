@@ -15,7 +15,8 @@
  */
 
 import React, { Component } from 'react';
-import { Chip } from '@material-ui/core';
+import { Chip, Input, Grid, Slider } from '@material-ui/core';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
 class FilterStores extends Component {
   constructor(props) {
@@ -24,9 +25,62 @@ class FilterStores extends Component {
       originalStores: this.props.originalStores,
       items: this.props.items,
       selectedFilters: new Set(),
+      maxPrice : 0,
+      setPrice : 0,
+      maxSet : false,
     }
     this.onFilterAdd = this.onFilterAdd.bind(this);
     this.onFilterRemove = this.onFilterRemove.bind(this);
+    this.onPriceChange = this.onPriceChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
+  }
+
+  getMaxCost() {
+    var max = this.props.originalStores[0].lowestPotentialPrice;
+    for(var store in this.props.originalStores) {
+      if(store.lowestPotentialPrice > max) {
+        max = store.lowestPotentialPrice;
+      }
+    }
+    this.setState({
+      maxPrice : max.toFixed(2),
+      setPrice : max.toFixed(2)
+    });
+  }
+
+  onPriceChange(event, newValue) {
+    this.setState({
+      setPrice : newValue,
+    });
+    const stores = this.filterStores(this.state.selectedFilters);
+    this.setState({
+      stores,
+    });
+    this.props.onFilterChange(stores);
+  }
+
+  handleInputChange(event) {
+    this.setState({
+      setPrice : event.target.value === '' ? 0 : Number(event.target.value)
+    });
+    const stores = this.filterStores(this.state.selectedFilters);
+    this.setState({
+      stores,
+    });
+    this.props.onFilterChange(stores);
+  }
+
+  handleBlur() {
+    if(this.state.setPrice < 0) {
+      this.setState({
+        setPrice : 0,
+      });
+    } else if (this.state.setPrice > this.state.maxPrice) {
+      this.setState({
+        setPrice : this.state.maxPrice,
+      });
+    }
   }
 
   onFilterAdd(event) {
@@ -54,6 +108,9 @@ class FilterStores extends Component {
 
   filterStores(selectedFilters) {
     const stores = this.props.originalStores.filter((store) => {
+      if(store.lowestPotentialPrice > this.state.setPrice){
+        return false;
+      }
       const storeItems = new Set();
       Object.keys(store.items).forEach((item) => storeItems.add(item));
       let containsAll = true;
@@ -84,8 +141,48 @@ class FilterStores extends Component {
       />
     ));
 
+    if(!this.state.maxSet && this.props.originalStores.length > 0){
+      this.getMaxCost();
+      this.setState({
+        maxSet : true,
+      });
+    }
+
     return(
+      <Grid>
       <div>{filter}</div>
+      <div>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item>
+            <AttachMoneyIcon color='primary' />
+          </Grid>
+          <Grid item xs>
+            <Slider
+                  value={this.state.setPrice}
+                  onChange={this.onPriceChange}
+                  aria-labelledby="input-slider"
+                  color="action"
+                  max={this.state.maxPrice}
+            />
+          </Grid>
+          <Grid item>
+            <Input
+              value={this.state.setPrice}
+              margin="dense"
+              onChange={this.handleInputChange}
+              onBlur={this.handleBlur}
+              inputProps={{
+                step: this.state.maxPrice/10,
+                min: 0,
+                max: this.state.maxPrice,
+                type: 'number',
+                'aria-labelledby': 'input-slider',
+              }}
+            />
+        </Grid>
+        </Grid>
+      </div>
+      </Grid>
     );
   }
 }

@@ -84,7 +84,7 @@ class StorePage extends Component {
       }}/>
     }
 
-    const overviewCards = (this.state.stores.length === 0) ? <CircularProgress id="stores-loading" color="action" /> : 
+    const overviewCards = (this.state.originalStores.length === 0) ? <CircularProgress id="stores-loading" color="action" /> : 
     <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>;
 
   const method = (this.state.method === "location") ? <h5>Calculated from tracked location</h5> : <h5>Calculated from Zip Code: {this.state.zipCode}</h5>
