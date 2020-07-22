@@ -44,7 +44,10 @@ class ListPage extends Component {
       listName: null,
       userId: -1,
       displayZipCodeInput: false,
-      location: null,
+      location: { // San Jose by default
+        latitude: 37.338207,
+        longitude: -121.886330,
+      },
       listSaveDialog: {
         display: false,
       },
@@ -298,6 +301,8 @@ class ListPage extends Component {
         />
     ));
 
+    const saveButton = (this.state.userId === -1) ? <div></div> : <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>;
+
     return (
       <div id="list-page-container">
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
@@ -318,7 +323,7 @@ class ListPage extends Component {
             <FormGroup id="items-list">
               {checkboxItems}
             </FormGroup>
-            <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>
+            {saveButton}
             <List>
               {this.state.selectedItemsList}
             </List>

@@ -15,7 +15,8 @@
  */
 
 import axios from 'axios';
-import { Card, Grid } from '@material-ui/core';
+import {Redirect} from 'react-router-dom';
+import { Button, Card, CircularProgress, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import { Store } from './Store';
@@ -37,6 +38,7 @@ class StorePage extends Component {
           distanceValue : params.get('distanceValue'),
           latitude : params.get('latitude'),
           longitude : params.get('longitude'),
+          redirect : null,
       }
       this.getStores = this.getStores.bind(this);
     }
@@ -62,20 +64,35 @@ class StorePage extends Component {
     }
 
   handleFilterChange = (stores) => {
+    goBack = () => {
+      this.setState({
+        redirect : "/",
+      });
+    }
     this.setState({
       stores,
     });
   }
 
   render() {
+    if(this.state.redirect) {
+      return <Redirect to={{
+        pathname : this.state.redirect,
+      }}/>
+    }
+
+    const overviewCards = (this.state.stores.length === 0) ? <CircularProgress id="stores-loading" color="action" /> : 
+    <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>;
+
     return(
-      <div>
+      <div id="stores-page-container">
         <h1>Store Recommendations</h1>
         <StoresProvider>
+        <Button id="back-button" onClick={this.goBack} color="primary" variant="contained">Back To List</Button>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
             <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterChange}/>
-            <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>
+            {overviewCards}
           </Grid>
           <Grid item component={Card} xs>
             <StoreDetailCards stores={this.state.stores} style={{display: 'none'}}/>

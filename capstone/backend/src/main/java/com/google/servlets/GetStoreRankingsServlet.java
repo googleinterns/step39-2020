@@ -103,8 +103,8 @@ public class GetStoreRankingsServlet extends HttpServlet {
           stores.stream()
               .filter(
                   store ->
-                      (distances.get(store.getStoreAddress())
-                          > (userPreferences.getDistancePreference() / MILES_METERS_CONVERSION)))
+                      ((distances.get(store.getStoreAddress()) / MILES_METERS_CONVERSION)
+                          < userPreferences.getDistancePreference()))
               .collect(Collectors.toList());
       setDistances(stores, distances);
     }
@@ -129,9 +129,9 @@ public class GetStoreRankingsServlet extends HttpServlet {
         new Comparator<Store>() {
           @Override
           public int compare(Store s1, Store s2) {
-            if (s1.getNumberOfItemsFound() > s2.getNumberOfItemsFound()) {
+            if (s1.getNumberOfItemsFound() < s2.getNumberOfItemsFound()) {
               return 1;
-            } else if (s1.getNumberOfItemsFound() < s2.getNumberOfItemsFound()) {
+            } else if (s1.getNumberOfItemsFound() > s2.getNumberOfItemsFound()) {
               return -1;
             }
             double s1StoreScore =
@@ -152,9 +152,9 @@ public class GetStoreRankingsServlet extends HttpServlet {
                       / AVERAGE_MILES_PER_GALLON
                       * AVERAGE_GAS_PRICE;
             }
-            if (s1StoreScore < s2StoreScore) {
+            if (s1StoreScore > s2StoreScore) {
               return -1;
-            } else if (s1StoreScore > s2StoreScore) {
+            } else if (s1StoreScore < s2StoreScore) {
               return 1;
             } else {
               return 0;
@@ -180,7 +180,6 @@ public class GetStoreRankingsServlet extends HttpServlet {
       ub.addParameter(ORIGINS_PARAM, userLocation.getLeft() + "," + userLocation.getRight());
       ub.addParameter(DESTINATIONS_PARAM, sb.toString());
       ub.addParameter(API_KEY_PARAM, API_KEY);
-      System.out.println(ub.toString());
     } catch (URISyntaxException e) {
       return new HashMap<>();
     }

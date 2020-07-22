@@ -113,7 +113,7 @@ public class LibraryFunctions {
       throws SpannerException {
     DatabaseClient dbClient = initClient();
     Mutation mutation =
-        Mutation.newInsertBuilder(USERS)
+        Mutation.newInsertOrUpdateBuilder(USERS)
             .set(USER_ID)
             .to(userId)
             .set(USERNAME)
