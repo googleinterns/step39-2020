@@ -28,6 +28,7 @@ import { Store } from './Store';
 import Geocode from "react-geocode";
 import APIKey from './APIKey.js';
 
+const MAX_JAVA_INTEGER = 2147483647;
 
 /*
  * Displays a checkbox list containing the items returned from the Items API. 
@@ -342,8 +343,8 @@ class ListPage extends Component {
 
     const distances = [2, 4, 6, 8, 10, 12, 14].map((item) => (
       <FormControlLabel
-        control={<Radio name={item + " mile radius"}/>}
-        label={item + " mile radius"}
+        control={<Radio name={item + " miles from current location"}/>}
+        label={item + " miles from current location"}
         value={item}
         key={item}
         onChange={this.handleDistanceChange}
@@ -362,9 +363,16 @@ class ListPage extends Component {
         </ButtonGroup>
         <Grid container alignItems="stretch">
           <Grid id="distance-list-container" item component={Card} xs>
-            <p>I would like to choose from stores in a</p>
+            <p>Select a distance preference</p>
             <RadioGroup id="distance-list" value={this.state.distanceValue}>
-              {distances} 
+              {distances}
+              <FormControlLabel
+                control={<Radio name={"None"}/>}
+                label={"None"}
+                value={MAX_JAVA_INTEGER}
+                key={"None"}
+                onChange={this.handleDistanceChange}
+               />
             </RadioGroup>
           </Grid>
           <Grid id="items-list-container" item component={Card} xs>
