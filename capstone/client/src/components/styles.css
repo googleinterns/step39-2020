@@ -78,6 +78,11 @@ h6 {
 
 /* StoresPage start */
 
+#stores-loading {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 #stores-page-container {
   text-align: center;
   color: azure;
