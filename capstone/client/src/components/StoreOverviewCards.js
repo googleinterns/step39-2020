@@ -43,7 +43,7 @@ class StoreOverviewCards extends Component {
                     <AttachMoneyIcon color='primary' />
                   </ListItemIcon>
                   <ListItemText>
-                  Lowest Potential Price: ${store.lowestPotentialPrice}
+                  Lowest Potential Price: ${(store.lowestPotentialPrice-.005).toFixed(2)}
                   </ListItemText>
               </ListItem>
               <ListItem>
