@@ -60,6 +60,7 @@ class ListPage extends Component {
       zipCodeError: true,
     }
     Geocode.setApiKey(APIKey.APIKey());
+    this.zipCodeRegex = new RegExp("^\\d{5}$");
   }
 
   componentWillMount = () => {
@@ -126,7 +127,7 @@ class ListPage extends Component {
     var latit = this.state.location.latitude;
     var longi = this.state.location.longitude;
     var method = "location";
-    if(this.state.zipCodeRequired && (!this.state.zipCode || this.state.zipCode.length !== 5 || isNaN(this.state.zipCode))){
+    if(this.state.zipCodeRequired && (!this.state.zipCode || this.zipCodeRegex.test(this.state.zipCode))){
       this.setState({
         errorMessage: "Invalid Zip Code"
       });
@@ -295,7 +296,7 @@ class ListPage extends Component {
   }
 
   zipCodeChange = (event) => {
-    if (event.target.value.length === 5 && !isNaN(this.state.zipCode)) {
+    if (this.zipCodeRegex.test(event.target.value)) {
       this.setState({
         zipCodeError : false,
       })
