@@ -57,6 +57,7 @@ class ListPage extends Component {
       },
       redirect : null,
       zipCode : null,
+      zipCodeError: true,
     }
     Geocode.setApiKey(APIKey.APIKey());
   }
@@ -289,6 +290,15 @@ class ListPage extends Component {
   }
 
   zipCodeChange = (event) => {
+    if (event.target.value.length === 5 && !isNaN(this.state.zipCode)) {
+      this.setState({
+        zipCodeError : false,
+      })
+    } else {
+      this.setState({
+        zipCodeError : true,
+      });
+    }
     this.setState({
       zipCode : event.target.value,
     });
@@ -362,7 +372,9 @@ class ListPage extends Component {
             </List>
           </Grid>
         </Grid>
-        {this.state.displayZipCodeInput ? <TextField display={this.state.location} onChange={this.zipCodeChange} id="filled-basic" label="Zip Code" variant="filled" /> : null}
+        {this.state.displayZipCodeInput ? 
+          <TextField display={this.state.location} onChange={this.zipCodeChange} error={this.state.zipCodeError} 
+            helperText={this.state.zipCodeError ? 'Invalid Zip Code' : ' ' } id="filled-basic" label="Zip Code" variant="filled" /> : null}
         <br></br>
         <br></br>
         <Button id="submit-button" onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
