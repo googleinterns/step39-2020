@@ -47,7 +47,7 @@ class ListPage extends Component {
       listId: -1,
       listName: null,
       userId: -1,
-      displayZipCodeInput: false,
+      zipCodeRequired: false,
       location: { // San Jose by default
         latitude: 37.338207,
         longitude: -121.886330,
@@ -82,7 +82,7 @@ class ListPage extends Component {
       });
     }, () => {
       this.setState({
-        displayZipCodeInput: true,
+        zipCodeRequired: true,
       });
     });
     if(this.state.userId !== -1) {
@@ -122,27 +122,27 @@ class ListPage extends Component {
    * @TODO Change this function to make a GET request to obtain store recommendations based 
    * on the selected items.
    */
-  onSubmit = () => {
-    if(this.state.displayZipCodeInput) {
-      if(!this.state.zipCode || this.state.zipCode.length !== 5 || isNaN(this.state.zipCode)){
-        this.setState({
-          errorMessage: "Invalid Zip Code"
-        });
-        return;
-      }
-      Geocode.fromAddress(this.state.zipCode).then(
-        response => {
-          const { lat, lng } = response.results[0].geometry.location;
-          this.setState({
-            location : {latitude: lat, longitude: lng}
-          });
-        },
-        error => {
-          this.setState({
-            errorMessage: "Invalid Zip Code"
-          });
-        }
-      );
+   onSubmit = async () => {
+    var latit = this.state.location.latitude;
+    var longi = this.state.location.longitude;
+    if(this.state.zipCodeRequired && (!this.state.zipCode || this.state.zipCode.length !== 5 || isNaN(this.state.zipCode))){
+      this.setState({
+        errorMessage: "Invalid Zip Code"
+      });
+      return;
+    }
+    try {
+      let response = await Geocode.fromAddress(this.state.zipCode);
+      const { lat, lng } = response.results[0].geometry.location;
+      latit = lat;
+      longi = lng;
+      this.setState({
+        location : {latitude: lat, longitude: lng}
+      });
+    } catch(e) {
+      this.setState({
+        errorMessage: "Invalid Zip Code"
+      });
     }
     const arr = [...this.selectedItems];
     this.props.store.set('items')(arr);
@@ -160,7 +160,7 @@ class ListPage extends Component {
     for(let i = 0; i < arr.length; i++){
       redirectAddress = redirectAddress + `items=${arr[i]}&`;
     }
-    redirectAddress = redirectAddress + `latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}&distanceValue=${this.state.distanceValue}`;
+    redirectAddress = redirectAddress + `latitude=${latit}&longitude=${longi}&distanceValue=${this.state.distanceValue}`;
     this.setState({
       redirect : redirectAddress,
       errorMessage: null,
