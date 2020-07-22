@@ -25,6 +25,11 @@ import { Alert } from '@material-ui/lab';
 
 import { Store } from './Store';
 
+import Geocode from "react-geocode";
+import APIKey from './APIKey.js';
+
+const MAX_JAVA_INTEGER = 2147483647;
+
 /*
  * Displays a checkbox list containing the items returned from the Items API. 
  * The selected items are displayed below when the form is submitted. 
@@ -43,7 +48,7 @@ class ListPage extends Component {
       listId: -1,
       listName: null,
       userId: -1,
-      displayZipCodeInput: false,
+      zipCodeRequired: false,
       location: { // San Jose by default
         latitude: 37.338207,
         longitude: -121.886330,
@@ -52,7 +57,11 @@ class ListPage extends Component {
         display: false,
       },
       redirect : null,
+      zipCode : null,
+      zipCodeError: true,
     }
+    Geocode.setApiKey(APIKey.APIKey());
+    this.zipCodeRegex = new RegExp("^\\d{5}$");
   }
 
   componentWillMount = () => {
@@ -75,7 +84,7 @@ class ListPage extends Component {
       });
     }, () => {
       this.setState({
-        displayZipCodeInput: true,
+        zipCodeRequired: true,
       });
     });
     if(this.state.userId !== -1) {
@@ -115,7 +124,30 @@ class ListPage extends Component {
    * @TODO Change this function to make a GET request to obtain store recommendations based 
    * on the selected items.
    */
-  onSubmit = () => {
+   onSubmit = async () => {
+    var latit = this.state.location.latitude;
+    var longi = this.state.location.longitude;
+    var method = "location";
+    if(this.state.zipCodeRequired && (!this.state.zipCode || this.zipCodeRegex.test(this.state.zipCode))){
+      this.setState({
+        errorMessage: "Invalid Zip Code"
+      });
+      return;
+    }
+    try {
+      const response = await Geocode.fromAddress(this.state.zipCode);
+      const { lat, lng } = response.results[0].geometry.location;
+      latit = lat;
+      longi = lng;
+      method = "zipcode";
+      this.setState({
+        location : {latitude: lat, longitude: lng}
+      });
+    } catch(e) {
+      this.setState({
+        errorMessage: "Invalid Zip Code"
+      });
+    }
     const arr = [...this.selectedItems];
     this.props.store.set('items')(arr);
     this.props.store.set('latitude')(this.state.location.latitude);
@@ -132,7 +164,10 @@ class ListPage extends Component {
     for(let i = 0; i < arr.length; i++){
       redirectAddress = redirectAddress + `items=${arr[i]}&`;
     }
-    redirectAddress = redirectAddress + `latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}&distanceValue=${this.state.distanceValue}`;
+    redirectAddress = redirectAddress + `latitude=${latit}&longitude=${longi}&distanceValue=${this.state.distanceValue}&method=${method}`;
+    if(this.state.zipCode){
+      redirectAddress = redirectAddress + `&zipCode=${this.state.zipCode}`;
+    }
     this.setState({
       redirect : redirectAddress,
       errorMessage: null,
@@ -261,6 +296,21 @@ class ListPage extends Component {
     }
   }
 
+  zipCodeChange = (event) => {
+    if (this.zipCodeRegex.test(event.target.value)) {
+      this.setState({
+        zipCodeError : false,
+      })
+    } else {
+      this.setState({
+        zipCodeError : true,
+      });
+    }
+    this.setState({
+      zipCode : event.target.value,
+    });
+  }
+
   render() {
     if(this.state.redirect) {
       return <Redirect to={{
@@ -293,15 +343,15 @@ class ListPage extends Component {
 
     const distances = [2, 4, 6, 8, 10, 12, 14].map((item) => (
       <FormControlLabel
-        control={<Radio name={item + " mile radius"}/>}
-        label={item + " mile radius"}
+        control={<Radio name={item + " miles from current location"}/>}
+        label={item + " miles from current location"}
         value={item}
         key={item}
         onChange={this.handleDistanceChange}
         />
     ));
 
-    const saveButton = (this.state.userId === -1) ? <div></div> : <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>;
+    const saveButton = (this.state.userId === -1) ? null : <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>;
 
     return (
       <div id="list-page-container">
@@ -313,9 +363,16 @@ class ListPage extends Component {
         </ButtonGroup>
         <Grid container alignItems="stretch">
           <Grid id="distance-list-container" item component={Card} xs>
-            <p>I would like to choose from stores in a</p>
+            <p>Select a distance preference</p>
             <RadioGroup id="distance-list" value={this.state.distanceValue}>
-              {distances} 
+              {distances}
+              <FormControlLabel
+                control={<Radio name={"None"}/>}
+                label={"None"}
+                value={MAX_JAVA_INTEGER}
+                key={"None"}
+                onChange={this.handleDistanceChange}
+               />
             </RadioGroup>
           </Grid>
           <Grid id="items-list-container" item component={Card} xs>
@@ -328,8 +385,9 @@ class ListPage extends Component {
               {this.state.selectedItemsList}
             </List>
           </Grid>
-        </Grid>
-        {this.state.displayZipCodeInput ? <TextField display={this.state.location} id="filled-basic" label="Zip Code" variant="filled" /> : null}
+        </Grid> 
+          <TextField display={this.state.location} onChange={this.zipCodeChange} error={this.state.zipCodeError} 
+            helperText={this.state.zipCodeError ? 'Invalid Zip Code' : ' ' } id="filled-basic" label="Zip Code" variant="filled" />
         <br></br>
         <br></br>
         <Button id="submit-button" onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>

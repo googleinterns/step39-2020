@@ -15,28 +15,24 @@
  */
 
 import React, { Component } from 'react';
+
 import { GoogleApiWrapper, Map } from 'google-maps-react';
 import { Accordion,  AccordionDetails, AccordionSummary, Card, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import APIKey from './APIKey.js';
 import { StoresContext } from './StoresProvider.js';
+import StoreMaps from './StoreMaps.js';
 import './styles.css';
 
 class StoreDetailCards extends Component {
   render() {
-    const maps = {
-      height : "25%",
-      width : "25%"
-    }
     const storeDetailCards = this.props.stores.map((store) => (
       <div>
         <Typography variant='h4'>{store.storeName}</Typography>
         <Typography variant='h6'>Address: {store.storeAddress}</Typography>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
-            <Map id="google-map" google={this.props.google} style={maps} zoom={14}>
-            </Map>
+            <StoreMaps store={store}/>
           </Grid>
           <Grid item component={Card} xs>
             <Typography variant='subtitle1'>This store has the following items:</Typography>
@@ -73,6 +69,4 @@ class StoreDetailCards extends Component {
   }
 }
 
-export default GoogleApiWrapper({
-  apiKey: (APIKey.APIKey())
-})(StoreDetailCards)
+export default StoreDetailCards;
