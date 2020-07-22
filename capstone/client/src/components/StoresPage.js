@@ -47,7 +47,7 @@ class StorePage extends Component {
     }
 
     getStores = () => {
-      axios.get('https://step39-2020.uc.r.appspot.com/api/v1/get-store-rankings', { params : { 'user-preferences' : {
+      axios.get('/api/v1/get-store-rankings', { params : { 'user-preferences' : {
         latitude : this.state.latitude,
         longitude : this.state.longitude,
         distancePreference : this.state.distanceValue,
@@ -61,7 +61,7 @@ class StorePage extends Component {
         });
     }
 
-  handleFilterchange = (stores) => {
+  handleFilterChange = (stores) => {
     this.setState({
       stores,
     });
@@ -74,7 +74,7 @@ class StorePage extends Component {
         <StoresProvider>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
-            <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterchange}/>
+            <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterChange}/>
             <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>
           </Grid>
           <Grid item component={Card} xs>
