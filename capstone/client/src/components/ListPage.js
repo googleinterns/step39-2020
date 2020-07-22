@@ -301,7 +301,7 @@ class ListPage extends Component {
         />
     ));
 
-    const saveButton = (this.state.userId === -1) ? <div></div> : <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>;
+    const saveButton = (this.state.userId === -1) ? null : <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>;
 
     return (
       <div id="list-page-container">
