@@ -25,6 +25,10 @@ import { Alert } from '@material-ui/lab';
 
 import { Store } from './Store';
 
+import Geocode from "react-geocode";
+import APIKey from './APIKey.js';
+
+
 /*
  * Displays a checkbox list containing the items returned from the Items API. 
  * The selected items are displayed below when the form is submitted. 
@@ -52,7 +56,9 @@ class ListPage extends Component {
         display: false,
       },
       redirect : null,
+      zipCode : null,
     }
+    Geocode.setApiKey(APIKey.APIKey());
   }
 
   componentWillMount = () => {
@@ -116,6 +122,27 @@ class ListPage extends Component {
    * on the selected items.
    */
   onSubmit = () => {
+    if(this.state.displayZipCodeInput) {
+      if(this.state.zipCode.length !== 5 || isNaN(this.state.zipCode)){
+        this.setState({
+          errorMessage: "Invalid Zip Code"
+        });
+        return;
+      }
+      Geocode.fromAddress(this.state.zipCode).then(
+        response => {
+          const { lat, lng } = response.results[0].geometry.location;
+          this.setState({
+            location : {latitude: lat, longitude: lng}
+          });
+        },
+        error => {
+          this.setState({
+            errorMessage: "Invalid Zip Code"
+          });
+        }
+      );
+    }
     const arr = [...this.selectedItems];
     this.props.store.set('items')(arr);
     this.props.store.set('latitude')(this.state.location.latitude);
@@ -261,6 +288,12 @@ class ListPage extends Component {
     }
   }
 
+  zipCodeChange = (event) => {
+    this.setState({
+      zipCode : event.target.value,
+    });
+  }
+
   render() {
     if(this.state.redirect) {
       return <Redirect to={{
@@ -329,7 +362,7 @@ class ListPage extends Component {
             </List>
           </Grid>
         </Grid>
-        {this.state.displayZipCodeInput ? <TextField display={this.state.location} id="filled-basic" label="Zip Code" variant="filled" /> : null}
+        {this.state.displayZipCodeInput ? <TextField display={this.state.location} onChange={this.zipCodeChange} id="filled-basic" label="Zip Code" variant="filled" /> : null}
         <br></br>
         <br></br>
         <Button id="submit-button" onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
