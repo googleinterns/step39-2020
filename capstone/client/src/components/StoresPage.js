@@ -62,13 +62,13 @@ class StorePage extends Component {
           });
         });
     }
+  goBack = () => {
+    this.setState({
+      redirect : "/",
+    });
+  }
 
   handleFilterChange = (stores) => {
-    goBack = () => {
-      this.setState({
-        redirect : "/",
-      });
-    }
     this.setState({
       stores,
     });

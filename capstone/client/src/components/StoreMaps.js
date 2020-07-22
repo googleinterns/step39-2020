@@ -49,6 +49,12 @@ class StoreMaps extends Component {
     this.getLatLangFromAddress(this.props.store.storeAddress);
   }
 
+  componentDidUpdate = (prevProps) => {
+    if (this.props.store !== prevProps.store) {
+      this.getLatLangFromAddress(this.props.store.storeAddress);
+    }
+  }
+
   render() {
     const maps = {
       height : "25%",
