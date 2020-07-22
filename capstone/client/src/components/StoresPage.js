@@ -16,7 +16,7 @@
 
 import axios from 'axios';
 import {Redirect} from 'react-router-dom';
-import { Button, Card, Grid } from '@material-ui/core';
+import { Button, Card, CircularProgress, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
 import { Store } from './Store';
@@ -82,6 +82,9 @@ class StorePage extends Component {
       }}/>
     }
 
+    const overviewCards = (this.state.stores.length === 0) ? <CircularProgress id="stores-loading" color="action" /> : 
+    <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>;
+
     return(
       <div id="stores-page-container">
         <h1>Store Recommendations</h1>
@@ -90,7 +93,7 @@ class StorePage extends Component {
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
             <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterchange}/>
-            <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>
+            {overviewCards}
           </Grid>
           <Grid item component={Card} xs>
             <StoreDetailCards stores={this.state.stores} style={{display: 'none'}}/>
