@@ -134,7 +134,7 @@ class ListPage extends Component {
       return;
     }
     try {
-      let response = await Geocode.fromAddress(this.state.zipCode);
+      const response = await Geocode.fromAddress(this.state.zipCode);
       const { lat, lng } = response.results[0].geometry.location;
       latit = lat;
       longi = lng;
