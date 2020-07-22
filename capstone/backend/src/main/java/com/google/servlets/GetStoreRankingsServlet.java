@@ -129,9 +129,9 @@ public class GetStoreRankingsServlet extends HttpServlet {
         new Comparator<Store>() {
           @Override
           public int compare(Store s1, Store s2) {
-            if (s1.getNumberOfItemsFound() > s2.getNumberOfItemsFound()) {
+            if (s1.getNumberOfItemsFound() < s2.getNumberOfItemsFound()) {
               return 1;
-            } else if (s1.getNumberOfItemsFound() < s2.getNumberOfItemsFound()) {
+            } else if (s1.getNumberOfItemsFound() > s2.getNumberOfItemsFound()) {
               return -1;
             }
             double s1StoreScore =
@@ -152,9 +152,9 @@ public class GetStoreRankingsServlet extends HttpServlet {
                       / AVERAGE_MILES_PER_GALLON
                       * AVERAGE_GAS_PRICE;
             }
-            if (s1StoreScore < s2StoreScore) {
+            if (s1StoreScore > s2StoreScore) {
               return -1;
-            } else if (s1StoreScore > s2StoreScore) {
+            } else if (s1StoreScore < s2StoreScore) {
               return 1;
             } else {
               return 0;
