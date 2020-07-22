@@ -51,7 +51,7 @@ class StoreOverviewCards extends Component {
                     <DriveEtaIcon color='primary' />
                   </ListItemIcon>
                   <ListItemText>
-                  Distance: {store.distance}
+                  Distance: {store.distanceFromUser.toFixed(1)} miles
                   </ListItemText>
               </ListItem>
               </List>
