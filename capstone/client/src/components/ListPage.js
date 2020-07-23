@@ -56,6 +56,10 @@ class ListPage extends Component {
       listSaveDialog: {
         display: false,
       },
+      listSaveStatus: {
+        display: false,
+      },
+      listSaveStatusMessage: null,
       redirect : null,
       zipCode : null,
       zipCodeError: true,
@@ -206,6 +210,14 @@ class ListPage extends Component {
     })
   }
 
+  handleListStatusDialogClose = () => {
+    this.setState({
+      listSaveStatus: {
+        display: false,
+      },
+    })
+  }
+
   /* 
    * Obtains the selected items from the checkbox list and makes a POST request to 
    * /api/v1/create-or-update-user-list-servlet to save the specified list.
@@ -229,13 +241,18 @@ class ListPage extends Component {
       },
     ).then((res) => {
       this.setState({
-        errorMessage: null,
-        successMessage: "Your list has been saved!",
+        listSaveStatus: {
+          display: true,
+        },
+        listSaveStatusMessage: "Your list has been saved!",
         listId: res.data.userList.listId,
       });
     }).catch((error) => {
       this.setState({
-        errorMessage: "There was an error saving your list.",
+        listSaveStatus: {
+          display: true,
+        },
+        listSaveStatusMessage: "There was an error saving your list.",
       })
     });
   }
@@ -414,6 +431,23 @@ class ListPage extends Component {
             </Button>
             <Button disabled={this.state.listSaveDialog.saveButtonDisabled} onClick={this.handleDialogSubmit} color="primary">
               Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+        open={this.state.listSaveStatus.display}
+        onClose={this.handleListStatusDialogClose}
+        aria-labelledby="form-dialog-title"
+        aria-describedby="form-dialog-description">
+          <DialogTitle id="list-save-dialog-title">{"List Status"}</DialogTitle>
+          <DialogContent>
+          <DialogContentText id="list-save-dialog-text">
+            {this.state.listSaveStatusMessage}
+          </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleListStatusDialogClose} color="primary">
+              OK
             </Button>
           </DialogActions>
         </Dialog>
