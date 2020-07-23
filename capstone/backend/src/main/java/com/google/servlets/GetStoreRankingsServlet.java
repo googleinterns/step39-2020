@@ -141,12 +141,12 @@ public class GetStoreRankingsServlet extends HttpServlet {
                 s2.getTotalUnavailableItemsFound() * UNAVALIABLE_ITEMS_WEIGHT
                     + s2.getLowestPotentialPrice() * PRICE_WEIGHT;
             if (!distances.isEmpty()) {
-              s1StoreScore +=
+              s1StoreScore -=
                   distances.get(s1.getStoreAddress())
                       / MILES_METERS_CONVERSION
                       / AVERAGE_MILES_PER_GALLON
                       * AVERAGE_GAS_PRICE;
-              s2StoreScore +=
+              s2StoreScore -=
                   distances.get(s2.getStoreAddress())
                       / MILES_METERS_CONVERSION
                       / AVERAGE_MILES_PER_GALLON
