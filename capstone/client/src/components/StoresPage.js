@@ -90,7 +90,7 @@ class StorePage extends Component {
         <StoresProvider>
         <Button id="back-button" onClick={this.goBack} color="primary" variant="contained">Back To List</Button>
         <Grid container alignItems="stretch">
-          <Grid item component={Card} xs>
+          <Grid item component={Card} xs={4}>
             <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterChange}/>
             {overviewCards}
           </Grid>
