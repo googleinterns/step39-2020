@@ -54,7 +54,6 @@ class ListPage extends Component {
       listSaveStatus: {
         display: false,
       },
-      listStatusMessage: null,
       redirect : null,
     }
   }
@@ -206,7 +205,6 @@ class ListPage extends Component {
       },
     ).then((res) => {
       this.setState({
-        listStatusMessage: "Your list has been saved!",
         listSaveStatus: {
           display: true,
         },
@@ -216,7 +214,6 @@ class ListPage extends Component {
       });
     }).catch((error) => {
       this.setState({
-        listStatusMessage: "There was an error saving your list.",
         listSaveStatus: {
           display: true,
         },
@@ -323,6 +320,18 @@ class ListPage extends Component {
 
     const saveButton = (this.state.userId === -1) ? <div></div> : <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>;
 
+    let listSaveMessage;
+    // If the list was successfully saved.
+    if (this.state.successMessage != null) {
+      listSaveMessage = (<DialogContentText id="list-save-dialog-text">
+        {this.state.successMessage}
+        </DialogContentText>);
+    } else if (this.state.errorMessage != null) {
+      listSaveMessage = (<DialogContentText id="list-save-dialog-text">
+        {this.state.errorMessage}
+        </DialogContentText>);
+    }
+
     return (
       <div id="list-page-container">
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
@@ -386,9 +395,7 @@ class ListPage extends Component {
         aria-describedby="form-dialog-description">
           <DialogTitle id="list-save-dialog-title">{"List Status"}</DialogTitle>
           <DialogContent>
-            <DialogContentText id="list-save-dialog-text">
-              {this.state.listStatusMessage}
-            </DialogContentText>
+            {listSaveMessage}
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleListStatusDialogClose} color="primary">
