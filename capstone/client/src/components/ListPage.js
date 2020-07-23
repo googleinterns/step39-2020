@@ -58,7 +58,7 @@ class ListPage extends Component {
       },
       redirect : null,
       zipCode : null,
-      zipCodeError: true,
+      zipCodeError: false,
     }
     Geocode.setApiKey(APIKey.APIKey());
     this.zipCodeRegex = new RegExp("^\\d{5}$");
