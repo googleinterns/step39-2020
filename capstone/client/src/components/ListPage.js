@@ -59,6 +59,7 @@ class ListPage extends Component {
       listSaveStatus: {
         display: false,
       },
+      listSaveStatusMessage: null,
       redirect : null,
       zipCode : null,
       zipCodeError: true,
@@ -243,8 +244,7 @@ class ListPage extends Component {
         listSaveStatus: {
           display: true,
         },
-        errorMessage: null,
-        successMessage: "Your list has been saved!",
+        listSaveStatusMessage: "Your list has been saved!",
         listId: res.data.userList.listId,
       });
     }).catch((error) => {
@@ -252,7 +252,7 @@ class ListPage extends Component {
         listSaveStatus: {
           display: true,
         },
-        errorMessage: "There was an error saving your list.",
+        listSaveStatusMessage: "There was an error saving your list.",
       })
     });
   }
@@ -370,18 +370,6 @@ class ListPage extends Component {
 
     const saveButton = (this.state.userId === -1) ? null : <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>;
 
-    let listSaveMessage;
-    // If the list was successfully saved.
-    if (this.state.successMessage != null) {
-      listSaveMessage = (<DialogContentText id="list-save-dialog-text">
-        {this.state.successMessage}
-        </DialogContentText>);
-    } else if (this.state.errorMessage != null) {
-      listSaveMessage = (<DialogContentText id="list-save-dialog-text">
-        {this.state.errorMessage}
-        </DialogContentText>);
-    }
-
     return (
       <div id="list-page-container">
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
@@ -453,7 +441,9 @@ class ListPage extends Component {
         aria-describedby="form-dialog-description">
           <DialogTitle id="list-save-dialog-title">{"List Status"}</DialogTitle>
           <DialogContent>
-            {listSaveMessage}
+          <DialogContentText id="list-save-dialog-text">
+            {this.state.listSaveStatusMessage}
+          </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleListStatusDialogClose} color="primary">
