@@ -33,6 +33,14 @@ h6 {
   font-weight: 600;
 }
 
+/* FilterStores start */
+
+#price-filter {
+  margin-top: 40px;
+}
+
+/* FilterStores end */
+
 /* Header start */
 
 #typography {

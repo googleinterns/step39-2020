@@ -317,7 +317,7 @@ class ListPage extends Component {
       }}/>
     }
 
-    if(this.state.userId !== -1 && this.state.userLists === []) {
+    if(this.state.userId !== -1 && this.state.userLists.length === 0) {
       axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
         .then(res => {
           this.setState({

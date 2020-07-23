@@ -26,13 +26,15 @@ class FilterStores extends Component {
       items: this.props.items,
       selectedFilters: new Set(),
       maxPrice : 0,
-      setPrice : 0,
+      setPriceLeft : 0,
+      setPriceRight : 0,
       maxSet : false,
     }
     this.onFilterAdd = this.onFilterAdd.bind(this);
     this.onFilterRemove = this.onFilterRemove.bind(this);
     this.onPriceChange = this.onPriceChange.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleInputChangeLeft = this.handleInputChangeLeft.bind(this);
+    this.handleInputChangeRight = this.handleInputChangeRight.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
   }
 
@@ -45,13 +47,15 @@ class FilterStores extends Component {
     }
     this.setState({
       maxPrice : max.toFixed(2),
-      setPrice : max.toFixed(2)
+      setPriceLeft : 0,
+      setPriceRight : max.toFixed(2)
     });
   }
 
   onPriceChange(event, newValue) {
     this.setState({
-      setPrice : newValue,
+      setPriceLeft : newValue[0],
+      setPriceRight : newValue[1]
     });
     const stores = this.filterStores(this.state.selectedFilters);
     this.setState({
@@ -60,9 +64,20 @@ class FilterStores extends Component {
     this.props.onFilterChange(stores);
   }
 
-  handleInputChange(event) {
+  handleInputChangeLeft(event) {
     this.setState({
-      setPrice : event.target.value === '' ? 0 : Number(event.target.value)
+      setPriceLeft : event.target.value === '' ? 0 : Number(event.target.value)
+    });
+    const stores = this.filterStores(this.state.selectedFilters);
+    this.setState({
+      stores,
+    });
+    this.props.onFilterChange(stores);
+  }
+
+  handleInputChangeRight(event) {
+    this.setState({
+      setPriceRight : event.target.value === '' ? this.state.maxPrice : Number(event.target.value)
     });
     const stores = this.filterStores(this.state.selectedFilters);
     this.setState({
@@ -72,13 +87,13 @@ class FilterStores extends Component {
   }
 
   handleBlur() {
-    if(this.state.setPrice < 0) {
+    if(this.state.setPriceLeft < 0) {
       this.setState({
-        setPrice : 0,
+        setPriceLeft : 0,
       });
-    } else if (this.state.setPrice > this.state.maxPrice) {
+    } else if (this.state.setPriceRight > this.state.maxPrice) {
       this.setState({
-        setPrice : this.state.maxPrice,
+        setPriceRight : this.state.maxPrice,
       });
     }
   }
@@ -108,7 +123,7 @@ class FilterStores extends Component {
 
   filterStores(selectedFilters) {
     const stores = this.props.originalStores.filter((store) => {
-      if(store.lowestPotentialPrice > this.state.setPrice){
+      if(store.lowestPotentialPrice > this.state.setPriceRight || store.lowestPotentialPrice < this.state.setPriceLeft){
         return false;
       }
       const storeItems = new Set();
@@ -150,29 +165,45 @@ class FilterStores extends Component {
 
     return(
       <Grid>
-      <div>{filter}</div>
-      <div>
+      <div id="price-filter">
         <Grid container spacing={2} alignItems="center">
           <Grid item>
             <AttachMoneyIcon color='primary' />
           </Grid>
+          <Grid item>
+            <Input
+              value={this.state.setPriceLeft}
+              margin="dense"
+              onChange={this.handleInputChangeLeft}
+              onBlur={this.handleBlur}
+              inputProps={{
+                step: this.state.maxPrice/40,
+                min: 0,
+                max: this.state.maxPrice,
+                type: 'number',
+                'aria-labelledby': 'input-slider',
+              }}
+            />
+          </Grid>
           <Grid item xs>
             <Slider
-                  value={this.state.setPrice}
+                  value={[this.state.setPriceLeft, this.state.setPriceRight]}
                   onChange={this.onPriceChange}
-                  aria-labelledby="input-slider"
+                  aria-labelledby="range-slider"
                   color="action"
+                  valueLabelDisplay="on"
                   max={this.state.maxPrice}
+                  step={this.state.maxPrice/40}
             />
           </Grid>
           <Grid item>
             <Input
-              value={this.state.setPrice}
+              value={this.state.setPriceRight}
               margin="dense"
-              onChange={this.handleInputChange}
+              onChange={this.handleInputChangeRight}
               onBlur={this.handleBlur}
               inputProps={{
-                step: this.state.maxPrice/10,
+                step: this.state.maxPrice/40,
                 min: 0,
                 max: this.state.maxPrice,
                 type: 'number',
@@ -182,6 +213,7 @@ class FilterStores extends Component {
         </Grid>
         </Grid>
       </div>
+      <div>{filter}</div>
       </Grid>
     );
   }
