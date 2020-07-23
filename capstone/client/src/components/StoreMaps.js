@@ -56,7 +56,7 @@ class StoreMaps extends Component {
   }
 
   render() {
-    const maps = {
+    const style = {
       width: '75%'
     }
 
@@ -67,7 +67,7 @@ class StoreMaps extends Component {
     }
 
     return (
-      <Map id="google-map" google={this.props.google} containerStyle={containerStyle} style={maps} zoom={14}
+      <Map id="google-map" google={this.props.google} containerStyle={containerStyle} style={style} zoom={14}
         center={{lat: this.state.latitude, lng: this.state.longitude}}>
         <Marker position={{lat: this.state.latitude, lng: this.state.longitude}}/>
       </Map>
