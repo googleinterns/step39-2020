@@ -41,7 +41,7 @@ class ListPage extends Component {
       selectedItemsList: null,
       errorMessage: null,
       successMessage: null,
-      distanceValue: 4,
+      distanceValue: MAX_JAVA_INTEGER,
       totalLists: 0,
       userLists : [],
       items: [],
@@ -365,7 +365,6 @@ class ListPage extends Component {
           <Grid id="distance-list-container" item component={Card} xs>
             <p>Select a distance preference</p>
             <RadioGroup id="distance-list" value={this.state.distanceValue}>
-              {distances}
               <FormControlLabel
                 control={<Radio name={"None"}/>}
                 label={"None"}
@@ -373,6 +372,7 @@ class ListPage extends Component {
                 key={"None"}
                 onChange={this.handleDistanceChange}
                />
+              {distances}
             </RadioGroup>
           </Grid>
           <Grid id="items-list-container" item component={Card} xs>
