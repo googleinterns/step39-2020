@@ -177,7 +177,7 @@ class FilterStores extends Component {
               onChange={this.handleInputChangeLeft}
               onBlur={this.handleBlur}
               inputProps={{
-                step: this.state.maxPrice/40,
+                step: (this.state.maxPrice/40).toFixed(2),
                 min: 0,
                 max: this.state.maxPrice,
                 type: 'number',
@@ -193,7 +193,7 @@ class FilterStores extends Component {
                   color="action"
                   valueLabelDisplay="on"
                   max={this.state.maxPrice}
-                  step={this.state.maxPrice/40}
+                  step={(this.state.maxPrice/40).toFixed(2)}
             />
           </Grid>
           <Grid item>
@@ -203,7 +203,7 @@ class FilterStores extends Component {
               onChange={this.handleInputChangeRight}
               onBlur={this.handleBlur}
               inputProps={{
-                step: this.state.maxPrice/40,
+                step: (this.state.maxPrice/40).toFixed(2),
                 min: 0,
                 max: this.state.maxPrice,
                 type: 'number',
