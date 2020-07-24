@@ -39,12 +39,12 @@ class FilterStores extends Component {
   }
 
   getMaxCost() {
-    var max = this.props.originalStores[0].lowestPotentialPrice;
-    for(var store in this.props.originalStores) {
-      if(store.lowestPotentialPrice > max) {
+    let max = this.props.originalStores[0].lowestPotentialPrice;
+    this.props.originalStores.forEach((store) => {
+      if (store.lowestPotentialPrice > max) {
         max = store.lowestPotentialPrice;
       }
-    }
+    });
     this.setState({
       maxPrice : max.toFixed(2),
       setPriceLeft : 0,

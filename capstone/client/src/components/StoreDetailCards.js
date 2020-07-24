@@ -16,7 +16,6 @@
 
 import React, { Component } from 'react';
 
-import { GoogleApiWrapper, Map } from 'google-maps-react';
 import { Accordion,  AccordionDetails, AccordionSummary, Card, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 

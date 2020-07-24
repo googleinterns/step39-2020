@@ -17,6 +17,7 @@
 import { GoogleApiWrapper, Map, Marker } from 'google-maps-react';
 import React, { Component } from 'react';
 import Geocode from 'react-geocode';
+import { Button } from '@material-ui/core';
 
 import APIKey from './APIKey.js';
 import './styles.css';
@@ -26,7 +27,8 @@ class StoreMaps extends Component {
     super(props);
     this.state = {
       latitude: 0,
-      longitude: 0
+      longitude: 0,
+      url: null,
     }
   } 
 
@@ -47,12 +49,25 @@ class StoreMaps extends Component {
   componentDidMount = () => {
     Geocode.setApiKey(APIKey.APIKey());
     this.getLatLangFromAddress(this.props.store.storeAddress);
+    this.getDirectionsUrl(this.props.store.storeAddress);
   }
 
   componentDidUpdate = (prevProps) => {
     if (this.props.store !== prevProps.store) {
       this.getLatLangFromAddress(this.props.store.storeAddress);
+      this.getDirectionsUrl(this.props.store.storeAddress);
     }
+  }
+
+  getDirectionsUrl(address) {
+    const url = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(address);
+    this.setState({
+      url,
+    });
+  }
+
+  redirectToDirections() {
+    window.location.href = this.state.url;
   }
 
   render() {
@@ -67,10 +82,15 @@ class StoreMaps extends Component {
     }
 
     return (
-      <Map id="google-map" google={this.props.google} containerStyle={containerStyle} style={style} zoom={14}
-        center={{lat: this.state.latitude, lng: this.state.longitude}}>
-        <Marker position={{lat: this.state.latitude, lng: this.state.longitude}}/>
-      </Map>
+      <div>
+        <Map id="google-map" google={this.props.google} containerStyle={containerStyle} style={style} zoom={14}
+          center={{lat: this.state.latitude, lng: this.state.longitude}}>
+          <Marker position={{lat: this.state.latitude, lng: this.state.longitude}}/>
+        </Map>
+        <Button variant="contained" color="primary" onClick={() => { this.redirectToDirections() }}>
+          Get Directions
+        </Button>
+      </div>
     )
   }
 }
