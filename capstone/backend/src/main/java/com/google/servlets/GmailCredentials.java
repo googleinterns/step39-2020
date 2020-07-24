@@ -18,8 +18,8 @@ package com.google.servlets;
 
 public class GmailCredentials {
 
-  private static String username = "REPLACE-WITH-EMAIL";
-  private static String password = "REPLACE-WITH-PASSWORD";
+  private static String username = "REPLACE_WITH_USERNAME";
+  private static String password = "REPLACE_WITH_PASSWORD";
 
   public static String getUsername() {
     return username;
