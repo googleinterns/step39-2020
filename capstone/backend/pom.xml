@@ -127,6 +127,7 @@
           <excludes>
             <exclude>**/spanner/**.java</exclude>
             <exclude>**/servlets/GetStoresWithItemTypesServletTest.java</exclude>
+            <exclude>**/servlets/ShareViaEmailServletTest.java</exclude>
           </excludes>
         </configuration>
       </plugin>
