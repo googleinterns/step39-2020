@@ -128,8 +128,16 @@ h6 {
 
 /* FilterStores start */
 
+#distance-filter {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 #price-filter {
-  margin-top: 40px;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 /* FilterStores end */
