@@ -87,7 +87,7 @@ class WelcomePage extends React.Component {
             </PlacesAutocomplete>
           </div>
         </div>
-        <Grid container justify="center" spacing={3} id="features-grid-container">
+        <Grid container justify="center" id="features-grid-container">
           <Grid item component={Card} xs>
             <div class="feature-card">
               <img src={placeholder} alt="stores"/>
@@ -123,7 +123,7 @@ class WelcomePage extends React.Component {
             </div>
           </Grid>
         </Grid>
-        <Grid container justify="center" spacing={3} id="features-grid-container">
+        <Grid container justify="center" id="features-grid-container">
           <Grid item component={Card} xs>
             <div class="feature-card">
               <img src={placeholder} alt="anudeep-profile"/>
