@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/api/v1/share-via-mailjet")
+@WebServlet("/api/v1/share-via-email")
 public class ShareViaEmailServlet extends HttpServlet {
 
   private String emailRegEx = "^[^@]+@[^@]+.[^@]+$";
@@ -23,14 +23,6 @@ public class ShareViaEmailServlet extends HttpServlet {
   private class RequestBody {
     private String email;
     private String html;
-  }
-
-  private class ResponseBody {
-    private String email;
-
-    public ResponseBody(String email) {
-      this.email = email;
-    }
   }
 
   @Override
@@ -54,10 +46,8 @@ public class ShareViaEmailServlet extends HttpServlet {
           HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occured while sending email.");
       return;
     }
-    ResponseBody responseBody = new ResponseBody(requestBody.email);
     response.setStatus(HttpServletResponse.SC_OK);
     response.setContentType("application/json;");
-    response.getWriter().println(g.toJson(responseBody));
   }
 
   public void sendEmail(String email, String html) throws MessagingException {
@@ -86,23 +76,19 @@ public class ShareViaEmailServlet extends HttpServlet {
             });
     // Used to debug SMTP issues
     session.setDebug(true);
-    try {
-      // Create a default MimeMessage object.
-      MimeMessage message = new MimeMessage(session);
-      // Set From: header field of the header.
-      message.setFrom(new InternetAddress(from));
-      // Set To: header field of the header.
-      message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-      // Set Subject: header field
-      message.setSubject("Message From ShopSmart");
-      // Now set the actual message
-      message.setContent(html, "text/html");
-      System.out.println("sending...");
-      // Send message
-      Transport.send(message);
-    } catch (MessagingException mex) {
-      throw mex;
-    }
+    // Create a default MimeMessage object.
+    MimeMessage message = new MimeMessage(session);
+    // Set From: header field of the header.
+    message.setFrom(new InternetAddress(from));
+    // Set To: header field of the header.
+    message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+    // Set Subject: header field
+    message.setSubject("Message From ShopSmart");
+    // Now set the actual message
+    message.setContent(html, "text/html");
+    System.out.println("sending...");
+    // Send message
+    Transport.send(message);
   }
 
   private RequestBody requestValidator(String reqString) {

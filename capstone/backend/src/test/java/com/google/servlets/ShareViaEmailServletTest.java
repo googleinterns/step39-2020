@@ -38,7 +38,6 @@ public class ShareViaEmailServletTest extends TestCase {
     Mockito.verify(setupObj.response).setStatus(HttpServletResponse.SC_OK);
     String result = setupObj.writer.toString();
     assertTrue("Is valid json format", ServletTestUtil.isValidJson(result));
-    assertTrue("Should contain Brett's email", result.contains("bzallen@google.com"));
   }
 
   public void testDoPostBadRequest() throws ServletException, IOException {
