@@ -163,6 +163,8 @@ class FilterStores extends Component {
       });
     }
 
+    const filterStep = 0.25;
+
     return(
       <Grid>
       <div id="price-filter">
@@ -177,7 +179,7 @@ class FilterStores extends Component {
               onChange={this.handleInputChangeLeft}
               onBlur={this.handleBlur}
               inputProps={{
-                step: (this.state.maxPrice/40).toFixed(2),
+                step: filterStep,
                 min: 0,
                 max: this.state.maxPrice,
                 type: 'number',
@@ -193,7 +195,7 @@ class FilterStores extends Component {
                   color="action"
                   valueLabelDisplay="on"
                   max={this.state.maxPrice}
-                  step={(this.state.maxPrice/40).toFixed(2)}
+                  step={filterStep}
             />
           </Grid>
           <Grid item>
@@ -203,7 +205,7 @@ class FilterStores extends Component {
               onChange={this.handleInputChangeRight}
               onBlur={this.handleBlur}
               inputProps={{
-                step: (this.state.maxPrice/40).toFixed(2),
+                step: filterStep,
                 min: 0,
                 max: this.state.maxPrice,
                 type: 'number',
