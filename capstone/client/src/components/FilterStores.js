@@ -17,6 +17,7 @@
 import React, { Component } from 'react';
 import { Chip, Input, Grid, Slider } from '@material-ui/core';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import DriveEtaIcon from '@material-ui/icons/DriveEta';
 
 class FilterStores extends Component {
   constructor(props) {
@@ -29,6 +30,9 @@ class FilterStores extends Component {
       setPriceLeft : 0,
       setPriceRight : 0,
       maxSet : false,
+      maxDistance : 100,
+      setDistanceLeft : 0,
+      setDistanceRight : 100,
     }
     this.onFilterAdd = this.onFilterAdd.bind(this);
     this.onFilterRemove = this.onFilterRemove.bind(this);
@@ -36,6 +40,10 @@ class FilterStores extends Component {
     this.handleInputChangeLeft = this.handleInputChangeLeft.bind(this);
     this.handleInputChangeRight = this.handleInputChangeRight.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
+    this.onDistanceChange = this.onDistanceChange.bind(this);
+    this.handleDistanceChangeLeft = this.handleDistanceChangeLeft.bind(this);
+    this.handleDistanceChangeRight = this.handleDistanceChangeRight.bind(this);
+    this.handleDistanceBlur = this.handleDistanceBlur.bind(this);
   }
 
   getMaxCost() {
@@ -98,6 +106,52 @@ class FilterStores extends Component {
     }
   }
 
+  onDistanceChange(event, newValue) {
+    this.setState({
+      setDistanceLeft : newValue[0],
+      setDistanceRight : newValue[1]
+    });
+    const stores = this.filterStores(this.state.selectedFilters);
+    this.setState({
+      stores,
+    });
+    this.props.onFilterChange(stores);
+  }
+
+  handleDistanceChangeLeft(event) {
+    this.setState({
+      setDistanceLeft : event.target.value === '' ? 0 : Number(event.target.value)
+    });
+    const stores = this.filterStores(this.state.selectedFilters);
+    this.setState({
+      stores,
+    });
+    this.props.onFilterChange(stores);
+  }
+
+  handleDistanceChangeRight(event) {
+    this.setState({
+      setDistanceRight : event.target.value === '' ? this.state.maxPrice : Number(event.target.value)
+    });
+    const stores = this.filterStores(this.state.selectedFilters);
+    this.setState({
+      stores,
+    });
+    this.props.onFilterChange(stores);
+  }
+
+  handleDistanceBlur() {
+    if(this.state.setDistanceLeft < 0) {
+      this.setState({
+        setDistanceLeft : 0,
+      });
+    } else if (this.state.setDistanceRight > this.state.maxDistance) {
+      this.setState({
+        setDistanceRight : this.state.maxDistance,
+      });
+    }
+  }
+
   onFilterAdd(event) {
     event.preventDefault();
     const selectedFilters = this.state.selectedFilters;
@@ -124,6 +178,9 @@ class FilterStores extends Component {
   filterStores(selectedFilters) {
     const stores = this.props.originalStores.filter((store) => {
       if(store.lowestPotentialPrice > this.state.setPriceRight || store.lowestPotentialPrice < this.state.setPriceLeft){
+        return false;
+      }
+      if(store.distanceFromUser > this.state.setDistanceRight || store.distanceFromUser < this.state.distanceFromUser) {
         return false;
       }
       const storeItems = new Set();
@@ -164,6 +221,8 @@ class FilterStores extends Component {
     }
 
     const filterStep = 0.25;
+
+    const distanceStep = 1;
 
     return(
       <Grid>
@@ -212,7 +271,55 @@ class FilterStores extends Component {
                 'aria-labelledby': 'input-slider',
               }}
             />
+          </Grid>
         </Grid>
+      </div>
+      <div id="distance-filter">
+        <Grid container spacing={2} alignItems="center">
+          <Grid item>
+            <DriveEtaIcon color='primary' />
+          </Grid>
+          <Grid item>
+            <Input
+              value={this.state.setDistanceLeft}
+              margin="dense"
+              onChange={this.handleDistanceChangeLeft}
+              onBlur={this.handleDistanceBlur}
+              inputProps={{
+                step: distanceStep,
+                min: 0,
+                max: this.state.maxDistance,
+                type: 'number',
+                'aria-labelledby': 'input-slider',
+              }}
+            />
+          </Grid>
+          <Grid item xs>
+            <Slider
+                  value={[this.state.setDistanceLeft, this.state.setDistanceRight]}
+                  onChange={this.onDistanceChange}
+                  aria-labelledby="range-slider"
+                  color="action"
+                  valueLabelDisplay="on"
+                  max={this.state.maxDistance}
+                  step={distanceStep}
+            />
+          </Grid>
+          <Grid item>
+            <Input
+              value={this.state.setDistanceRight}
+              margin="dense"
+              onChange={this.handleDistanceChangeRight}
+              onBlur={this.handleDistanceBlur}
+              inputProps={{
+                step: distanceStep,
+                min: 0,
+                max: this.state.maxDistance,
+                type: 'number',
+                'aria-labelledby': 'input-slider',
+              }}
+            />
+          </Grid>
         </Grid>
       </div>
       <div>{filter}</div>
