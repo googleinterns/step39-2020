@@ -252,7 +252,6 @@ class FilterStores extends Component {
                   onChange={this.onPriceChange}
                   aria-labelledby="range-slider"
                   color="action"
-                  valueLabelDisplay="on"
                   max={this.state.maxPrice}
                   step={filterStep}
             />
@@ -300,7 +299,6 @@ class FilterStores extends Component {
                   onChange={this.onDistanceChange}
                   aria-labelledby="range-slider"
                   color="action"
-                  valueLabelDisplay="on"
                   max={this.state.maxDistance}
                   step={distanceStep}
             />
