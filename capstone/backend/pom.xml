@@ -86,9 +86,9 @@
       <version>1.10.19</version>
     </dependency>
     <dependency>
-      <groupId>com.google.appengine</groupId>
-      <artifactId>appengine-api-1.0-sdk</artifactId>
-      <version>1.9.59</version>
+	  <groupId>com.sun.mail</groupId>
+	  <artifactId>javax.mail</artifactId>
+	  <version>1.6.2</version>
     </dependency>
   </dependencies>
   
@@ -127,6 +127,7 @@
           <excludes>
             <exclude>**/spanner/**.java</exclude>
             <exclude>**/servlets/GetStoresWithItemTypesServletTest.java</exclude>
+            <exclude>**/servlets/ShareViaEmailServletTest.java</exclude>
           </excludes>
         </configuration>
       </plugin>
