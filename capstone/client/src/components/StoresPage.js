@@ -26,6 +26,7 @@ import StoreOverviewCards from './StoreOverviewCards.js';
 import { StoresProvider } from './StoresProvider.js';
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
 import './styles.css';
 
@@ -190,7 +191,7 @@ class StorePage extends Component {
   
     const shareButton = (this.state.originalStores.length === 0) ? null :
         (<Button id="back-button" variant="contained" color="primary" onClick={this.onShare}>
-           Share Stores!
+           Share Stores <MailOutlineIcon color='white' />
          </Button>)
 
     return(
