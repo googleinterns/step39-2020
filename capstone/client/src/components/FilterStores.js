@@ -318,6 +318,9 @@ class FilterStores extends Component {
               }}
             />
           </Grid>
+          <Grid item>
+            <p>miles</p>
+          </Grid>
         </Grid>
       </div>
       <div>{filter}</div>
