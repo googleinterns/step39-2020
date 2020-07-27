@@ -134,7 +134,7 @@ class StorePage extends Component {
     axios.post(
       '/api/v1/share-via-email',
       { 
-        email: this.state.email,
+        email : this.state.email,
         html : "<h1>Test</h1>",
       },
     ).then((res) => {
@@ -189,7 +189,7 @@ class StorePage extends Component {
     const method = (this.state.method === "location") ? <h5>Calculated from tracked location</h5> : <h5>Calculated from Zip Code: {this.state.zipCode}</h5>
   
     const shareButton = (this.state.originalStores.length === 0) ? null :
-        (<Button id="selection-button" variant="contained" color="primary" onClick={this.onShare}>
+        (<Button id="back-button" variant="contained" color="primary" onClick={this.onShare}>
            Share Stores!
          </Button>)
 
