@@ -61,7 +61,7 @@ h6 {
 }
 
 #price-filter {
-  margin-top: 10px;
+  margin-top: 20px;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -216,6 +216,10 @@ h6 {
 #google-map {
   height : 25%;
   width : 25%;
+}
+
+#store-details-container {
+  margin-top : 20px;
 }
 
 /* StoreDetailCards end */

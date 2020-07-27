@@ -38,7 +38,7 @@ class StoreOverviewCards extends Component {
     render() {
         const storeOverviewCards = this.props.stores.map((store, index) => (
             <div id="store-overview-card">
-              <img id="store-logo" src={logos[store.storeName[0]]}/>
+              <img id="store-logo" src={logos[store.storeName[0]]} alt=""/>
               <Typography variant="h6" component="h6">{store.storeName}</Typography>
               <List>
               <ListItem>
