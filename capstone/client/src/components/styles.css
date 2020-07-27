@@ -17,7 +17,7 @@
 h1 {
   color: black;
   font-family: 'Helvetica Neue', sans-serif;
-  font-size: 70px;
+  font-size: 72px;
   font-weight: bold;
   letter-spacing: -1px;
   line-height: 1;
@@ -35,6 +35,7 @@ h2 {
 h3 {
   color: #111;
   font-family: 'Helvetica Neue', sans-serif;
+  font-size: 30px;
 }
 
 h4 {
@@ -51,6 +52,79 @@ h6 {
   font-family: 'Helvetica Neue', sans-serif;
   font-weight: 600;
 }
+
+/* WelcomePage starts */
+#banner {
+  position: relative;
+  text-align: center;
+}
+
+#banner-image {
+  width: 100%;
+}
+
+#banner-text-container {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+}
+
+#enter-location-container {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.banner-text {
+  color: #05386b;
+  text-shadow: none;
+  font-weight: bold;
+}
+
+.slogan-text {
+  color: #edf5e1;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#slogan-text {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.feature-card {
+  padding: 50px;
+  text-align: center;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+#features-grid-container {
+  padding: 40px;
+}
+
+#about-grid {
+  padding: 40px;
+}
+
+#about-text {
+  padding: 40px;
+}
+
+.rc-footer {
+  color: #05386b;
+}
+
+/* WelcomePage end */
 
 /* FilterStores start */
 
