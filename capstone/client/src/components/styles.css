@@ -15,13 +15,31 @@
  */
 
 h1 {
-  color: #111;
+  color: black;
   font-family: 'Helvetica Neue', sans-serif;
   font-size: 70px;
   font-weight: bold;
   letter-spacing: -1px;
   line-height: 1;
+  margin-top: 0;
+  padding-top: 0.67em;
   text-align: center;
+  text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 100px #727478, 0 0 20px #727478;
+}
+
+h2 {
+  color: #111;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+h3 {
+  color: #111;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+h4 {
+  color: gray;
+  font-family: 'Helvetica Neue', sans-serif;
 }
 
 h5 {
@@ -30,6 +48,7 @@ h5 {
 }
 
 h6 {
+  font-family: 'Helvetica Neue', sans-serif;
   font-weight: 600;
 }
 
@@ -52,22 +71,67 @@ h6 {
 /* ListPage start */
 
 #list-page-container {
-  text-align: center;
+  background-image: url("./images/background5.jpg");
+  background-size: cover;
   color: azure;
+  min-height: 100%;
+  position: fixed;
+  text-align: center;
+}
+
+#items-container {
+  margin: 40px 3%;
+  text-align: center;
 }
 
 #items-list-container {
-  background-color: #667ef7;
-  border-radius: 14px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 4px 2px #dce1e8;
   color: azure;
-  margin: 0 10% 1% 0;
+  margin: 0 15% 5% 15%;
 }
 
-#distance-list-container {
-  background-color: #667ef7;
-  border-radius: 14px;
-  color: azure;
-  margin: 0 5% 1% 10%;
+#item-list-text {
+  margin: 0 10% 50px 10%;
+}
+
+#check-icon {
+  color: #a782da;
+}
+
+#directions-text {
+  color: grey;
+}
+
+#number-selected-text {
+  color: black;
+}
+
+#item {
+  background-color: white;
+  border-radius: 0px;
+  box-shadow: 0px 0px 4px 0px #dce1e8;
+  height: 70px;
+  margin: 0px 15px 30px 0px;
+  width: 220px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#selected-item {
+  background-color: white;
+  border-radius: 0px;
+  box-shadow: 0px 0px 8px 4px #d3cece;
+  height: 70px;
+  margin: 0px 15px 30px 0px;
+  width: 220px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#item-icon {
+  width: 50px;
+  height: 50px;
 }
 
 #items-list {
@@ -83,8 +147,18 @@ h6 {
   margin-bottom: 10px;
 }
 
-#submit-button {
-  margin-bottom: 20px;
+#selection-button {
+  background-color: #a782da;
+  border-radius: 24px;
+  margin: 0 10px 0px 10px;
+  height: 50px;
+  width: 140px;
+}
+
+#list-button {
+  background-color: #a782da;
+  border-radius: 24px;
+  margin: 0 10px 10px 10px;
 }
 
 /* ListPage end */
