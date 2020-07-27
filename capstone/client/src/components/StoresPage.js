@@ -212,7 +212,7 @@ class StorePage extends Component {
               <TextField
                 autoFocus
                 margin="dense"
-                id="list-name"
+                id="email"
                 label="Email"
                 helperText={this.state.shareDialog.errorText}
                 error={this.state.shareDialog.error}
@@ -234,9 +234,9 @@ class StorePage extends Component {
           onClose={this.handleShareStatusDialogClose}
           aria-labelledby="form-dialog-title"
           aria-describedby="form-dialog-description">
-          <DialogTitle id="list-save-dialog-title">{"Share Status"}</DialogTitle>
+          <DialogTitle id="share-dialog-title">{"Share Status"}</DialogTitle>
           <DialogContent>
-          <DialogContentText id="list-save-dialog-text">
+          <DialogContentText id="share-dialog-text">
             {this.state.shareStatusMessage}
           </DialogContentText>
           </DialogContent>
