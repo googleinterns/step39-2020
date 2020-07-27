@@ -17,16 +17,14 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
-import { Button, ButtonGroup, Card, Checkbox, CircularProgress, Dialog, DialogActions,DialogContent, DialogContentText, 
-  DialogTitle, FormGroup, FormControlLabel, Grid, List,
-  Radio, RadioGroup, TextField } 
-  from '@material-ui/core';
+import { Button, ButtonGroup, Card, FormControlLabel, Grid, List, Radio, TextField } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 import { Store } from './Store';
 
 import Geocode from "react-geocode";
 import APIKey from './APIKey.js';
+import ItemsList from './ItemsList.js';
 
 const MAX_JAVA_INTEGER = 2147483647;
 
@@ -45,33 +43,22 @@ class ListPage extends Component {
       totalLists: 0,
       userLists : [],
       items: [],
+      selectedItems: new Set(),
       listId: -1,
       listName: null,
       userId: -1,
-      zipCodeRequired: false,
       location: { // San Jose by default
         latitude: 37.338207,
         longitude: -121.886330,
       },
-      listSaveDialog: {
-        display: false,
-      },
-      listSaveStatus: {
-        display: false,
-      },
-      listSaveStatusMessage: null,
       redirect : null,
-      zipCode : null,
-      zipCodeError: false,
     }
     Geocode.setApiKey(APIKey.APIKey());
-    this.zipCodeRegex = new RegExp("^\\d{5}$");
   }
 
   componentWillMount = () => {
     // Get ItemTypes from database.
     this.getItemTypes();
-    this.selectedItems = new Set();
     this.itemsToComponent = {};
     this.props.store.on('userId').subscribe((userId) => {
       this.setState({
@@ -103,157 +90,28 @@ class ListPage extends Component {
   }
 
   /* 
-   * Adds an item to the selectedItems list if an item is checked and removes
-   * an item if it is unchecked. 
-   */
-  handleItemChange = (event) => {
-    if (event.target.checked) {
-      this.selectedItems.add(event.target.name);
-    } else {
-      this.selectedItems.delete(event.target.name);
-    }
-  }
-
-  /* 
-   * Saves the most recently selected distance preference. 
-   */
-  handleDistanceChange = (event) => {
-    this.setState({
-      distanceValue: parseInt(event.target.value),
-    })
-  }
-
-  /* 
    * Displays a list of the items selected from the checkbox list. 
    * @TODO Change this function to make a GET request to obtain store recommendations based 
    * on the selected items.
    */
-   onSubmit = async () => {
+   onSubmit = async (selectedItems) => {
     var latit = this.state.location.latitude;
     var longi = this.state.location.longitude;
     var method = "location";
-    if(this.state.zipCodeRequired && (!this.state.zipCode || this.zipCodeRegex.test(this.state.zipCode))){
-      this.setState({
-        errorMessage: "Invalid Zip Code"
-      });
-      return;
-    }
-    try {
-      const response = await Geocode.fromAddress(this.state.zipCode);
-      const { lat, lng } = response.results[0].geometry.location;
-      latit = lat;
-      longi = lng;
-      method = "zipcode";
-      this.setState({
-        location : {latitude: lat, longitude: lng}
-      });
-    } catch(e) {
-      this.setState({
-        errorMessage: "Invalid Zip Code"
-      });
-    }
-    const arr = [...this.selectedItems];
+   
+    const arr = Array.from(selectedItems);
     this.props.store.set('items')(arr);
     this.props.store.set('latitude')(this.state.location.latitude);
     this.props.store.set('longitude')(this.state.location.longitude);
-    this.props.store.set('distanceValue')(this.state.distanceValue);
-    if (arr.length === 0) {
-      this.setState({
-        selectedItemsList: null,
-        errorMessage: "Please select at least one item!",
-      });
-      return;
-    }
+    
     let redirectAddress = '/stores/?';
     for(let i = 0; i < arr.length; i++){
       redirectAddress = redirectAddress + `items=${arr[i]}&`;
     }
-    redirectAddress = redirectAddress + `latitude=${latit}&longitude=${longi}&distanceValue=${this.state.distanceValue}&method=${method}`;
-    if(this.state.zipCode){
-      redirectAddress = redirectAddress + `&zipCode=${this.state.zipCode}`;
-    }
+    redirectAddress = redirectAddress + `latitude=${latit}&longitude=${longi}&distanceValue=${MAX_JAVA_INTEGER}&method=${method}`;
     this.setState({
       redirect : redirectAddress,
       errorMessage: null,
-    });
-  }
-
-
-  /* 
-   * Displays a dialog prompting the user to specify a name for the list that 
-   * is going to be saved. 
-   */
-  onSave = () => {
-    const arr = [...this.selectedItems];
-    if (arr.length === 0) {
-      this.setState({
-        errorMessage: "Please select at least one item!",
-      });
-    } else {
-      this.setState({
-        listSaveDialog: {
-          display: true,
-          saveButtonDisabled: true,
-          error: true,
-          errorText: "This is a required field."
-        },
-        errorMessage: null,
-      });
-    }
-  }
-
-  handleDialogCancel = () => {
-    this.setState({
-      listSaveDialog: {
-        display: false,
-      },
-    })
-  }
-
-  handleListStatusDialogClose = () => {
-    this.setState({
-      listSaveStatus: {
-        display: false,
-      },
-    })
-  }
-
-  /* 
-   * Obtains the selected items from the checkbox list and makes a POST request to 
-   * /api/v1/create-or-update-user-list-servlet to save the specified list.
-   */
-  handleDialogSubmit = () => {
-    this.setState({
-      listSaveDialog: {
-        display: false,
-      },
-    });
-    const arr = [...this.selectedItems];
-    axios.post(
-      '/api/v1/create-or-update-user-list-servlet',
-      { 
-        userId: this.state.userId,
-        userList: {
-          listId: this.state.listId,
-          displayName: this.state.listName,
-          itemTypes: arr
-        }
-      },
-    ).then((res) => {
-      this.setState({
-        listSaveStatus: {
-          display: true,
-        },
-        listSaveStatusMessage: "Your list has been saved!",
-        listId: res.data.userList.listId,
-      });
-    }).catch((error) => {
-      this.setState({
-        listSaveStatus: {
-          display: true,
-        },
-        listSaveStatusMessage: "There was an error saving your list.",
-      })
     });
   }
 
@@ -270,61 +128,14 @@ class ListPage extends Component {
     }); 
   }
 
-  /*
-   * Checks to see if the "List Name" field is empty. If the field is empty, an 
-   * error message is displayed and the save button is disabled. 
-   */
-  onTextFieldChange = (event) => {
-    if (event.target.value.trim() === '') {
-      this.setState({
-        listSaveDialog: {
-          display: true,
-          error: true,
-          errorText: "This is a required field.",
-          saveButton: true,
-        },
-      });
-    } else {
-      this.setState({
-        listName: event.target.value,
-        listSaveDialog: {
-          display: true,
-          saveButtonDisabled: false,
-        },
-      });
-    }
-  }
-
   selectList = (event) => {
-    if (this.selectedItems.size !== 0) {
-      for (let val of this.selectedItems) {
-        this.itemsToComponent[val].click();
-      }
-    }
     var index = event.target.name;
     if(event.target.className === "MuiButton-label"){
       index = event.target.parentElement.name;
     }
     this.setState({
       listId : this.state.userLists[index].listId,
-    });
-    for (const i in this.state.userLists[index].itemTypes) {
-      this.itemsToComponent[this.state.userLists[index].itemTypes[i]].click();
-    }
-  }
-
-  zipCodeChange = (event) => {
-    if (this.zipCodeRegex.test(event.target.value)) {
-      this.setState({
-        zipCodeError : false,
-      })
-    } else {
-      this.setState({
-        zipCodeError : true,
-      });
-    }
-    this.setState({
-      zipCode : event.target.value,
+      selectedItems: new Set(this.state.userLists[index].itemTypes),
     });
   }
 
@@ -346,111 +157,22 @@ class ListPage extends Component {
     }
 
     const userListButtons = this.state.userLists.map((userList, index) => (
-    <Button name={index}>{userList.displayName}</Button>
+      <Button id="list-button" name={index}>{userList.displayName}</Button>
     ));
-
-    const checkboxItems = (this.state.items.length === 0) ? <CircularProgress id="loading-spinner" color="action" /> : this.state.items.map((item) => (
-      <FormControlLabel
-        control={<Checkbox name={item} ref={component => this.itemsToComponent[item] = component} data-testid='checkbox item'/>}
-        label={item}
-        key={item}
-        onChange={this.handleItemChange}
-        />
-    ));
-
-    const distances = [2, 4, 6, 8, 10, 12, 14].map((item) => (
-      <FormControlLabel
-        control={<Radio name={item + " miles from current location"}/>}
-        label={item + " miles from current location"}
-        value={item}
-        key={item}
-        onChange={this.handleDistanceChange}
-        />
-    ));
-
-    const saveButton = (this.state.userId === -1) ? null : <Button onClick={this.onSave} color="secondary" variant="contained">Save List</Button>;
 
     return (
       <div id="list-page-container">
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
         {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
-        <h1>Preferences</h1>
+        <h1>Item Selection</h1>
         <ButtonGroup container id="user-lists" onClick={this.selectList}>
           {userListButtons}
         </ButtonGroup>
         <Grid container alignItems="stretch">
-          <Grid id="distance-list-container" item component={Card} xs>
-            <p>Select a distance preference</p>
-            <RadioGroup id="distance-list" value={this.state.distanceValue}>
-              <FormControlLabel
-                control={<Radio name={"None"}/>}
-                label={"None"}
-                value={MAX_JAVA_INTEGER}
-                key={"None"}
-                onChange={this.handleDistanceChange}
-               />
-              {distances}
-            </RadioGroup>
-          </Grid>
           <Grid id="items-list-container" item component={Card} xs>
-            <p>Select items to add to your list</p>
-            <FormGroup id="items-list">
-              {checkboxItems}
-            </FormGroup>
-            {saveButton}
-            <List>
-              {this.state.selectedItemsList}
-            </List>
+            {<ItemsList items={this.state.items} selectedItems={this.state.selectedItems} userId={this.state.userId} listId={this.state.listId} onSubmit={this.onSubmit}/>}
           </Grid>
         </Grid> 
-          <TextField display={this.state.location} onChange={this.zipCodeChange} error={this.state.zipCodeError} 
-            helperText={this.state.zipCodeError ? 'Invalid Zip Code' : ' ' } id="filled-basic" label="Zip Code" variant="filled" />
-        <br></br>
-        <br></br>
-        <Button id="submit-button" onClick={this.onSubmit} color="primary" variant="contained">Find Stores</Button>
-        <Dialog open={this.state.listSaveDialog.display} onClose={this.handleDialogCancel} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Save List</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              To save a list containing the selected items to your account, please enter a list name. 
-            </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="list-name"
-                label="List Name"
-                helperText={this.state.listSaveDialog.errorText}
-                error={this.state.listSaveDialog.error}
-                onChange={this.onTextFieldChange}
-                fullWidth
-              />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleDialogCancel} color="primary">
-              Cancel
-            </Button>
-            <Button disabled={this.state.listSaveDialog.saveButtonDisabled} onClick={this.handleDialogSubmit} color="primary">
-              Save
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog
-        open={this.state.listSaveStatus.display}
-        onClose={this.handleListStatusDialogClose}
-        aria-labelledby="form-dialog-title"
-        aria-describedby="form-dialog-description">
-          <DialogTitle id="list-save-dialog-title">{"List Status"}</DialogTitle>
-          <DialogContent>
-          <DialogContentText id="list-save-dialog-text">
-            {this.state.listSaveStatusMessage}
-          </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleListStatusDialogClose} color="primary">
-              OK
-            </Button>
-          </DialogActions>
-        </Dialog>
       </div>
     );
   }
