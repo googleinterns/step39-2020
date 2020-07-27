@@ -208,7 +208,7 @@ class StorePage extends Component {
           <DialogTitle id="form-dialog-title">Share Results</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To share your results with a friend, type in their email here.
+              To share your results, type an email below.
             </DialogContentText>
               <TextField
                 autoFocus
