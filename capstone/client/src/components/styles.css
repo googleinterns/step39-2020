@@ -38,7 +38,7 @@ h3 {
 }
 
 h4 {
-  color: gray;
+  color: #111;
   font-family: 'Helvetica Neue', sans-serif;
 }
 
@@ -179,6 +179,9 @@ h6 {
 }
 
 #stores-page-container {
+  background-image: url("./images/the-market-background.jpg");
+  background-size: 3000px;
+  background-position: -500px -1000px;
   text-align: center;
   color: azure;
 }
@@ -191,6 +194,10 @@ h6 {
 /* StoresPage end */
 
 /* StoreOverviewCards start */
+
+#store-logo {
+  width: 50px;
+}
 
 #show-more-info {
   margin-left: 20%;

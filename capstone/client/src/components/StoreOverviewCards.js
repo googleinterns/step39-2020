@@ -23,11 +23,22 @@ import DriveEtaIcon from '@material-ui/icons/DriveEta';
 import { StoresContext } from './StoresProvider.js';
 import './styles.css';
 
+import safeway from './images/safeway-logo.png';
+import walmart from './images/walmart-logo.jpg';
+import target from './images/target-logo.png';
+
+const logos = {
+  "S" : safeway,
+  "W" : walmart,
+  "T" : target
+}
+
 class StoreOverviewCards extends Component {
 
     render() {
         const storeOverviewCards = this.props.stores.map((store, index) => (
             <div id="store-overview-card">
+              <img id="store-logo" src={logos[store.storeName[0]]}/>
               <Typography variant="h6" component="h6">{store.storeName}</Typography>
               <List>
               <ListItem>
