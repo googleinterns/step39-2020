@@ -106,7 +106,7 @@ class WelcomePage extends React.Component {
 
     if (lat && lng) {
       this.setState({
-        redirect : `/lists?latitude=${lat}&longitude=${lng}`,
+        redirect : `/lists/?latitude=${lat}&longitude=${lng}`,
       });
     }
   }
