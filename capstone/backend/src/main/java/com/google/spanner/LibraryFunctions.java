@@ -18,6 +18,8 @@ package com.google.spanner;
 
 import com.google.cloud.spanner.DatabaseClient;
 import com.google.cloud.spanner.DatabaseId;
+import com.google.cloud.spanner.Key;
+import com.google.cloud.spanner.KeySet;
 import com.google.cloud.spanner.Mutation;
 import com.google.cloud.spanner.ResultSet;
 import com.google.cloud.spanner.Spanner;
@@ -89,6 +91,15 @@ public class LibraryFunctions {
                 .set(DISPLAY_NAME)
                 .to(displayName)
                 .build());
+    dbClient.write(mutations);
+  }
+
+  public static void deleteUserList(long listId, long userId) {
+    DatabaseClient dbClient = initClient();
+    List<Mutation> mutations =
+        Arrays.asList(
+            Mutation.delete(
+                USER_LISTS, KeySet.newBuilder().addKey(Key.of(userId, listId)).build()));
     dbClient.write(mutations);
   }
 

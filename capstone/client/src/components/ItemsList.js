@@ -80,7 +80,8 @@ class ItemsList extends Component {
    * Obtains the selected items from the checkbox list and makes a POST request to 
    * /api/v1/create-or-update-user-list-servlet to save the specified list.
    */
-  handleDialogSubmit = () => {
+  handleDialogSubmit = (successMessage, errorMessage, listName) => {
+    const displayName = (listName === null) ? this.state.listName : listName;
     this.setState({
       listSaveDialog: {
         display: false,
@@ -92,7 +93,7 @@ class ItemsList extends Component {
         userId: this.props.userId,
         userList: {
           listId: this.props.listId,
-          displayName: this.state.listName,
+          displayName,
           itemTypes: Array.from(this.state.selectedItems),
         }
       },
@@ -101,15 +102,16 @@ class ItemsList extends Component {
         listSaveStatus: {
           display: true,
         },
-        listSaveStatusMessage: "Your list has been saved!",
+        listSaveStatusMessage: successMessage,
         listId: res.data.userList.listId,
       });
+      this.props.onSave(res.data.userList.listId);
     }).catch((error) => {
       this.setState({
         listSaveStatus: {
           display: true,
         },
-        listSaveStatusMessage: "There was an error saving your list.",
+        listSaveStatusMessage: errorMessage,
       })
     });
   }
@@ -162,6 +164,16 @@ class ItemsList extends Component {
     }
   }
 
+  onUpdate = () => {
+    const arr = [...this.state.selectedItems];
+    if (arr.length === 0) {
+      this.setState({
+        errorMessage: "Please select at least one item!",
+      });
+    }
+    this.handleDialogSubmit("Your list has been updated.", "There was an error updating your list.", this.props.listName)
+  }
+
   handleDialogCancel = () => {
     this.setState({
       listSaveDialog: {
@@ -175,7 +187,7 @@ class ItemsList extends Component {
       listSaveStatus: {
         display: false,
       },
-    })
+    });
   }
 
   onItemAdd = (item) => {
@@ -233,10 +245,10 @@ class ItemsList extends Component {
             label={<Typography variant="h6">{item}</Typography>}
             key={item}
           />)));
-      const saveButton = (this.props.userId === -1) ? null :
-        (<Button id="selection-button" variant="contained" color="primary" onClick={this.onSave}>
-           Save List
-         </Button>)
+      const saveButton = (this.props.userId === -1) ? null : 
+        ((this.props.listId !== -1) ? 
+          <Button id="selection-button" variant="contained" color="primary" onClick={this.onUpdate}>Update List</Button> : 
+          <Button id="selection-button" variant="contained" color="primary" onClick={this.onSave}>Save List</Button>)
 
     return(
       <div>
@@ -277,7 +289,9 @@ class ItemsList extends Component {
             <Button onClick={this.handleDialogCancel} color="primary">
               Cancel
             </Button>
-            <Button disabled={this.state.listSaveDialog.saveButtonDisabled} onClick={this.handleDialogSubmit} color="primary">
+            <Button 
+              disabled={this.state.listSaveDialog.saveButtonDisabled} 
+              onClick={() => { this.handleDialogSubmit("Your list has been saved.", "There was an error saving yout list.", null) }} color="primary">
               Save
             </Button>
           </DialogActions>
