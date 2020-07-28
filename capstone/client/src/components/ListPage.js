@@ -36,6 +36,7 @@ const MAX_JAVA_INTEGER = 2147483647;
 class ListPage extends Component {
   constructor(props) {
     super(props);
+    const params = new URLSearchParams(window.location.search);
     this.state = {
       selectedItemsList: null,
       errorMessage: null,
@@ -49,9 +50,9 @@ class ListPage extends Component {
       listIndex: -1,
       listName: null,
       userId: this.props.store.get('userId'),
-      location: { // San Jose by default
-        latitude: 37.338207,
-        longitude: -121.886330,
+      location: { 
+        latitude: params.get('latitude'),
+        longitude: params.get('longitude'),
       },
       redirect : null,
     }
@@ -139,7 +140,7 @@ class ListPage extends Component {
   }
 
   render() {
-    if(this.state.redirect) {
+    if (this.state.redirect) {
       return <Redirect to={{
         pathname : this.state.redirect,
       }}/>

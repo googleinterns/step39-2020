@@ -15,19 +15,28 @@
  */
 
 import React from 'react';
+import { Redirect ,} from 'react-router-dom';
+
 import { GoogleApiWrapper } from 'google-maps-react';
 import { Button, Card, Grid, Typography } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
 import APIKey from './APIKey.js';
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
 } from 'react-places-autocomplete';
+
 import Footer from 'rc-footer';
 import 'rc-footer/assets/index.css';
 import Geocode from "react-geocode";
 
+import { Store } from './Store';
 import banner from './images/banner_no_text.png';
+import login from './images/login.png';
+import map from './images/map.png';
+import checklist from './images/checklist.png';
 import placeholder from './images/placehold.png';
+import about from './images/grocery_graphic_small_circle.png';
 
 import './styles.css';
 
@@ -50,6 +59,7 @@ class WelcomePage extends React.Component {
     this.setState({ 
       address,
     });
+
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
       .then(({lat, lng}) => {
@@ -94,10 +104,9 @@ class WelcomePage extends React.Component {
     var lng = this.state.location.longitude;
     console.log(lat, lng);
 
-    if (lat != null && lng != null) {
-      let redirectAddress = '/lists/?latitude=${lat}&longitude=${lng}';
+    if (lat && lng) {
       this.setState({
-        redirect : redirectAddress,
+        redirect : `/lists?latitude=${lat}&longitude=${lng}`,
       });
     }
   }
@@ -112,7 +121,9 @@ class WelcomePage extends React.Component {
           });
         },
         error => {
-          console.error(error);
+          this.setState({
+            address: null,
+          });
         }
       );
 
@@ -126,7 +137,9 @@ class WelcomePage extends React.Component {
   }
 
   render() {
-    //TODO(carolynlwang): WHY ISN'T IT CENTERED
+    if (this.state.redirect) {
+      return <Redirect to={ this.state.redirect }/>
+    }
     return (
       <div id="welcome-page-container">
         <div id="banner">
@@ -161,29 +174,29 @@ class WelcomePage extends React.Component {
                 </div>
               )}
             </PlacesAutocomplete>
-            <div><Button id="enter-location-button" onClick={this.onSubmit}>Enter</Button></div>
+            <div><Button id="enter-location-button" onClick={this.onSubmit}><SearchIcon /></Button></div>
           </Grid>
-          <div><Button onClick={this.requestLocation}>Use current location</Button></div>
+          <div><Button id="current-location-button" onClick={this.requestLocation}>Use current location</Button></div>
           </div>
         </div>
         <Grid container justify="center" id="features-grid-container">
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={placeholder} alt="stores"/>
+              <img src={login} alt="login" class="feature-image"/>
               <h3 className="card-title">Create an account</h3>
               <Typography variant="body1">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography> 
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={placeholder} alt="stores"/>
+              <img src={checklist} alt="checklist" class="feature-image"/>
               <h3 className="card-title">Add items to your list</h3>
               <Typography variant="body1">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography> 
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={placeholder} alt="stores"/>
+              <img src={map} alt="map" class="feature-image"/>
               <h3 className="card-title">Find stores near you</h3>
               <Typography variant="body1">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography> 
             </div>
@@ -193,12 +206,25 @@ class WelcomePage extends React.Component {
           <Grid item component={Card} xs>
             <div id="about-text">
               <h3 className="card-title">About Shopsmart</h3>
-              <Typography variant="body1">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography> 
+              <div id="about-body">
+                <Typography variant="body1">When visiting stores, shoppers today face a variety of challenges. 
+                While a shopper can use a simple Google Search to find the quantity and price for a single item, 
+                this task becomes tedious when it comes to a list of multiple items, as with a shopping list. 
+                The limitations and precautions taken to suppress the spread of the coronavirus have only exacerbated these difficulties. 
+                For example, to reduce the risk of transmission, local and major grocery chains have begun to limit the number of people that can enter stores at any given time.  
+                </Typography> 
+                <br/>
+                <Typography variant="body1">Now more than ever, people need efficient shopping experiences. 
+                If we streamline this process of shopping for multiple items at once, a shopper will be better able to access the information they need before leaving the house, 
+                in alignment with Google’s mission to “organize the world’s information and make it universally accessible and useful.” 
+                Shopsmart will help you save money and time by making more informed decisions about which stores to visit for your particular needs. 
+</Typography>
+              </div>
             </div>
           </Grid>
-          <Grid item component={Card} xs>
-            <div class="feature-card">
-              <img src={placeholder} alt="stores"/> 
+          <Grid item component={Card} xs> 
+            <div id="about-image-card">
+              <img src={about} alt="Woman pushing grocery cart" id="about-image"/> 
             </div>
           </Grid>
         </Grid>
@@ -231,6 +257,6 @@ class WelcomePage extends React.Component {
   }
 }
 
-export default GoogleApiWrapper({
+export const WelcomePageWithStore = GoogleApiWrapper({
     apiKey: (APIKey.APIKey())
-  })(WelcomePage)
+  })(Store.withStore(WelcomePage))
