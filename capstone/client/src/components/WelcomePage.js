@@ -44,7 +44,7 @@ class WelcomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-        address: '',
+        address: '21 North 5th Street, San Jose, CA 95112', // San Jose by default
         location: { // San Jose by default
           latitude: 37.338207,
           longitude: -121.886330,
