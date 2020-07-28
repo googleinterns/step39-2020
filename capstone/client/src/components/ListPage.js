@@ -17,7 +17,7 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
-import { Card, FormControlLabel, Grid, List, MenuItem, Radio, Select, TextField } from '@material-ui/core';
+import { Card, Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { Add, Create } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
 
@@ -168,6 +168,7 @@ class ListPage extends Component {
         <h1>Item Selection</h1>
         {this.state.userId === -1 ? null : 
           <div id="list-selection-buttons-container">
+            <InputLabel>Select from saved lists</InputLabel>
             <Select variant="standard" value={this.state.listIndex} container id="user-lists" onClick={this.selectList}>
               <MenuItem id="list-button" value={-1} key={-1}>
                 <Add fontSize="small"/><span> </span>New list
