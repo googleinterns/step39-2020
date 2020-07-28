@@ -24,6 +24,7 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 import Footer from 'rc-footer';
 import 'rc-footer/assets/index.css';
+import Geocode from "react-geocode";
 
 import banner from './images/banner_no_text.png';
 import placeholder from './images/placehold.png';
@@ -34,15 +35,40 @@ class WelcomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
-        address: '' 
+        address: '',
+        location: { // San Jose by default
+          latitude: 37.338207,
+          longitude: -121.886330,
+        },
+        redirect: null,
     };
+    Geocode.setApiKey(APIKey.APIKey());
   }
 
   handleChange = address => {
+    // TODO(carolynlwang): Get full address from partial address and replace address field with it
     this.setState({ 
       address,
     });
-  };
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(({lat, lng}) => {
+        this.setState({
+          location: {
+            latitude: lat,
+            longitude: lng,
+          }
+        });
+      })
+      .catch(error => {
+        this.setState({
+          location: {
+            latitude: null,
+            longitude: null,
+          }
+        });
+      });
+  }
 
   handleSelect = address => {
     this.setState({
@@ -50,9 +76,57 @@ class WelcomePage extends React.Component {
     });
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
-  };
+      .then(({lat, lng}) => {
+        this.setState({
+          location: {
+            latitude: lat,
+            longitude: lng,
+          }
+        });
+      })
+      .catch(error => {
+        
+      });
+  }
+
+  onSubmit = async () => {
+    var lat = this.state.location.latitude;
+    var lng = this.state.location.longitude;
+    console.log(lat, lng);
+
+    if (lat != null && lng != null) {
+      let redirectAddress = '/lists/?latitude=${lat}&longitude=${lng}';
+      this.setState({
+        redirect : redirectAddress,
+      });
+    }
+  }
+
+  requestLocation = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      Geocode.fromLatLng(position.coords.latitude, position.coords.longitude).then(
+        response => {
+          const address = response.results[0].formatted_address;
+          this.setState({
+            address: address,
+          });
+        },
+        error => {
+          console.error(error);
+        }
+      );
+
+      this.setState({
+        location: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        },
+      });
+    });
+  }
 
   render() {
+    //TODO(carolynlwang): WHY ISN'T IT CENTERED
     return (
       <div id="welcome-page-container">
         <div id="banner">
@@ -61,9 +135,10 @@ class WelcomePage extends React.Component {
             <h1 className="banner-text">Shopsmart</h1>
           </div>
           <div id="slogan-text">
-            <h2 class="slogan-text">Get prices you deserve.</h2>
+            <h2 className="slogan-text">Get prices you deserve.</h2>
           </div>
-          <div id="enter-location-container">
+          <div id="location-input-container">
+          <Grid container alignItems="stretch" id="location-input-grid">
             <PlacesAutocomplete
             value={this.state.address}
             onChange={this.handleChange}
@@ -74,17 +149,21 @@ class WelcomePage extends React.Component {
                   <input
                   {...getInputProps({
                   placeholder: 'Enter your address...',
+                  className: 'location-input'
                   })}
                   />
                   {suggestions.map(suggestion => (
                   <div {...getSuggestionItemProps(suggestion)}>
-                    <Button>{suggestion.description}</Button>
-                    {suggestion === suggestions[suggestions.length - 1] ? (<div><Button>Use current location</Button></div>) : null}
+                    <Button class="location-suggestion">{suggestion.description}</Button>
                   </div>
                   ))}
+                  
                 </div>
               )}
             </PlacesAutocomplete>
+            <div><Button id="enter-location-button" onClick={this.onSubmit}>Enter</Button></div>
+          </Grid>
+          <div><Button onClick={this.requestLocation}>Use current location</Button></div>
           </div>
         </div>
         <Grid container justify="center" id="features-grid-container">

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+ /* TODO(carolynlwang): Reactive text sizing */
 h1 {
   color: black;
   font-family: 'Helvetica Neue', sans-serif;
@@ -71,13 +72,6 @@ h6 {
   font-weight: bold;
 }
 
-#enter-location-container {
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 .banner-text {
   color: #05386b;
   text-shadow: none;
@@ -99,6 +93,33 @@ h6 {
   transform: translate(-50%, -50%);
 }
 
+#location-input-container {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+}
+
+.location-suggestion {
+  font-size: 20px;
+  width: 100%;
+  text-align: left;
+  position: relative;
+}
+
+.location-input {
+  font-size: 20px;
+  border: none;
+  width: 100%;
+}
+
+#enter-location-button {
+  margin-left: 20px;
+  background-color: #05386b; 
+  color: #edf5e1;
+}
+
 .feature-card {
   padding: 50px;
   text-align: center;
@@ -110,10 +131,6 @@ h6 {
 
 #about-text {
   padding: 40px;
-}
-
-.rc-footer {
-  color: #05386b;
 }
 
 /* WelcomePage end */
