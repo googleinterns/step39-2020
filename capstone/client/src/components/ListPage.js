@@ -68,7 +68,7 @@ class ListPage extends Component {
       });
     });
   
-    if(this.state.userId !== -1) {
+    if (this.state.userId !== -1) {
       axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
         .then(res => {
           this.setState({
@@ -77,6 +77,24 @@ class ListPage extends Component {
           });
         });
     }
+  }
+
+  getUserLists = (listId) => {
+    axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
+        .then(res => {
+          let listIndex = -1;
+          for (let i = 0; i < res.data.userLists.length; i++) {
+            if (listId === res.data.userLists[i].listId) {
+              listIndex = i;
+            }
+          }
+          this.setState({
+            totalLists: res.data.userLists.length,
+            userLists: res.data.userLists,
+            listId,
+            listIndex,
+          });
+        });
   }
 
   /* 
@@ -128,6 +146,7 @@ class ListPage extends Component {
         listId: -1,
         listIndex: -1,
         selectedItems: new Set(),
+        listName: null,
       });
       return;
     }
@@ -135,6 +154,7 @@ class ListPage extends Component {
       listId : this.state.userLists[index].listId,
       listIndex: index,
       selectedItems: new Set(this.state.userLists[index].itemTypes),
+      listName: this.state.userLists[index].displayName,
     });
   }
 
@@ -194,7 +214,14 @@ class ListPage extends Component {
         }
         <Grid container alignItems="stretch">
           <Grid id="items-list-container" item component={Card} xs>
-            {<ItemsList items={this.state.items} selectedItems={this.state.selectedItems} userId={this.state.userId} listId={this.state.listId} onSubmit={this.onSubmit}/>}
+            {<ItemsList 
+              items={this.state.items} 
+              selectedItems={this.state.selectedItems} 
+              userId={this.state.userId} 
+              listId={this.state.listId} 
+              listName={this.state.listName} 
+              onSubmit={this.onSubmit} 
+              onSave={this.getUserLists} />}
           </Grid>
         </Grid> 
       </div>
