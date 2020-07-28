@@ -23,10 +23,21 @@ import { StoresContext } from './StoresProvider.js';
 import StoreMaps from './StoreMaps.js';
 import './styles.css';
 
+import safeway from './images/safeway-logo.png';
+import walmart from './images/walmart-logo.jpg';
+import target from './images/target-logo.png';
+
+const logos = {
+  "S" : safeway,
+  "W" : walmart,
+  "T" : target
+}
+
 class StoreDetailCards extends Component {
   render() {
     const storeDetailCards = this.props.stores.map((store) => (
-      <div>
+      <div id="store-details-container">
+        <img id="store-logo" src={logos[store.storeName[0]]} alt=""/>
         <Typography variant='h4'>{store.storeName}</Typography>
         <Typography variant='h6'>Address: {store.storeAddress}</Typography>
         <Grid container alignItems="stretch">

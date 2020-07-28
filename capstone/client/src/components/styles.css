@@ -39,7 +39,7 @@ h3 {
 }
 
 h4 {
-  color: gray;
+  color: #111;
   font-family: 'Helvetica Neue', sans-serif;
 }
 
@@ -123,7 +123,7 @@ h6 {
 }
 
 #price-filter {
-  margin-top: 10px;
+  margin-top: 20px;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -245,6 +245,9 @@ h6 {
 }
 
 #stores-page-container {
+  background-image: url("./images/the-market-background.jpg");
+  background-size: 3000px;
+  background-position: -500px -1000px;
   text-align: center;
   color: azure;
 }
@@ -257,6 +260,10 @@ h6 {
 /* StoresPage end */
 
 /* StoreOverviewCards start */
+
+#store-logo {
+  width: 50px;
+}
 
 #show-more-info {
   margin-left: 20%;
@@ -275,6 +282,10 @@ h6 {
 #google-map {
   height : 25%;
   width : 25%;
+}
+
+#store-details-container {
+  margin-top : 20px;
 }
 
 /* StoreDetailCards end */
