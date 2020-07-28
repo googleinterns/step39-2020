@@ -224,6 +224,10 @@ h6 {
   width: 140px;
 }
 
+#select-text{
+  margin-right: 65px;
+}
+
 #list-selection-buttons-container {
   margin: 0 15% 0 0;
 }

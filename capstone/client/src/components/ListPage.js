@@ -17,8 +17,8 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
-import { Card, Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
-import { Add, Create } from '@material-ui/icons';
+import { Button, Card, Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { Add, Create, Delete } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
 
 import { Store } from './Store';
@@ -138,6 +138,20 @@ class ListPage extends Component {
     });
   }
 
+  removeList = () => {
+    axios.get('/api/v1/remove-user-list', { params: { userId: this.state.userId, listId: this.state.listId }})
+      .then(() => {
+        this.setState({
+          successMessage: "This list has been successfully deleted."
+        });
+      }).catch(() => {
+        this.setState({
+          errorMessage: "There was an error deleting this list."
+        });
+      });
+      window.location.reload();
+  }
+
   render() {
     if(this.state.redirect) {
       return <Redirect to={{
@@ -168,13 +182,14 @@ class ListPage extends Component {
         <h1>Item Selection</h1>
         {this.state.userId === -1 ? null : 
           <div id="list-selection-buttons-container">
-            <InputLabel>Select from saved lists</InputLabel>
+            {(this.state.userId !== -1 && this.state.listId !== -1) ? <InputLabel id="select-text">Select from saved lists</InputLabel> : <InputLabel>Select from saved lists</InputLabel>}
             <Select variant="standard" value={this.state.listIndex} container id="user-lists" onClick={this.selectList}>
               <MenuItem id="list-button" value={-1} key={-1}>
                 <Add fontSize="small"/><span> </span>New list
               </MenuItem>
               {userListButtons}
             </Select>
+            {(this.state.userId !== -1 && this.state.listId !== -1) ? <Button onClick={this.removeList}><Delete /></Button> : null}
           </div>
         }
         <Grid container alignItems="stretch">
