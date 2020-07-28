@@ -17,7 +17,7 @@
 h1 {
   color: black;
   font-family: 'Helvetica Neue', sans-serif;
-  font-size: 70px;
+  font-size: 72px;
   font-weight: bold;
   letter-spacing: -1px;
   line-height: 1;
@@ -35,10 +35,11 @@ h2 {
 h3 {
   color: #111;
   font-family: 'Helvetica Neue', sans-serif;
+  font-size: 30px;
 }
 
 h4 {
-  color: gray;
+  color: #111;
   font-family: 'Helvetica Neue', sans-serif;
 }
 
@@ -52,10 +53,79 @@ h6 {
   font-weight: 600;
 }
 
+/* WelcomePage starts */
+#banner {
+  position: relative;
+  text-align: center;
+}
+
+#banner-image {
+  width: 100%;
+}
+
+#banner-text-container {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+}
+
+#enter-location-container {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.banner-text {
+  color: #05386b;
+  text-shadow: none;
+  font-weight: bold;
+}
+
+.slogan-text {
+  color: #edf5e1;
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#slogan-text {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.feature-card {
+  padding: 50px;
+  text-align: center;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+#about-text {
+  padding: 40px;
+}
+
+/* WelcomePage end */
+
 /* FilterStores start */
 
+#distance-filter {
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 #price-filter {
-  margin-top: 40px;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 /* FilterStores end */
@@ -75,8 +145,7 @@ h6 {
   background-size: cover;
   color: azure;
   min-height: 100%;
-  position: fixed;
-  text-align: center;
+  text-align: right;
 }
 
 #items-container {
@@ -155,10 +224,15 @@ h6 {
   width: 140px;
 }
 
-#list-button {
+#list-selection-buttons-container {
+  margin: 0 15% 0 0;
+}
+
+#user-lists {
   background-color: #a782da;
-  border-radius: 24px;
-  margin: 0 10px 10px 10px;
+  color: white;
+  text-align: center;
+  width: 140px;
 }
 
 /* ListPage end */
@@ -171,6 +245,9 @@ h6 {
 }
 
 #stores-page-container {
+  background-image: url("./images/the-market-background.jpg");
+  background-size: 3000px;
+  background-position: -500px -1000px;
   text-align: center;
   color: azure;
 }
@@ -185,6 +262,10 @@ h6 {
 /* StoresPage end */
 
 /* StoreOverviewCards start */
+
+#store-logo {
+  width: 50px;
+}
 
 #show-more-info {
   margin-left: 20%;
@@ -203,6 +284,10 @@ h6 {
 #google-map {
   height : 25%;
   width : 25%;
+}
+
+#store-details-container {
+  margin-top : 20px;
 }
 
 /* StoreDetailCards end */

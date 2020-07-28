@@ -17,7 +17,8 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import axios from 'axios';
-import { Button, ButtonGroup, Card, FormControlLabel, Grid, List, Radio, TextField } from '@material-ui/core';
+import { Card, Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { Add, Create } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
 
 import { Store } from './Store';
@@ -45,8 +46,9 @@ class ListPage extends Component {
       items: [],
       selectedItems: new Set(),
       listId: -1,
+      listIndex: -1,
       listName: null,
-      userId: -1,
+      userId: this.props.store.get('userId'),
       location: { // San Jose by default
         latitude: 37.338207,
         longitude: -121.886330,
@@ -66,18 +68,6 @@ class ListPage extends Component {
       });
     });
   
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.setState({
-        location: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        },
-      });
-    }, () => {
-      this.setState({
-        zipCodeRequired: true,
-      });
-    });
     if(this.state.userId !== -1) {
       axios.get('/api/v1/get-user-lists', { params : { userId : this.state.userId }})
         .then(res => {
@@ -129,12 +119,21 @@ class ListPage extends Component {
   }
 
   selectList = (event) => {
-    var index = event.target.name;
-    if(event.target.className === "MuiButton-label"){
-      index = event.target.parentElement.name;
+    const index = event.target.value;
+    if (index === undefined) {
+      return;
+    }
+    if (index === -1) {
+      this.setState({
+        listId: -1,
+        listIndex: -1,
+        selectedItems: new Set(),
+      });
+      return;
     }
     this.setState({
       listId : this.state.userLists[index].listId,
+      listIndex: index,
       selectedItems: new Set(this.state.userLists[index].itemTypes),
     });
   }
@@ -157,7 +156,9 @@ class ListPage extends Component {
     }
 
     const userListButtons = this.state.userLists.map((userList, index) => (
-      <Button id="list-button" name={index}>{userList.displayName}</Button>
+      <MenuItem id="list-button" value={index} key={index}> 
+        <Create /><span> </span>{userList.displayName}
+      </MenuItem>
     ));
 
     return (
@@ -165,9 +166,17 @@ class ListPage extends Component {
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
         {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
         <h1>Item Selection</h1>
-        <ButtonGroup container id="user-lists" onClick={this.selectList}>
-          {userListButtons}
-        </ButtonGroup>
+        {this.state.userId === -1 ? null : 
+          <div id="list-selection-buttons-container">
+            <InputLabel>Select from saved lists</InputLabel>
+            <Select variant="standard" value={this.state.listIndex} container id="user-lists" onClick={this.selectList}>
+              <MenuItem id="list-button" value={-1} key={-1}>
+                <Add fontSize="small"/><span> </span>New list
+              </MenuItem>
+              {userListButtons}
+            </Select>
+          </div>
+        }
         <Grid container alignItems="stretch">
           <Grid id="items-list-container" item component={Card} xs>
             {<ItemsList items={this.state.items} selectedItems={this.state.selectedItems} userId={this.state.userId} listId={this.state.listId} onSubmit={this.onSubmit}/>}
