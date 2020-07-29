@@ -32,6 +32,7 @@ class Header extends Component {
       this.state = {
           errorMessage: null,
           loggedIn: this.props.store.get('loggedIn'), 
+          redirect: null,
       }
     }
     /*
@@ -78,24 +79,51 @@ class Header extends Component {
     }
 
     redirectToHome = () => {
-      return <Redirect to='/'/>
+      this.setState({
+        redirect: '/'
+      });
     }
 
     render() {
+      // Change the color of the header depending on what page we're on
+      let headerColor = 'transparent';
+      if (this.props.page === 'welcome') {
+        headerColor = '#77bce0';
+      } else if (this.props.page === 'lists') {
+        headerColor = '#ebebed';
+      }
+      // TODO(carolynlwang): Set a header color for new background image for StoresPage.
+      
+      const headerStyle = {
+        background: headerColor
+      }
+
+      // Disable hover effect for the logo
+      const buttonStyle = {
+        backgroundColor: 'transparent'
+      }
+
+      if (this.state.redirect) {
+        // TODO(carolynlwang): Figure out why header disappears when you redirect to home from home.
+        if (this.props.page != 'welcome') {
+          return <Redirect to={{
+            pathname : '/'
+          }}/>
+        }
+      }
         return (
           <div>
-            <AppBar position="static">
+            <AppBar position="static" style={headerStyle}>
               <Toolbar>
                 <Typography id="typography" variant="h6">
-                  <Button id="shopsmart-logo" onClick={this.redirectToHome}>Shopsmart</Button>
+                  <Button id="shopsmart-logo" onClick={this.redirectToHome} style={buttonStyle}>Shopsmart</Button>
                 </Typography>
                 {this.state.loggedIn ? 
                 <GoogleLogout
                   display="none"
                   clientId={CLIENT_ID}
-                  buttonText="Logout"
+                  buttonText="Log out"
                   onLogoutSuccess={this.logoutSuccess}
-                  icon={false}
                 /> :
                 <GoogleLogin
                   clientId={CLIENT_ID}
