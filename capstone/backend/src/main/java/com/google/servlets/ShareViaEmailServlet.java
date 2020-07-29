@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.http.client.utils.URIBuilder;
 
 @WebServlet("/api/v1/share-via-email")
 public class ShareViaEmailServlet extends HttpServlet {
@@ -75,27 +76,27 @@ public class ShareViaEmailServlet extends HttpServlet {
     message.setSubject("Message From ShopSmart");
     // Now set the actual message
     message.setContent(storesHTML, "text/html");
-    System.out.println("sending...");
     // Send message
     Transport.send(message);
   }
 
   private String getStoresHTML(
       List<Store> stores, List<String> itemTypes, double latitude, double longitude) {
-    String url = "https://step39-2020.uc.r.appspot.com/stores/?";
-    String items = itemTypes.get(0);
-    boolean first = true;
-    for (String item : itemTypes) {
-      url = url + "items=" + item + "&";
-      items = items + ", " + item;
+    String url = "https://step39-2020.uc.r.appspot.com/";
+    try {
+      URIBuilder urlb = new URIBuilder("https://step39-2020.uc.r.appspot.com/stores/");
+      for (String item : itemTypes) {
+        urlb.addParameter("items", item);
+      }
+      urlb.addParameter("latitude", "" + latitude);
+      urlb.addParameter("longitude", "" + longitude);
+      urlb.addParameter("distanceValue", "2147483647");
+      urlb.addParameter("method", "location");
+      url = urlb.toString();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-    url =
-        url
-            + "latitude="
-            + latitude
-            + "&longitude="
-            + longitude
-            + "&distanceValue=2147483647&method=location";
+    String items = String.join(", ", itemTypes);
     String storesString = "";
     for (Store store : stores) {
       storesString =
