@@ -15,12 +15,13 @@
  */
 
 import React, { Component } from 'react';
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
-import { withRouter } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 
+import './styles.css';
 import { Store } from './Store';
 
 const CLIENT_ID = "618901837293-lggv074jcmas0qvt2gvatjsb62r219om.apps.googleusercontent.com";
@@ -76,13 +77,17 @@ class Header extends Component {
       });
     }
 
+    redirectToHome = () => {
+      return <Redirect to='/'/>
+    }
+
     render() {
         return (
           <div>
             <AppBar position="static">
               <Toolbar>
                 <Typography id="typography" variant="h6">
-                  {this.props.title}
+                  <Button id="shopsmart-logo" onClick={this.redirectToHome}>Shopsmart</Button>
                 </Typography>
                 {this.state.loggedIn ? 
                 <GoogleLogout
