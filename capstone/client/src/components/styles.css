@@ -193,6 +193,10 @@ h6 {
   flex: 1;
 }
 
+#shopsmart-logo {
+  background-color: none;
+}
+
 /* Header end */
 
 /* ListPage start */

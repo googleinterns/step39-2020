@@ -15,12 +15,13 @@
  */
 
 import React, { Component } from 'react';
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
-import { withRouter } from "react-router-dom";
+import { Redirect, withRouter } from "react-router-dom";
 
+import './styles.css';
 import { Store } from './Store';
 
 const CLIENT_ID = "618901837293-lggv074jcmas0qvt2gvatjsb62r219om.apps.googleusercontent.com";
@@ -31,6 +32,7 @@ class Header extends Component {
       this.state = {
           errorMessage: null,
           loggedIn: this.props.store.get('loggedIn'), 
+          redirect: null,
       }
     }
     /*
@@ -76,21 +78,54 @@ class Header extends Component {
       });
     }
 
+    redirectToHome = () => {
+      this.setState({
+        redirect: '/'
+      });
+    }
+
     render() {
+      // Change the color of the header depending on what page we're on
+      let headerColor = 'transparent';
+      if (this.props.page === 'welcome') {
+        headerColor = '#77bce0';
+      } else if (this.props.page === 'lists') {
+        headerColor = '#ebebed';
+      }
+      // TODO(carolynlwang): Set a header color for new background image for StoresPage.
+
+      const headerStyle = {
+        background: headerColor
+      }
+
+      // Disable hover effect for the logo
+      const buttonStyle = {
+        backgroundColor: 'transparent'
+      }
+
+      if (this.state.redirect) {
+        if (this.props.page === 'welcome') {
+          window.location.reload(true);
+        }
+        else {
+          return <Redirect to={{
+            pathname : '/'
+          }}/>
+        }
+      }
         return (
           <div>
-            <AppBar position="static">
+            <AppBar position="static" style={headerStyle}>
               <Toolbar>
                 <Typography id="typography" variant="h6">
-                  {this.props.title}
+                  <Button id="shopsmart-logo" onClick={this.redirectToHome} style={buttonStyle}>Shopsmart</Button>
                 </Typography>
                 {this.state.loggedIn ? 
                 <GoogleLogout
                   display="none"
                   clientId={CLIENT_ID}
-                  buttonText="Logout"
+                  buttonText="Log out"
                   onLogoutSuccess={this.logoutSuccess}
-                  icon={false}
                 /> :
                 <GoogleLogin
                   clientId={CLIENT_ID}

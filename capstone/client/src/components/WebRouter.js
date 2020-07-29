@@ -29,11 +29,11 @@ function WebRouter() {
       <Router>
         <Store.Container>
           <Switch>
-            <Route exact path='/' component={() => <div><HeaderWithStore title="Welcome"/><WelcomePageWithStore/></div>} />
-            <Route path='/lists/:params' component={() => <div><HeaderWithStore title="Lists"/><ListPageWithStore/></div>} />
-            <Route path='/lists' component={() => <div><HeaderWithStore title="Lists"/><ListPageWithStore /></div>} />
-            <Route path='/stores/:params' component={() => <div><HeaderWithStore title="Store Recommendations"/><StorePageWithStore/></div>} />
-            <Route path='/stores' component={() => <div><HeaderWithStore title="Store Recommendations"/><StorePageWithStore/></div>} />
+            <Route exact path='/' component={() => <div><HeaderWithStore page="welcome"/><WelcomePageWithStore/></div>} />
+            <Route path='/lists/:params' component={() => <div><HeaderWithStore page="lists"/><ListPageWithStore/></div>} />
+            <Route path='/lists' component={() => <div><HeaderWithStore page="lists"/><ListPageWithStore /></div>} />
+            <Route path='/stores/:params' component={() => <div><HeaderWithStore page="stores"/><StorePageWithStore/></div>} />
+            <Route path='/stores' component={() => <div><HeaderWithStore page="stores"/><StorePageWithStore/></div>} />
           </Switch>
         </Store.Container>
       </Router>
