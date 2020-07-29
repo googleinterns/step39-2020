@@ -203,7 +203,7 @@ class FilterStores extends Component {
         label={item}
         clickable
         onClick={this.onFilterRemove}
-        color="secondary"
+        id="interior-button"
       /> :
       <Chip
         key={item}
@@ -229,12 +229,13 @@ class FilterStores extends Component {
       <div id="price-filter">
         <Grid container spacing={2} alignItems="center">
           <Grid item>
-            <AttachMoneyIcon color='primary' />
+            <AttachMoneyIcon id="store-icon" />
           </Grid>
           <Grid item>
             <Input
               value={this.state.setPriceLeft}
               margin="dense"
+              id="store-icon"
               onChange={this.handleInputChangeLeft}
               onBlur={this.handleBlur}
               inputProps={{
@@ -251,7 +252,7 @@ class FilterStores extends Component {
                   value={[this.state.setPriceLeft, this.state.setPriceRight]}
                   onChange={this.onPriceChange}
                   aria-labelledby="range-slider"
-                  color="action"
+                  id="store-icon"
                   max={this.state.maxPrice}
                   step={filterStep}
             />
@@ -260,6 +261,7 @@ class FilterStores extends Component {
             <Input
               value={this.state.setPriceRight}
               margin="dense"
+              id="store-icon"
               onChange={this.handleInputChangeRight}
               onBlur={this.handleBlur}
               inputProps={{
@@ -276,12 +278,13 @@ class FilterStores extends Component {
       <div id="distance-filter">
         <Grid container spacing={2} alignItems="center">
           <Grid item>
-            <DriveEtaIcon color='primary' />
+            <DriveEtaIcon id="store-icon" />
           </Grid>
           <Grid item>
             <Input
               value={this.state.setDistanceLeft}
               margin="dense"
+              id="store-icon"
               onChange={this.handleDistanceChangeLeft}
               onBlur={this.handleDistanceBlur}
               inputProps={{
@@ -298,7 +301,7 @@ class FilterStores extends Component {
                   value={[this.state.setDistanceLeft, this.state.setDistanceRight]}
                   onChange={this.onDistanceChange}
                   aria-labelledby="range-slider"
-                  color="action"
+                  id="store-icon"
                   max={this.state.maxDistance}
                   step={distanceStep}
             />
@@ -307,6 +310,7 @@ class FilterStores extends Component {
             <Input
               value={this.state.setDistanceRight}
               margin="dense"
+              id="store-icon"
               onChange={this.handleDistanceChangeRight}
               onBlur={this.handleDistanceBlur}
               inputProps={{

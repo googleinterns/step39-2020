@@ -245,6 +245,7 @@ class ItemsList extends Component {
             label={<Typography variant="h6">{item}</Typography>}
             key={item}
           />)));
+    
     const saveButton = (this.props.userId === -1) ? null : 
       ((this.props.listId !== -1) ? 
         <Button id="selection-button" variant="contained" color="primary" onClick={this.onUpdate}>Update List</Button> : 

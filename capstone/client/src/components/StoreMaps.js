@@ -18,6 +18,7 @@ import { GoogleApiWrapper, Map, Marker } from 'google-maps-react';
 import React, { Component } from 'react';
 import Geocode from 'react-geocode';
 import { Button } from '@material-ui/core';
+import CommuteIcon from '@material-ui/icons/Commute';
 
 import APIKey from './APIKey.js';
 import './styles.css';
@@ -87,8 +88,8 @@ class StoreMaps extends Component {
           center={{lat: this.state.latitude, lng: this.state.longitude}}>
           <Marker position={{lat: this.state.latitude, lng: this.state.longitude}}/>
         </Map>
-        <Button variant="contained" color="primary" onClick={() => { this.redirectToDirections() }}>
-          Get Directions
+        <Button variant="contained" id="interior-button" onClick={() => { this.redirectToDirections() }}>
+          Get Directions&nbsp;<CommuteIcon color='black' />
         </Button>
       </div>
     )
