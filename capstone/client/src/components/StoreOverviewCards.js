@@ -43,7 +43,7 @@ class StoreOverviewCards extends Component {
               <List>
               <ListItem>
                   <ListItemIcon>
-                    <ShoppingCartIcon color='primary' />
+                    <ShoppingCartIcon id="store-icon" />
                   </ListItemIcon>
                   <ListItemText>
                   Total Items Found: {store.totalItemsFound}/{this.props.numItems}
@@ -51,7 +51,7 @@ class StoreOverviewCards extends Component {
               </ListItem>
               <ListItem>
                   <ListItemIcon>
-                    <AttachMoneyIcon color='primary' />
+                    <AttachMoneyIcon id="store-icon" />
                   </ListItemIcon>
                   <ListItemText>
                   Lowest Potential Price: ${(store.lowestPotentialPrice-.005).toFixed(2)}
@@ -59,7 +59,7 @@ class StoreOverviewCards extends Component {
               </ListItem>
               <ListItem>
                   <ListItemIcon>
-                    <DriveEtaIcon color='primary' />
+                    <DriveEtaIcon id="store-icon" />
                   </ListItemIcon>
                   <ListItemText>
                   Distance: {store.distanceFromUser.toFixed(1)} miles
@@ -68,7 +68,7 @@ class StoreOverviewCards extends Component {
               </List>
               <StoresContext.Consumer>
                   {(context) => (
-                    <Button id="show-more-info" variant="contained" color="primary" onClick={() => 
+                    <Button id="show-more-info" variant="contained" id="interior-button" onClick={() => 
                       context.setStore(index)}>
                     Show more Information
                     </Button>

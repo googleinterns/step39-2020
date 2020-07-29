@@ -190,21 +190,18 @@ class StorePage extends Component {
 
     const overviewCards = (this.state.originalStores.length === 0) ? <CircularProgress id="stores-loading" color="action" /> : 
     <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>;
-
-    const method = (this.state.method === "location") ? <h5>Calculated from tracked location</h5> : <h5>Calculated from Zip Code: {this.state.zipCode}</h5>
   
     const shareButton = (this.state.originalStores.length === 0) ? null :
-        (<Button id="back-button" variant="contained" color="primary" onClick={this.onShare}>
-           Share Stores <MailOutlineIcon color='white' />
+        (<Button id="back-button" variant="contained" onClick={this.onShare}>
+           Share Results&nbsp;<MailOutlineIcon color='white' />
          </Button>)
 
     return(
       <div id="stores-page-container">
         <h1>Store Recommendations</h1>
-        {method}
         <StoresProvider>
         <Grid item>
-            <Button id="back-button" onClick={this.goBack} color="primary" variant="contained"><ArrowBackIcon color='white' />Back To List</Button>
+            <Button id="back-button" onClick={this.goBack} variant="contained"><ArrowBackIcon color='white' />Back To List</Button>
             {shareButton}
         </Grid>
         <Grid item>
@@ -226,7 +223,7 @@ class StorePage extends Component {
               />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleDialogCancel} color="primary">
+            <Button onClick={this.handleDialogCancel} color="#77bce0">
               Cancel
             </Button>
             <Button disabled={this.state.shareDialog.shareButtonDisabled} onClick={this.handleDialogSubmit} color="primary">
