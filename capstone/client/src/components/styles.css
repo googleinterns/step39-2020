@@ -304,7 +304,7 @@ h6 {
 }
 
 #back-button-list-page {
-  background-color: #77bce0;
+  background-color: #c5ddeb;
   color: black;
   height: 40px;
   text-align: center;
@@ -345,8 +345,8 @@ h6 {
 }
 
 #back-button {
-  background-color : #05386b;
-  color : #edf5e1;
+  background-color: #c5ddeb;
+  color : black;
   justify-content: center;
   margin-bottom: 10px;
   margin-left: 5px;
