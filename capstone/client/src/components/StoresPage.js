@@ -53,6 +53,7 @@ class StorePage extends Component {
           shareStatusMessage: null,
           email : null,
       }
+      this.emailRegex = new RegExp("^[^@]+@[^@]+.[^@]+$");
       this.getStores = this.getStores.bind(this);
     }
   
@@ -102,7 +103,7 @@ class StorePage extends Component {
    * error message is displayed and the save button is disabled. 
    */
   onTextFieldChange = (event) => {
-    if (event.target.value.trim() === '') {
+    if (!this.emailRegex.test(event.target.value)) {
       this.setState({
         shareDialog: {
           display: true,
@@ -136,7 +137,10 @@ class StorePage extends Component {
       '/api/v1/share-via-email',
       { 
         email : this.state.email,
-        html : "<h1>Test</h1>",
+        latitude : this.state.latitude,
+        longitude : this.state.longitude,
+        itemTypes : this.state.items,
+        stores : this.state.originalStores,
       },
     ).then((res) => {
       this.setState({
