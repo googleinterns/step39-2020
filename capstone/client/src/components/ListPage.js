@@ -198,7 +198,7 @@ class ListPage extends Component {
 
     const userListButtons = this.state.userLists.map((userList, index) => (
       <MenuItem id="list-button" value={index} key={index}> 
-        <Create /><span> </span>{userList.displayName}
+        <Create fontSize="inherit"/><span> </span>{userList.displayName}
       </MenuItem>
     ));
 
@@ -211,10 +211,10 @@ class ListPage extends Component {
         {this.state.userId === -1 ? null : 
           <div id="list-selection-buttons-container">
             <InputLabel>Select from saved lists</InputLabel>
-            {(this.state.userId !== -1 && this.state.listId !== -1) ? <Button onClick={this.removeList}><Delete /></Button> : null}
+            {(this.state.userId !== -1 && this.state.listId !== -1) ? <Button onClick={this.removeList}><div id="delete-icon-container"><Delete /></div></Button> : null}
             <Select variant="standard" value={this.state.listIndex} container id="user-lists" onClick={this.selectList}>
               <MenuItem id="list-button" value={-1} key={-1}>
-                <Add fontSize="small"/><span> </span>New list
+                <Add fontSize="inherit"/><span> </span>New list
               </MenuItem>
               {userListButtons}
             </Select>

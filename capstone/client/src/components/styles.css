@@ -275,9 +275,10 @@ h6 {
 
 #selection-button {
   background-color: #a782da;
-  border-radius: 24px;
+  border-radius: 4px;
   margin: 0 10px 0px 10px;
-  height: 50px;
+  height: 40px;
+  text-transform: none;
   width: 140px;
 }
 
@@ -287,7 +288,7 @@ h6 {
 
 #user-lists {
   background-color: #a782da;
-  color: white;
+  color: white; 
   text-align: center;
   width: 140px;
 }
@@ -300,8 +301,15 @@ h6 {
 #back-button-list-page {
   background-color: #a782da;
   color: white;
+  height: 40px;
   text-align: center;
+  text-transform: none;
   width: 160px;
+}
+
+#delete-icon-container {
+  margin-right: -30px;
+  margin-bottom: -6px;
 }
 
 /* ListPage end */
