@@ -305,8 +305,8 @@ h6 {
 }
 
 #interior-button {
-  background-color : #05386b;
-  color : #edf5e1;
+  background-color : #77bce0;
+  color : #111;
 }
 
 #stores-loading {
@@ -327,8 +327,8 @@ h6 {
   margin-bottom: 10px;
   margin-left: 5px;
   margin-right: 5px;
-  background-color : #77bce0;
-  color : #111;
+  background-color : #05386b;
+  color : #edf5e1;
 }
 
 /* StoresPage end */
