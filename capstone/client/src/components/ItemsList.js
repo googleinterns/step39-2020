@@ -257,8 +257,9 @@ class ItemsList extends Component {
           <div id="item-list-text">
             <Typography variant="h3">Select items</Typography>
             <Typography id="directions-text" variant="h6">
-              Click on items to add them to the current list. Click save list to save the selected 
-              items and click find stores to obtain store recommendations for the selected items.
+              Click on the items you want to add to the current list. <br></br>
+              If you want to retrieve your lists later, save your list.<br></br>
+              When you're done, select "Find Stores" to get your store recommendations.
             </Typography>
           </div>
           {checkboxItems}
