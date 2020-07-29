@@ -343,25 +343,27 @@ h6 {
 }
 
 #stores-page-container {
-  background-image: url("./images/stores_without_text.png");
+  background-image: url("./images/stores.jpg");
   background-size: 100%;
-  background-position-y: -120px;
+  background-position-y: -700px;
   text-align: center;
 }
 
 #back-button {
   justify-content: center;
-  margin-bottom: 100px;  margin-left: 5px;
+  margin-top: 10px;  
+  margin-bottom: 120px;  
+  margin-left: 5px;
   margin-right: 5px;
   background-color : #05386b;
   color : #edf5e1;
 }
 
 .stores-banner-text {
-  color: #edf5e1;
+  color: white;
   text-shadow: none;
   font-weight: bold;
-  padding-top: 60px;
+  padding-top: 80px;
 }
 
 /* StoresPage end */

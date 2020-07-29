@@ -92,7 +92,7 @@ class Header extends Component {
       } else if (this.props.page === 'lists') {
         headerColor = '#ebebed';
       } else if (this.props.page === 'stores') {
-        headerColor = '#eccfb2';
+        headerColor = '#d5dfe1';
       }
 
       const headerStyle = {
