@@ -104,8 +104,10 @@ class Header extends Component {
       }
 
       if (this.state.redirect) {
-        // TODO(carolynlwang): Figure out why header disappears when you redirect to home from home.
-        if (this.props.page !== 'welcome') {
+        if (this.props.page === 'welcome') {
+          window.location.reload(true);
+        }
+        else {
           return <Redirect to={{
             pathname : '/'
           }}/>
