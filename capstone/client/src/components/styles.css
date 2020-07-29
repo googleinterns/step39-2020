@@ -318,16 +318,22 @@ h6 {
 }
 
 #stores-page-container {
-  background-image: url("./images/the-market-background.jpg");
-  background-size: 3000px;
-  background-position: -500px -1000px;
+  background-image: url("./images/stores_without_text.png");
+  background-size: 100%;
+  background-position-y: -120px;
   text-align: center;
-  color: azure;
 }
 
 #back-button {
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 100px;
+}
+
+.stores-banner-text {
+  color: #edf5e1;
+  text-shadow: none;
+  font-weight: bold;
+  padding-top: 60px;
 }
 
 /* StoresPage end */

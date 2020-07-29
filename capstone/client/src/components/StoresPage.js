@@ -28,22 +28,22 @@ import { StoresProvider } from './StoresProvider.js';
 import './styles.css';
 
 class StorePage extends Component { 
-    constructor(props) {
-      super(props)
-      const params = new URLSearchParams(window.location.search);
-      this.state = {
-          originalStores: [],
-          stores : [],
-          items : params.getAll('items'),
-          distanceValue : params.get('distanceValue'),
-          latitude : params.get('latitude'),
-          longitude : params.get('longitude'),
-          method : params.get('method'),
-          zipCode : params.get('zipCode'),
-          redirect : null,
-      }
-      this.getStores = this.getStores.bind(this);
+  constructor(props) {
+    super(props)
+    const params = new URLSearchParams(window.location.search);
+    this.state = {
+      originalStores: [],
+      stores : [],
+      items : params.getAll('items'),
+      distanceValue : params.get('distanceValue'),
+      latitude : params.get('latitude'),
+      longitude : params.get('longitude'),
+      method : params.get('method'),
+      zipCode : params.get('zipCode'),
+      redirect : null,
     }
+    this.getStores = this.getStores.bind(this);
+  }
   
     componentDidMount = () => {
       // Get Stores from database.
@@ -58,6 +58,7 @@ class StorePage extends Component {
         selectedItemTypes : this.state.items,
       } }})
         .then(res => {
+          console.log(res.data);
           this.setState({
             stores: res.data,
             originalStores : res.data
@@ -86,12 +87,9 @@ class StorePage extends Component {
     const overviewCards = (this.state.originalStores.length === 0) ? <CircularProgress id="stores-loading" color="action" /> : 
     <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>;
 
-  const method = (this.state.method === "location") ? <h5>Calculated from tracked location</h5> : <h5>Calculated from Zip Code: {this.state.zipCode}</h5>
-
     return(
       <div id="stores-page-container">
-        <h1>Store Recommendations</h1>
-        {method}
+        <h1 className="stores-banner-text">Store Recommendations</h1>
         <StoresProvider>
         <Button id="back-button" onClick={this.goBack} color="primary" variant="contained">Back To List</Button>
         <Grid container alignItems="stretch">
