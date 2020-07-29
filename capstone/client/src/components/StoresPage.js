@@ -252,10 +252,12 @@ class StorePage extends Component {
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs={4}>
             <FilterStores originalStores={this.state.originalStores} items={this.state.items} onFilterChange={this.handleFilterChange}/>
-            {overviewCards}
+            <div id="overview-cards">{overviewCards}</div>
           </Grid>
           <Grid item component={Card} xs>
+            <div id="details-cards">
             <StoreDetailCards stores={this.state.stores} style={{display: 'none'}}/>
+            </div>
           </Grid>
         </Grid> 
         </StoresProvider>
