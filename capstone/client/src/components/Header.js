@@ -93,7 +93,7 @@ class Header extends Component {
         headerColor = '#ebebed';
       }
       // TODO(carolynlwang): Set a header color for new background image for StoresPage.
-      
+
       const headerStyle = {
         background: headerColor
       }
@@ -105,7 +105,7 @@ class Header extends Component {
 
       if (this.state.redirect) {
         // TODO(carolynlwang): Figure out why header disappears when you redirect to home from home.
-        if (this.props.page != 'welcome') {
+        if (this.props.page !== 'welcome') {
           return <Redirect to={{
             pathname : '/'
           }}/>
