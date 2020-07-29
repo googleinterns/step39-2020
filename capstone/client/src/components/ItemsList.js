@@ -249,6 +249,15 @@ class ItemsList extends Component {
         ((this.props.listId !== -1) ? 
           <Button id="selection-button" variant="contained" color="primary" onClick={this.onUpdate}>Update List</Button> : 
           <Button id="selection-button" variant="contained" color="primary" onClick={this.onSave}>Save List</Button>)
+      const directionsText = (this.props.userId === -1) ? 
+        (<Typography id="directions-text" variant="h6">
+          Click on items to add them to the current list. Click login to be able to save the 
+          selected items and click find stores to obtain store recommendations for the selected items.
+        </Typography>) :
+        (<Typography id="directions-text" variant="h6">
+          Click on items to add them to the current list. Click save list to save the selected 
+          items and click find stores to obtain store recommendations for the selected items.
+        </Typography>);
 
     return(
       <div>
@@ -256,10 +265,7 @@ class ItemsList extends Component {
           {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
           <div id="item-list-text">
             <Typography variant="h3">Select items</Typography>
-            <Typography id="directions-text" variant="h6">
-              Click on items to add them to the current list. Click save list to save the selected 
-              items and click find stores to obtain store recommendations for the selected items.
-            </Typography>
+            {directionsText}
           </div>
           {checkboxItems}
         <Typography id="number-selected-text" variant="h6">You have selected <b>{this.state.selectedItems.size}</b> items</Typography>
