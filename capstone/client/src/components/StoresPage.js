@@ -193,7 +193,7 @@ class StorePage extends Component {
   
     const shareButton = (this.state.originalStores.length === 0) ? null :
         (<Button id="back-button" variant="contained" onClick={this.onShare}>
-           Share Stores <MailOutlineIcon color='white' />
+           Share Results&nbsp;<MailOutlineIcon color='white' />
          </Button>)
 
     return(
