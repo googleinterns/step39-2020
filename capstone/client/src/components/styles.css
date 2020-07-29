@@ -300,6 +300,15 @@ h6 {
 
 /* StoresPage start */
 
+#store-icon {
+  color: #05386b;
+}
+
+#interior-button {
+  background-color : #05386b;
+  color : #edf5e1;
+}
+
 #stores-loading {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -318,6 +327,8 @@ h6 {
   margin-bottom: 10px;
   margin-left: 5px;
   margin-right: 5px;
+  background-color : #05386b;
+  color : #edf5e1;
 }
 
 /* StoresPage end */

@@ -87,7 +87,7 @@ class StoreMaps extends Component {
           center={{lat: this.state.latitude, lng: this.state.longitude}}>
           <Marker position={{lat: this.state.latitude, lng: this.state.longitude}}/>
         </Map>
-        <Button variant="contained" color="primary" onClick={() => { this.redirectToDirections() }}>
+        <Button variant="contained" id="interior-button" onClick={() => { this.redirectToDirections() }}>
           Get Directions
         </Button>
       </div>
