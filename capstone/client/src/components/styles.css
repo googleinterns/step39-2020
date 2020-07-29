@@ -226,7 +226,7 @@ h6 {
 }
 
 #check-icon {
-  color: #a782da;
+  color: #77bce0;
 }
 
 #directions-text {
@@ -278,8 +278,9 @@ h6 {
 }
 
 #selection-button {
-  background-color: #a782da;
+  background-color: #77bce0;
   border-radius: 4px;
+  color: black;
   margin: 0 10px 0px 10px;
   height: 40px;
   text-transform: none;
@@ -291,8 +292,8 @@ h6 {
 }
 
 #user-lists {
-  background-color: #a782da;
-  color: white; 
+  background-color: #77bce0;
+  color: black;
   text-align: center;
   width: 140px;
 }
@@ -303,8 +304,8 @@ h6 {
 }
 
 #back-button-list-page {
-  background-color: #a782da;
-  color: white;
+  background-color: #77bce0;
+  color: black;
   height: 40px;
   text-align: center;
   text-transform: none;
@@ -327,6 +328,7 @@ h6 {
 #interior-button {
   background-color : #77bce0;
   color : #111;
+  text-transform: none;
 }
 
 #stores-loading {
@@ -343,12 +345,13 @@ h6 {
 }
 
 #back-button {
+  background-color : #05386b;
+  color : #edf5e1;
   justify-content: center;
   margin-bottom: 10px;
   margin-left: 5px;
   margin-right: 5px;
-  background-color : #05386b;
-  color : #edf5e1;
+  text-transform: none;
 }
 
 /* StoresPage end */
