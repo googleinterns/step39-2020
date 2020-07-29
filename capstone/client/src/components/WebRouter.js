@@ -21,7 +21,7 @@ import { ListPageWithStore } from './ListPage.js';
 import { HeaderWithStore } from './Header.js';
 import { Store } from './Store';
 import { StorePageWithStore } from './StoresPage';
-import WelcomePage from './WelcomePage.js';
+import { WelcomePageWithStore } from './WelcomePage.js';
 
 function WebRouter() {
   return (
@@ -29,8 +29,9 @@ function WebRouter() {
       <Router>
         <Store.Container>
           <Switch>
-            <Route exact path='/' component={() => <div><HeaderWithStore title="Welcome"/><WelcomePage/></div>} />
-            <Route path='/lists' component={() => <div><HeaderWithStore title="Preferences"/><ListPageWithStore /></div>} />
+            <Route exact path='/' component={() => <div><HeaderWithStore title="Welcome"/><WelcomePageWithStore/></div>} />
+            <Route path='/lists/:params' component={() => <div><HeaderWithStore title="Lists"/><ListPageWithStore/></div>} />
+            <Route path='/lists' component={() => <div><HeaderWithStore title="Lists"/><ListPageWithStore /></div>} />
             <Route path='/stores/:params' component={() => <div><HeaderWithStore title="Store Recommendations"/><StorePageWithStore/></div>} />
             <Route path='/stores' component={() => <div><HeaderWithStore title="Store Recommendations"/><StorePageWithStore/></div>} />
           </Switch>

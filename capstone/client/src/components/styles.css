@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+ /* TODO(carolynlwang): Reactive text sizing */
 h1 {
   color: black;
   font-family: 'Helvetica Neue', sans-serif;
@@ -71,13 +72,6 @@ h6 {
   font-weight: bold;
 }
 
-#enter-location-container {
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 .banner-text {
   color: #05386b;
   text-shadow: none;
@@ -99,9 +93,56 @@ h6 {
   transform: translate(-50%, -50%);
 }
 
+#location-input-container {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  bottom: 25%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+}
+
+.location-suggestion {
+  font-size: 20px;
+  text-align: left;
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 510px;
+}
+
+.location-input {
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 20px;
+  border: none;
+  width: 500px;
+}
+
+#enter-location-button {
+  margin-left: 20px;
+  background-color: #05386b; 
+  color: #edf5e1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#current-location-button {
+  background-color: #05386b; 
+  color: #edf5e1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 510px;
+}
+
 .feature-card {
   padding: 50px;
   text-align: center;
+}
+
+.feature-image {
+  max-height: 100px;
 }
 
 .card-title {
@@ -110,6 +151,22 @@ h6 {
 
 #about-text {
   padding: 40px;
+  padding-left: 60px;
+}
+
+#about-body {
+  padding-right: 30px;
+}
+
+#about-image {
+  padding: 10px;
+  margin-left: 40px;
+  max-height: 500px;
+}
+
+#about-image-card {
+  width: 100%;
+  justify-content: right;
 }
 
 /* WelcomePage end */
