@@ -203,14 +203,14 @@ class ListPage extends Component {
         <h1>Item Selection</h1>
         {this.state.userId === -1 ? null : 
           <div id="list-selection-buttons-container">
-            {(this.state.userId !== -1 && this.state.listId !== -1) ? <InputLabel id="select-text">Select from saved lists</InputLabel> : <InputLabel>Select from saved lists</InputLabel>}
+             <InputLabel>Select from saved lists</InputLabel>
+            {(this.state.userId !== -1 && this.state.listId !== -1) ? <Button onClick={this.removeList}><Delete /></Button> : null}
             <Select variant="standard" value={this.state.listIndex} container id="user-lists" onClick={this.selectList}>
               <MenuItem id="list-button" value={-1} key={-1}>
                 <Add fontSize="small"/><span> </span>New list
               </MenuItem>
               {userListButtons}
             </Select>
-            {(this.state.userId !== -1 && this.state.listId !== -1) ? <Button onClick={this.removeList}><Delete /></Button> : null}
           </div>
         }
         <Grid container alignItems="stretch">
