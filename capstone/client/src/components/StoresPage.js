@@ -78,7 +78,7 @@ class StorePage extends Component {
     }
   goBack = () => {
     this.setState({
-      redirect : "/",
+      redirect : `/lists/?latitude=${this.state.latitude}&longitude=${this.state.longitude}`,
     });
   }
 
