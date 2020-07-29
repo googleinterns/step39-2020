@@ -173,6 +173,12 @@ class ListPage extends Component {
       window.location.reload();
   }
 
+  goBack = () => {
+    this.setState({
+      redirect : "/",
+    });
+  }
+
   render() {
     if (this.state.redirect) {
       return <Redirect to={{
@@ -192,7 +198,7 @@ class ListPage extends Component {
 
     const userListButtons = this.state.userLists.map((userList, index) => (
       <MenuItem id="list-button" value={index} key={index}> 
-        <Create /><span> </span>{userList.displayName}
+        <Create fontSize="inherit"/><span> </span>{userList.displayName}
       </MenuItem>
     ));
 
@@ -201,16 +207,17 @@ class ListPage extends Component {
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
         {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
         <h1>Item Selection</h1>
+        <div id="back-button-container"><Button id="back-button-list-page" onClick={this.goBack}>Back to home</Button></div>
         {this.state.userId === -1 ? null : 
           <div id="list-selection-buttons-container">
-            {(this.state.userId !== -1 && this.state.listId !== -1) ? <InputLabel id="select-text">Select from saved lists</InputLabel> : <InputLabel>Select from saved lists</InputLabel>}
+            <InputLabel>Select from saved lists</InputLabel>
+            {(this.state.userId !== -1 && this.state.listId !== -1) ? <Button onClick={this.removeList}><div id="delete-icon-container"><Delete /></div></Button> : null}
             <Select variant="standard" value={this.state.listIndex} container id="user-lists" onClick={this.selectList}>
               <MenuItem id="list-button" value={-1} key={-1}>
-                <Add fontSize="small"/><span> </span>New list
+                <Add fontSize="inherit"/><span> </span>New list
               </MenuItem>
               {userListButtons}
             </Select>
-            {(this.state.userId !== -1 && this.state.listId !== -1) ? <Button onClick={this.removeList}><Delete /></Button> : null}
           </div>
         }
         <Grid container alignItems="stretch">
