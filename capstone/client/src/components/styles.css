@@ -173,6 +173,13 @@ h6 {
   justify-content: right;
 }
 
+.body-text {
+  font-size: 1.2rem;
+}
+
+.profile-photos {
+  max-height: 20rem;
+}
 /* WelcomePage end */
 
 /* FilterStores start */
@@ -235,6 +242,7 @@ h6 {
 
 #directions-text {
   color: grey;
+  padding-top: 10px;
 }
 
 #number-selected-text {
@@ -345,11 +353,10 @@ h6 {
 }
 
 #stores-page-container {
-  background-image: url("./images/the-market-background.jpg");
-  background-size: 3000px;
-  background-position: -500px -1000px;
+  background-image: url("./images/stores.jpg");
+  background-size: 100%;
+  background-position-y: -700px;
   text-align: center;
-  color: azure;
 }
 
 #back-button {
@@ -357,10 +364,18 @@ h6 {
   color : black;
   font-family: 'Open Sans',serif;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-top: 10px;  
+  margin-bottom: 120px;  
   margin-left: 5px;
   margin-right: 5px;
   text-transform: none;
+}
+
+.stores-banner-text {
+  color: white;
+  text-shadow: none;
+  font-weight: bold;
+  padding-top: 80px;
 }
 
 /* StoresPage end */

@@ -91,8 +91,9 @@ class Header extends Component {
         headerColor = '#77bce0';
       } else if (this.props.page === 'lists') {
         headerColor = '#ebebed';
+      } else if (this.props.page === 'stores') {
+        headerColor = '#d5dfe1';
       }
-      // TODO(carolynlwang): Set a header color for new background image for StoresPage.
 
       const headerStyle = {
         background: headerColor

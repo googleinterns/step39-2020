@@ -245,19 +245,14 @@ class ItemsList extends Component {
             label={<Typography variant="h6">{item}</Typography>}
             key={item}
           />)));
-      const saveButton = (this.props.userId === -1) ? null : 
-        ((this.props.listId !== -1) ? 
-          <Button id="selection-button" variant="contained" color="primary" onClick={this.onUpdate}>Update List</Button> : 
-          <Button id="selection-button" variant="contained" color="primary" onClick={this.onSave}>Save List</Button>)
-      const directionsText = (this.props.userId === -1) ? 
-        (<Typography id="directions-text" variant="h6">
-          Click on items to add them to the current list. Click login to be able to save the 
-          selected items and click find stores to obtain store recommendations for the selected items.
-        </Typography>) :
-        (<Typography id="directions-text" variant="h6">
-          Click on items to add them to the current list. Click save list to save the selected 
-          items and click find stores to obtain store recommendations for the selected items.
-        </Typography>);
+    
+    const saveButton = (this.props.userId === -1) ? null : 
+      ((this.props.listId !== -1) ? 
+        <Button id="selection-button" variant="contained" color="primary" onClick={this.onUpdate}>Update List</Button> : 
+        <Button id="selection-button" variant="contained" color="primary" onClick={this.onSave}>Save List</Button>)
+
+    const saveDirections = (this.props.userId === -1) ? "If you want to retrieve your lists later, save your list." :
+      "If you want to save your list for later, log in with Google.";
 
     return(
       <div>
@@ -265,7 +260,11 @@ class ItemsList extends Component {
           {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
           <div id="item-list-text">
             <Typography variant="h3">Select items</Typography>
-            {directionsText}
+            <Typography id="directions-text" variant="h6">
+              Click on the items you want to add to the current list. <br></br>
+              {saveDirections}
+              When you're done, select "Find Stores" to get your store recommendations.
+            </Typography>
           </div>
           {checkboxItems}
         <Typography id="number-selected-text" variant="h6">You have selected <b>{this.state.selectedItems.size}</b> items</Typography>
