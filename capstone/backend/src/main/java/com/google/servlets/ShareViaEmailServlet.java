@@ -109,7 +109,7 @@ public class ShareViaEmailServlet extends HttpServlet {
               + itemTypes.size()
               + "</p>"
               + "<p>Lowest Potential Price: "
-              + store.getLowestPotentialPrice()
+              + ((double) Math.round(store.getLowestPotentialPrice() * 100) / 100)
               + "</p>"
               + "<p>Distance: "
               + store.getDistanceFromUser()
