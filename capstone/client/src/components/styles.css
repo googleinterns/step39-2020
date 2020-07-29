@@ -292,6 +292,18 @@ h6 {
   width: 140px;
 }
 
+#back-button-container {
+  margin-top: -40px;
+  text-align: center;
+}
+
+#back-button-list-page {
+  background-color: #a782da;
+  color: white;
+  text-align: center;
+  width: 160px;
+}
+
 /* ListPage end */
 
 /* StoresPage start */
