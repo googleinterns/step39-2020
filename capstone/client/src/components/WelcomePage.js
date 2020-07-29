@@ -36,6 +36,7 @@ import login from './images/login.png';
 import map from './images/map.png';
 import checklist from './images/checklist.png';
 import placeholder from './images/placehold.png';
+import carolyn from './images/carolyn-profile.png';
 import about from './images/grocery_graphic_small_circle.png';
 
 import './styles.css';
@@ -95,14 +96,18 @@ class WelcomePage extends React.Component {
         });
       })
       .catch(error => {
-        
+        this.setState({
+          location: {
+            latitude: null,
+            longitude: null,
+          }
+        });
       });
   }
 
   onSubmit = async () => {
     var lat = this.state.location.latitude;
     var lng = this.state.location.longitude;
-    console.log(lat, lng);
 
     if (lat && lng) {
       this.setState({
@@ -184,21 +189,21 @@ class WelcomePage extends React.Component {
             <div class="feature-card">
               <img src={login} alt="login" class="feature-image"/>
               <h3 className="card-title">Create an account</h3>
-              <Typography variant="body1">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography> 
+              <Typography variant="body1" class="body-text">Log in with Google to retrieve and<br></br>save lists for all occasions. </Typography> 
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
               <img src={checklist} alt="checklist" class="feature-image"/>
               <h3 className="card-title">Add items to your list</h3>
-              <Typography variant="body1">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography> 
+              <Typography variant="body1" class="body-text">Create new lists with items<br></br>you're looking for. </Typography> 
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
               <img src={map} alt="map" class="feature-image"/>
               <h3 className="card-title">Find stores near you</h3>
-              <Typography variant="body1">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography> 
+              <Typography variant="body1" class="body-text">Choose from our recommendations, based on<br></br>price, distance, and item availability.</Typography> 
             </div>
           </Grid>
         </Grid> 
@@ -207,16 +212,15 @@ class WelcomePage extends React.Component {
             <div id="about-text">
               <h3 className="card-title">About Shopsmart</h3>
               <div id="about-body">
-                <Typography variant="body1">When visiting stores, shoppers today face a variety of challenges. 
+                <Typography variant="body1" class="body-text">When visiting retail stores, shoppers today face a variety of challenges. 
                 While a shopper can use a simple Google Search to find the quantity and price for a single item, 
                 this task becomes tedious when it comes to a list of multiple items, as with a shopping list. 
                 The limitations and precautions taken to suppress the spread of the coronavirus have only exacerbated these difficulties. 
                 For example, to reduce the risk of transmission, local and major grocery chains have begun to limit the number of people that can enter stores at any given time.  
                 </Typography> 
                 <br/>
-                <Typography variant="body1">Now more than ever, people need efficient shopping experiences. 
-                If we streamline this process of shopping for multiple items at once, a shopper will be better able to access the information they need before leaving the house, 
-                in alignment with Google’s mission to “organize the world’s information and make it universally accessible and useful.” 
+                <Typography variant="body1" class="body-text">Now more than ever, people need efficient shopping experiences. 
+                If we streamline this process of shopping for multiple items at once, a shopper will be better able to access the information they need before leaving the house.
                 Shopsmart will help you save money and time by making more informed decisions about which stores to visit for your particular needs. 
 </Typography>
               </div>
@@ -233,21 +237,21 @@ class WelcomePage extends React.Component {
             <div class="feature-card">
               <img src={placeholder} alt="anudeep-profile"/>
               <h3 className="card-title">Anudeep Yakkala</h3>
-              We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. 
+              <Typography variant="body1" class="body-text">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography>
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
               <img src={placeholder} alt="brett-profile"/>
               <h3 className="card-title">Brett Allen</h3>
-              We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. 
+              <Typography variant="body1" class="body-text">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography>
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={placeholder} alt="carolyn-profile"/>
+              <img src={carolyn} alt="carolyn-profile" class="profile-photos"/>
               <h3 className="card-title">Carolyn Wang</h3>
-              We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. 
+              <Typography variant="body1" class="body-text">Carolyn Wang is a rising junior at Columbia University who loves color palette generators, Donna Tartt's "The Secret History," and polished design docs.</Typography>
             </div>
           </Grid>
         </Grid> 
