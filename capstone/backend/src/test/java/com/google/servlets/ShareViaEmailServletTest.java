@@ -25,7 +25,9 @@ import org.mockito.Mockito;
 public class ShareViaEmailServletTest extends TestCase {
 
   private static final String CORRECT_REQUEST_STRING =
-      "{\"email\":\"bzallen@google.com\", \"html\":\"<h1>Official Test<h1>\"}";
+      "{\"email\":\"bzallen@google.com\", \"latitude\":37.2695392, \"longitude\": -121.77117759999999, "
+          + " \"itemTypes\" : [\"cereal\", \"chips\", \"cookies\", \"flour\", \"ketchup\", \"milk\", \"napkin\"], "
+          + "\"stores\" : [{\"distanceFromUser\" : 10, \"items\" : {\"chips\": []}, \"lowestPotentialPrice\" : 15, \"storeAddress\" : \"5100 Broadway\", \"storeId\" : 10, \"storeName\" : \"Safeway-94611\", \"totalItemsFound\" : 6, \"totalUnavailableItemsFound\" : 0, \"typeToPrice\" : {\"chips\" : 3}}]}";
   private static final String INCORRECT_REQUEST_STRING =
       "{\"email\":\"bademail\", \"html\":\"<p>HTML is fine</p>\"}";
 
@@ -47,6 +49,6 @@ public class ShareViaEmailServletTest extends TestCase {
     servlet.doPost(setupObj.request, setupObj.response);
 
     Mockito.verify(setupObj.response)
-        .sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid email format.");
+        .sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request syntax.");
   }
 }
