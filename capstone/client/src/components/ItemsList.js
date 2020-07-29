@@ -245,10 +245,13 @@ class ItemsList extends Component {
             label={<Typography variant="h6">{item}</Typography>}
             key={item}
           />)));
-      const saveButton = (this.props.userId === -1) ? null : 
-        ((this.props.listId !== -1) ? 
-          <Button id="selection-button" variant="contained" color="primary" onClick={this.onUpdate}>Update List</Button> : 
-          <Button id="selection-button" variant="contained" color="primary" onClick={this.onSave}>Save List</Button>)
+    const saveButton = (this.props.userId === -1) ? null : 
+      ((this.props.listId !== -1) ? 
+        <Button id="selection-button" variant="contained" color="primary" onClick={this.onUpdate}>Update List</Button> : 
+        <Button id="selection-button" variant="contained" color="primary" onClick={this.onSave}>Save List</Button>)
+
+    const saveDirections = (this.props.userId === -1) ? "If you want to retrieve your lists later, save your list." :
+      "If you want to save your list for later, log in with Google.";
 
     return(
       <div>
@@ -258,7 +261,7 @@ class ItemsList extends Component {
             <Typography variant="h3">Select items</Typography>
             <Typography id="directions-text" variant="h6">
               Click on the items you want to add to the current list. <br></br>
-              If you want to retrieve your lists later, save your list.<br></br>
+              {saveDirections}
               When you're done, select "Find Stores" to get your store recommendations.
             </Typography>
           </div>
