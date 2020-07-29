@@ -369,6 +369,11 @@ h6 {
   padding: 20px;
 }
 
+#overview-cards {
+  height: 400px;
+  overflow-y: scroll;
+}
+
 /* StoreOverviewCards end */
 
 /* StoreDetailCards start */
@@ -380,6 +385,11 @@ h6 {
 
 #store-details-container {
   margin-top : 20px;
+}
+
+#details-cards {
+  height: 600px;
+  overflow-y: scroll;
 }
 
 /* StoreDetailCards end */
