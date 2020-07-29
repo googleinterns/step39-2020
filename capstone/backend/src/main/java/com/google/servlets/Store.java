@@ -66,6 +66,10 @@ public class Store implements Comparable<Store> {
     }
   }
 
+  public String getStoreName() {
+    return storeName;
+  }
+
   public String getStoreAddress() {
     return storeAddress;
   }
@@ -88,6 +92,10 @@ public class Store implements Comparable<Store> {
 
   public double getLowestPotentialPrice() {
     return lowestPotentialPrice;
+  }
+
+  public double getDistanceFromUser() {
+    return distanceFromUser;
   }
 
   public void setDistanceFromUser(double distanceFromUser) {
