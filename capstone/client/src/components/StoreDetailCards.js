@@ -16,16 +16,50 @@
 
 import React, { Component } from 'react';
 
-import { Accordion,  AccordionDetails, AccordionSummary, Card, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import { Accordion,  AccordionDetails, AccordionSummary, Avatar, Card, Grid, List, ListItem, ListItemText, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { StoresContext } from './StoresProvider.js';
 import StoreMaps from './StoreMaps.js';
 import './styles.css';
 
+import cerealImage from './images/cereal.jpg';
+import chipsImage from './images/chips.jpg';
+import cookiesImage from './images/cookies.jpg';
+import flourImage from './images/flour.jpg';
+import ketchupImage from './images/ketchup.jpg';
+import milkImage from './images/milk.jpg';
+import pencilImage from './images/pencil.jpg';
+import ramenImage from './images/ramen.jpg';
+import shampooImage from './images/shampoo.jpg';
+import sodaImage from './images/soda.jpg';
+import sugarImage from './images/sugar.jpg';
+import waterImage from './images/water.jpg';
+import napkinImage from './images/napkin.jpg'
+import paperTowelsImage from './images/paper towels.jpg';
+import oliveOilImage from './images/olive oil.jpg';
+
 import safeway from './images/safeway-logo.png';
 import walmart from './images/walmart-logo.jpg';
 import target from './images/target-logo.png';
+
+const images = {
+  cereal: cerealImage,
+  chips: chipsImage,
+  cookies: cookiesImage,
+  flour: flourImage,
+  ketchup: ketchupImage,
+  milk: milkImage,
+  pencil: pencilImage,
+  ramen: ramenImage,
+  shampoo: shampooImage,
+  soda: sodaImage,
+  sugar: sugarImage,
+  water: waterImage,
+  napkin: napkinImage,
+  'olive oil': oliveOilImage,
+  'paper towels': paperTowelsImage,
+}
 
 const logos = {
   "S" : safeway,
@@ -49,7 +83,7 @@ class StoreDetailCards extends Component {
               {Object.keys(store.items).map((itemType, i) => (
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant='subtitle1'>{itemType}</Typography>
+                    <Typography variant='subtitle1' style={{display: 'flex', alignItems:'center'}}><Avatar id="item-icon" src={images[itemType]}/>&nbsp;&nbsp;{itemType}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <List>
