@@ -25,7 +25,6 @@ import StoreDetailCards from './StoreDetailCards.js';
 import StoreOverviewCards from './StoreOverviewCards.js';
 import { StoresProvider } from './StoresProvider.js';
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
 import './styles.css';

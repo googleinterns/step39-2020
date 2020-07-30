@@ -35,9 +35,9 @@ import banner from './images/banner_no_text.png';
 import login from './images/login.png';
 import map from './images/map.png';
 import checklist from './images/checklist.png';
-import placeholder from './images/placehold.png';
 import carolyn from './images/carolyn-profile.png';
 import brett from './images/brett-profile.png';
+import anudeep from './images/anudeep-profile.png';
 import about from './images/grocery_graphic_small_circle.png';
 
 import './styles.css';
@@ -236,9 +236,9 @@ class WelcomePage extends React.Component {
         <Grid container justify="center" id="features-grid-container">
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={placeholder} alt="anudeep-profile"/>
+              <img src={anudeep} alt="anudeep-profile" class="profile-photos"/>
               <h3 className="card-title">Anudeep Yakkala</h3>
-              <Typography variant="body1" class="body-text">We aim to use modern API technology and computing to streamline the process of buying a set of items for the lowest possible cost. </Typography>
+              <Typography variant="body1" class="body-text">Anudeep Yakkala is a rising junior at Purdue University, where he is an organizer for the Hello World Hackathon. He loves web development, playing basketball, and exploring nature.</Typography>
             </div>
           </Grid>
           <Grid item component={Card} xs>
