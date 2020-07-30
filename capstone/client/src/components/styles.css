@@ -205,6 +205,11 @@ h6 {
 }
 
 #shopsmart-logo {
+  max-height: 1.5rem;
+  padding: 10px;
+}
+
+#shopsmart-logo-text {
   background-color: none;
 }
 
@@ -372,7 +377,7 @@ h6 {
 }
 
 .stores-banner-text {
-  color: white;
+  color:  #05386b;
   text-shadow: none;
   font-weight: bold;
   padding-top: 80px;
