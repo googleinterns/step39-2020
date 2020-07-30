@@ -18,8 +18,7 @@ import React from 'react';
 import { Redirect ,} from 'react-router-dom';
 
 import { GoogleApiWrapper } from 'google-maps-react';
-import { Button, Card, Dialog, DialogActions,DialogContent, DialogContentText, 
-  DialogTitle, Grid, Typography } from '@material-ui/core';
+import { Button, Card, Grid, Typography } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import APIKey from './APIKey.js';
 import PlacesAutocomplete, {
@@ -47,13 +46,9 @@ class WelcomePage extends React.Component {
     super(props);
     this.state = { 
         address: '21 North 5th Street, San Jose, CA 95112, USA', // Reverse geocoded from the default location
-        getLocationButtonText: 'Use current location',
         location: { // San Jose by default
           latitude: 37.338207,
           longitude: -121.886330,
-        },
-        locationStatus: {
-          display: false,
         },
         redirect: null,
     };
@@ -122,10 +117,6 @@ class WelcomePage extends React.Component {
   }
 
   requestLocation = () => {
-    console.log("enter function");
-    this.setState({
-      getLocationButtonText: 'Please wait...',
-    });
     navigator.geolocation.getCurrentPosition((position) => {
       Geocode.fromLatLng(position.coords.latitude, position.coords.longitude).then(
         response => {
@@ -136,37 +127,18 @@ class WelcomePage extends React.Component {
         },
         error => {
           this.setState({
-            locationStatus: {
-              display: true,
-            }
+            address: null,
           });
         }
       );
 
       this.setState({
-        // TODO(carolynlwang): change colors
-        getLocationButtonText: 'Use current location',
         location: {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         },
       });
-    }, ((error) => {
-      this.setState({
-        getLocationButtonText: 'Use current location',
-        locationStatus: {
-          display: true,
-        }
-      });
-    }));
-  }
-
-  handleLocationStatusDialogClose = () => {
-    this.setState({
-      locationStatus: {
-        display: false,
-      },
-    })
+    });
   }
 
   render() {
@@ -209,7 +181,7 @@ class WelcomePage extends React.Component {
             </PlacesAutocomplete>
             <div><Button id="enter-location-button" onClick={this.onSubmit}><SearchIcon /></Button></div>
           </Grid>
-          <div><Button id="current-location-button" onClick={this.requestLocation}>{this.state.getLocationButtonText}</Button></div>
+          <div><Button id="current-location-button" onClick={this.requestLocation}>Use current location</Button></div>
           </div>
         </div>
         <Grid container justify="center" id="features-grid-container">
@@ -284,23 +256,6 @@ class WelcomePage extends React.Component {
           </Grid>
         </Grid> 
         <Footer bottom='© 2020 Shopsmart' backgroundColor='#05386b'></Footer> 
-        <Dialog
-        open={this.state.locationStatus.display}
-        onClose={this.handleLocationStatusDialogClose}
-        aria-labelledby="location-dialog-title"
-        aria-describedby="location-dialog-description">
-          <DialogTitle id="get-location-dialog-title">{"Location Status"}</DialogTitle>
-          <DialogContent>
-          <DialogContentText id="get-location-dialog-text">
-            Can't retrieve your current location. You may need to enable location tracking.
-          </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleLocationStatusDialogClose} color="primary">
-              OK
-            </Button>
-          </DialogActions>
-        </Dialog>
       </div>
     );
   }
