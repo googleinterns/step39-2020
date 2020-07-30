@@ -15,7 +15,8 @@
  */
 
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { Button, Card, Grid, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { Add, Create, Delete } from '@material-ui/icons';
@@ -205,6 +206,9 @@ class ListPage extends Component {
 
     return (
       <div id="list-page-container">
+        <Helmet>
+          <title> Lists | Shopsmart</title>
+        </Helmet>
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
         {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
         <h1>Item Selection</h1>
