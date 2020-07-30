@@ -25,7 +25,6 @@ import StoreDetailCards from './StoreDetailCards.js';
 import StoreOverviewCards from './StoreOverviewCards.js';
 import { StoresProvider } from './StoresProvider.js';
 
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 
 import './styles.css';
@@ -201,7 +200,7 @@ class StorePage extends Component {
         <h1 className="stores-banner-text">Store Recommendations</h1>
         <StoresProvider>
         <Grid item>
-            <Button id="back-button" onClick={this.goBack} variant="contained"><ArrowBackIcon color='white' />Back To List</Button>
+            <Button id="back-button" onClick={this.goBack} variant="contained">Back To Items</Button>
             {shareButton}
         </Grid>
         <Grid item>
