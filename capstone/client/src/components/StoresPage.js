@@ -15,7 +15,8 @@
  */
 
 import axios from 'axios';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { Button, Card, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Grid } from '@material-ui/core';
 import React, { Component } from 'react';
 
@@ -197,6 +198,9 @@ class StorePage extends Component {
 
     return(
       <div id="stores-page-container">
+        <Helmet>
+          <title> Stores | Shopsmart</title>
+        </Helmet>
         <h1 className="stores-banner-text">Store Recommendations</h1>
         <StoresProvider>
         <Grid item>
