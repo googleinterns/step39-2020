@@ -61,11 +61,13 @@ class FilterStores extends Component {
   }
 
   onPriceChange(event, newValue) {
+    const priceLeft = newValue[0];
+    const priceRight = newValue[1];
     this.setState({
       setPriceLeft : newValue[0],
       setPriceRight : newValue[1]
     });
-    const stores = this.filterStores(this.state.selectedFilters);
+    const stores = this.filterStores(this.state.selectedFilters, priceLeft, priceRight, this.state.setDistanceLeft, this.state.setDistanceRight);
     this.setState({
       stores,
     });
@@ -73,10 +75,11 @@ class FilterStores extends Component {
   }
 
   handleInputChangeLeft(event) {
+    const priceLeft = event.target.value === '' ? 0 : Number(event.target.value);
     this.setState({
       setPriceLeft : event.target.value === '' ? 0 : Number(event.target.value)
     });
-    const stores = this.filterStores(this.state.selectedFilters);
+    const stores = this.filterStores(this.state.selectedFilters, priceLeft, this.state.setPriceRight, this.state.setDistanceLeft, this.state.setDistanceRight);
     this.setState({
       stores,
     });
@@ -84,10 +87,11 @@ class FilterStores extends Component {
   }
 
   handleInputChangeRight(event) {
+    const priceRight = event.target.value === '' ? this.state.maxPrice : Number(event.target.value);
     this.setState({
       setPriceRight : event.target.value === '' ? this.state.maxPrice : Number(event.target.value)
     });
-    const stores = this.filterStores(this.state.selectedFilters);
+    const stores = this.filterStores(this.state.selectedFilters, this.state.setPriceLeft, priceRight, this.state.setDistanceLeft, this.state.setDistanceRight);
     this.setState({
       stores,
     });
@@ -107,11 +111,13 @@ class FilterStores extends Component {
   }
 
   onDistanceChange(event, newValue) {
+    const distanceLeft = newValue[0];
+    const distanceRight = newValue[1];
     this.setState({
       setDistanceLeft : newValue[0],
       setDistanceRight : newValue[1]
     });
-    const stores = this.filterStores(this.state.selectedFilters);
+    const stores = this.filterStores(this.state.selectedFilters, this.state.setPriceLeft, this.state.setPriceRight, distanceLeft, distanceRight);
     this.setState({
       stores,
     });
@@ -119,10 +125,11 @@ class FilterStores extends Component {
   }
 
   handleDistanceChangeLeft(event) {
+    const distanceLeft = event.target.value === '' ? 0 : Number(event.target.value);
     this.setState({
       setDistanceLeft : event.target.value === '' ? 0 : Number(event.target.value)
     });
-    const stores = this.filterStores(this.state.selectedFilters);
+    const stores = this.filterStores(this.state.selectedFilters, this.state.setPriceLeft, this.state.setPriceRight, distanceLeft, this.state.setDistanceRight);
     this.setState({
       stores,
     });
@@ -130,10 +137,11 @@ class FilterStores extends Component {
   }
 
   handleDistanceChangeRight(event) {
+    const distanceRight = event.target.value === '' ? 100 : Number(event.target.value);
     this.setState({
-      setDistanceRight : event.target.value === '' ? this.state.maxPrice : Number(event.target.value)
+      setDistanceRight : event.target.value === '' ? 100 : Number(event.target.value)
     });
-    const stores = this.filterStores(this.state.selectedFilters);
+    const stores = this.filterStores(this.state.selectedFilters, this.state.setPriceLeft, this.state.setPriceRight, this.state.setDistanceLeft, distanceRight);
     this.setState({
       stores,
     });
@@ -175,12 +183,12 @@ class FilterStores extends Component {
     this.props.onFilterChange(stores);
   }
 
-  filterStores(selectedFilters) {
+  filterStores(selectedFilters, priceLeft, priceRight, distanceLeft, distanceRight) {
     const stores = this.props.originalStores.filter((store) => {
-      if(store.lowestPotentialPrice > this.state.setPriceRight || store.lowestPotentialPrice < this.state.setPriceLeft){
+      if(store.lowestPotentialPrice < priceLeft || priceRight < store.lowestPotentialPrice){
         return false;
       }
-      if(store.distanceFromUser > this.state.setDistanceRight || store.distanceFromUser < this.state.distanceFromUser) {
+      if(store.distanceFromUser < distanceLeft || distanceRight < store.distanceFromUser) {
         return false;
       }
       const storeItems = new Set();
