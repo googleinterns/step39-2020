@@ -21,7 +21,6 @@ import axios from 'axios';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { Redirect, withRouter } from "react-router-dom";
 
-import logo from './images/logo.png';
 import './styles.css';
 import { Store } from './Store';
 
@@ -120,9 +119,7 @@ class Header extends Component {
             <AppBar position="static" style={headerStyle}>
               <Toolbar>
                 <Typography id="typography" variant="h6">
-                  <Button id="shopsmart-logo-text" onClick={this.redirectToHome} style={buttonStyle}>
-                    <img src={logo} alt="shopsmart-logo" id="shopsmart-logo"/>Shopsmart
-                  </Button>
+                  <Button id="shopsmart-logo" onClick={this.redirectToHome} style={buttonStyle}>Shopsmart</Button>
                 </Typography>
                 {this.state.loggedIn ? 
                 <GoogleLogout
