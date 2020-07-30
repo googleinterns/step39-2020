@@ -201,7 +201,7 @@ class StorePage extends Component {
         <h1 className="stores-banner-text">Store Recommendations</h1>
         <StoresProvider>
         <Grid item>
-            <Button id="back-button" onClick={this.goBack} variant="contained"><ArrowBackIcon color='white' />Back To List</Button>
+            <Button id="back-button" onClick={this.goBack} variant="contained">Back To Items</Button>
             {shareButton}
         </Grid>
         <Grid item>
