@@ -21,6 +21,7 @@ import { Button, Card, Grid, InputLabel, MenuItem, Select } from '@material-ui/c
 import { Add, Create, Delete } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
 
+
 import { Store } from './Store';
 
 import Geocode from "react-geocode";
@@ -207,7 +208,7 @@ class ListPage extends Component {
         {this.state.errorMessage ? <Alert severity="error">{this.state.errorMessage}</Alert> : null}
         {this.state.successMessage ? <Alert severity="success">{this.state.successMessage}</Alert> : null}
         <h1>Item Selection</h1>
-        <div id="back-button-container"><Button id="back-button-list-page" onClick={this.goBack}>Back to home</Button></div>
+        <div id="back-button-container"><Button id="back-button-list-page" onClick={this.goBack}>Back To Home</Button></div>
         {this.state.userId === -1 ? null : 
           <div id="list-selection-buttons-container">
             <InputLabel>Select from saved lists</InputLabel>
