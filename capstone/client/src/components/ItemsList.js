@@ -251,8 +251,8 @@ class ItemsList extends Component {
         <Button id="selection-button" variant="contained" color="primary" onClick={this.onUpdate}>Update List</Button> : 
         <Button id="selection-button" variant="contained" color="primary" onClick={this.onSave}>Save List</Button>)
 
-    const saveDirections = (this.props.userId === -1) ? "If you want to retrieve your lists later, save your list." :
-      "If you want to save your list for later, log in with Google.";
+    const saveDirections = (this.props.userId === -1) ? "If you want to retrieve your lists later, save your list. " :
+      "If you want to save your list for later, log in with Google. ";
 
     return(
       <div>
