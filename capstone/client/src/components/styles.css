@@ -204,8 +204,8 @@ h6 {
   flex: 1;
 }
 
-.shopsmart-logo {
-  max-height: 1.2rem;
+#shopsmart-logo {
+  max-height: 1.5rem;
   padding: 10px;
 }
 
