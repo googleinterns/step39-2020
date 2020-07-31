@@ -16,6 +16,7 @@
 
 import React from 'react';
 import { Redirect ,} from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import { GoogleApiWrapper } from 'google-maps-react';
 import { Button, Card, Dialog, DialogActions,DialogContent, DialogContentText, 
@@ -175,6 +176,9 @@ class WelcomePage extends React.Component {
     }
     return (
       <div id="welcome-page-container">
+        <Helmet>
+          <title> Welcome | Shopsmart</title>
+        </Helmet>
         <div id="banner">
           <img id="banner-image" src={banner} alt="Banner"/>
           <div id="banner-text-container">

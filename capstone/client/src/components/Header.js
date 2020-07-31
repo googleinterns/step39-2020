@@ -22,6 +22,7 @@ import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { Redirect, withRouter } from "react-router-dom";
 
 import './styles.css';
+import logo from './images/logo.png';
 import { Store } from './Store';
 
 const CLIENT_ID = "618901837293-lggv074jcmas0qvt2gvatjsb62r219om.apps.googleusercontent.com";
@@ -119,7 +120,9 @@ class Header extends Component {
             <AppBar position="static" style={headerStyle}>
               <Toolbar>
                 <Typography id="typography" variant="h6">
-                  <Button id="shopsmart-logo" onClick={this.redirectToHome} style={buttonStyle}>Shopsmart</Button>
+                  <Button id="shopsmart-logo" onClick={this.redirectToHome} style={buttonStyle}>
+                    <img src={logo} alt="shopsmart-logo" id="shopsmart-logo"/>Shopsmart
+                  </Button>
                 </Typography>
                 {this.state.loggedIn ? 
                 <GoogleLogout

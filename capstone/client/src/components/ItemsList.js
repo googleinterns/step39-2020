@@ -261,8 +261,8 @@ class ItemsList extends Component {
           <div id="item-list-text">
             <Typography variant="h3">Select items</Typography>
             <Typography id="directions-text" variant="h6">
-              Click on the items you want to add to the current list. 
-              {saveDirections}
+              Click on the items you want to add to the current list. <br/>
+              {saveDirections}<br/>
               When you're done, select "Find Stores" to get your store recommendations.
             </Typography>
           </div>
