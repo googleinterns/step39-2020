@@ -249,7 +249,7 @@ class WelcomePage extends React.Component {
             <div class="feature-card">
               <img src={brett} alt="brett-profile" class="profile-photos"/>
               <h3 className="card-title">Brett Allen</h3>
-              <Typography variant="body1" class="body-text">Brett Allen is a rising junior at Massachusetts Institute of Technology, where he plays for the varisty men's volleyball team. He is a simple man who loves three things: backend development, The Office, and his one-eyed dog named Fergie.</Typography>
+              <Typography variant="body1" class="body-text">Brett Allen is a rising junior at Massachusetts Institute of Technology, where he plays for the varsity men's volleyball team. He is a simple man who loves three things: backend development, The Office, and his one-eyed dog named Fergie.</Typography>
             </div>
           </Grid>
           <Grid item component={Card} xs>
