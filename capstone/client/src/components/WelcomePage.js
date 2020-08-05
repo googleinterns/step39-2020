@@ -124,9 +124,6 @@ class WelcomePage extends React.Component {
   }
 
   requestLocation = () => {
-    this.setState({
-      getLocationButtonText: 'Please wait...',
-    });
     navigator.geolocation.getCurrentPosition((position) => {
       Geocode.fromLatLng(position.coords.latitude, position.coords.longitude).then(
         response => {
@@ -146,7 +143,6 @@ class WelcomePage extends React.Component {
 
       this.setState({
         // TODO(carolynlwang): change colors
-        getLocationButtonText: 'Use current location',
         location: {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -154,7 +150,6 @@ class WelcomePage extends React.Component {
       });
     }, ((error) => {
       this.setState({
-        getLocationButtonText: 'Use current location',
         locationStatus: {
           display: true,
         }
@@ -296,7 +291,7 @@ class WelcomePage extends React.Component {
           <DialogTitle id="get-location-dialog-title">{"Location Status"}</DialogTitle>
           <DialogContent>
           <DialogContentText id="get-location-dialog-text">
-            Can't retrieve your current location. You may need to enable location tracking.
+            Can't retrieve your current location. You may need to enable location tracking in your browser settings.
           </DialogContentText>
           </DialogContent>
           <DialogActions>
