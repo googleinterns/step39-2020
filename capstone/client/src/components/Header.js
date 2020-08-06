@@ -121,7 +121,7 @@ class Header extends Component {
               <Toolbar>
                 <Typography id="typography" variant="h6">
                   <Button id="shopsmart-logo" onClick={this.redirectToHome} style={buttonStyle}>
-                    <img src={logo} alt="shopsmart-logo" id="shopsmart-logo"/>Shopsmart
+                    <img src={logo} alt="Shopsmart logo" id="shopsmart-logo"/>Shopsmart
                   </Button>
                 </Typography>
                 {this.state.loggedIn ? 

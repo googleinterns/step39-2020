@@ -211,7 +211,7 @@ class StorePage extends Component {
         <h1 className="stores-banner-text">Store Recommendations</h1>
         <StoresProvider>
         <Grid item>
-            <Button id="back-button" onClick={this.goBack} variant="contained">Back To Items</Button>
+            <Button id="back-button" onClick={this.goBack} variant="contained">Back to Items</Button>
             {shareButton}
         </Grid>
         <Grid item>
@@ -225,7 +225,7 @@ class StorePage extends Component {
                 autoFocus
                 margin="dense"
                 id="email"
-                label="Email"
+                aria-label="Email"
                 helperText={this.state.shareDialog.errorText}
                 error={this.state.shareDialog.error}
                 onChange={this.onTextFieldChange}

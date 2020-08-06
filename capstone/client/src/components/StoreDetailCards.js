@@ -82,8 +82,8 @@ class StoreDetailCards extends Component {
             <Typography variant='subtitle1'>This store has the following items:</Typography>
               {Object.keys(store.items).map((itemType, i) => (
                 <Accordion>
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant='subtitle1' style={{display: 'flex', alignItems:'center'}}><Avatar id="item-icon" src={images[itemType]}/>&nbsp;&nbsp;{itemType}</Typography>
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-label="Expand">
+                    <Typography variant='subtitle1' style={{display: 'flex', alignItems:'center'}}><Avatar id="item-icon" src={images[itemType]} alt={images[itemType]}/>&nbsp;&nbsp;{itemType}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <List>

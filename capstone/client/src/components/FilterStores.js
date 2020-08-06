@@ -237,7 +237,7 @@ class FilterStores extends Component {
       <div id="price-filter">
         <Grid container spacing={2} alignItems="center">
           <Grid item>
-            <AttachMoneyIcon id="store-icon" />
+            <AttachMoneyIcon id="store-icon" aria-label="Dollar sign"/>
           </Grid>
           <Grid item>
             <Input
@@ -246,6 +246,7 @@ class FilterStores extends Component {
               id="store-icon"
               onChange={this.handleInputChangeLeft}
               onBlur={this.handleBlur}
+              aria-label="Lower bound of price filter"
               inputProps={{
                 step: filterStep,
                 min: 0,
@@ -272,6 +273,7 @@ class FilterStores extends Component {
               id="store-icon"
               onChange={this.handleInputChangeRight}
               onBlur={this.handleBlur}
+              aria-label="Upper bound of price filter"
               inputProps={{
                 step: filterStep,
                 min: 0,
@@ -286,7 +288,7 @@ class FilterStores extends Component {
       <div id="distance-filter">
         <Grid container spacing={2} alignItems="center">
           <Grid item>
-            <DriveEtaIcon id="store-icon" />
+            <DriveEtaIcon id="store-icon" aria-label="Car"/>
           </Grid>
           <Grid item>
             <Input
@@ -295,6 +297,7 @@ class FilterStores extends Component {
               id="store-icon"
               onChange={this.handleDistanceChangeLeft}
               onBlur={this.handleDistanceBlur}
+              aria-label="Lower bound of distance filter"
               inputProps={{
                 step: distanceStep,
                 min: 0,
@@ -321,6 +324,7 @@ class FilterStores extends Component {
               id="store-icon"
               onChange={this.handleDistanceChangeRight}
               onBlur={this.handleDistanceBlur}
+              aria-label="Upper bound of distance filter"
               inputProps={{
                 step: distanceStep,
                 min: 0,

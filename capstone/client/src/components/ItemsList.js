@@ -283,7 +283,7 @@ class ItemsList extends Component {
                 autoFocus
                 margin="dense"
                 id="list-name"
-                label="List Name"
+                aria-label="List Name"
                 helperText={this.state.listSaveDialog.errorText}
                 error={this.state.listSaveDialog.error}
                 onChange={this.onTextFieldChange}
