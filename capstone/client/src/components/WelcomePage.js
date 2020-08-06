@@ -174,8 +174,8 @@ class WelcomePage extends React.Component {
         <Helmet>
           <title> Welcome | Shopsmart</title>
         </Helmet>
-        <div id="banner">
-          <img id="banner-image" src={banner} alt="Banner"/>
+        <div id="banner" aria-label="Banner">
+          <img id="banner-image" src={banner} alt="Welcome banner with produce"/>
           <div id="banner-text-container">
             <h1 className="banner-text">Shopsmart</h1>
           </div>
@@ -194,7 +194,8 @@ class WelcomePage extends React.Component {
                   <input
                   {...getInputProps({
                   placeholder: 'Enter your address...',
-                  className: 'location-input'
+                  className: 'location-input',
+                  "aria-label": 'Enter address'
                   })}
                   />
                   {suggestions.map(suggestion => (
@@ -206,7 +207,7 @@ class WelcomePage extends React.Component {
                 </div>
               )}
             </PlacesAutocomplete>
-            <div><Button id="enter-location-button" onClick={this.onSubmit}><SearchIcon /></Button></div>
+            <div><Button id="enter-location-button" onClick={this.onSubmit} aria-label="Enter location"><SearchIcon /></Button></div>
           </Grid>
           <div><Button id="current-location-button" onClick={this.requestLocation}>{this.state.getLocationButtonText}</Button></div>
           </div>
@@ -214,21 +215,21 @@ class WelcomePage extends React.Component {
         <Grid container justify="center" id="features-grid-container">
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={login} alt="login" class="feature-image"/>
+              <img src={login} alt="User account" class="feature-image"/>
               <h3 className="card-title">Create an account</h3>
               <Typography variant="body1" class="body-text">Log in with Google to retrieve and<br></br>save lists for all occasions. </Typography> 
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={checklist} alt="checklist" class="feature-image"/>
+              <img src={checklist} alt="Checklists and pencil" class="feature-image"/>
               <h3 className="card-title">Add items to your list</h3>
               <Typography variant="body1" class="body-text">Create new lists with items<br></br>you're looking for. </Typography> 
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={map} alt="map" class="feature-image"/>
+              <img src={map} alt="Locations on a map" class="feature-image"/>
               <h3 className="card-title">Find stores near you</h3>
               <Typography variant="body1" class="body-text">Choose from our recommendations, based on<br></br>price, distance, and item availability.</Typography> 
             </div>
@@ -262,21 +263,21 @@ class WelcomePage extends React.Component {
         <Grid container justify="center" id="features-grid-container">
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={anudeep} alt="anudeep-profile" class="profile-photos"/>
+              <img src={anudeep} alt="Anudeep Yakkala" class="profile-photos"/>
               <h3 className="card-title">Anudeep Yakkala</h3>
               <Typography variant="body1" class="body-text">Anudeep Yakkala is a rising junior at Purdue University, where he is an organizer for the Hello World Hackathon. He loves web development, playing basketball, and exploring nature.</Typography>
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={brett} alt="brett-profile" class="profile-photos"/>
+              <img src={brett} alt="Brett Allen" class="profile-photos"/>
               <h3 className="card-title">Brett Allen</h3>
               <Typography variant="body1" class="body-text">Brett Allen is a rising junior at Massachusetts Institute of Technology, where he plays for the varsity men's volleyball team. He is a simple man who loves three things: backend development, The Office, and his one-eyed dog named Fergie.</Typography>
             </div>
           </Grid>
           <Grid item component={Card} xs>
             <div class="feature-card">
-              <img src={carolyn} alt="carolyn-profile" class="profile-photos"/>
+              <img src={carolyn} alt="Carolyn Wang" class="profile-photos"/>
               <h3 className="card-title">Carolyn Wang</h3>
               <Typography variant="body1" class="body-text">Carolyn Wang is a rising junior at Columbia University who loves color palette generators, Donna Tartt's "The Secret History," and polished design docs.</Typography>
             </div>

@@ -34,54 +34,54 @@ const logos = {
 }
 
 class StoreOverviewCards extends Component {
-
-    render() {
-        const storeOverviewCards = this.props.stores.map((store, index) => (
-            <div id="store-overview-card">
-              <img id="store-logo" src={logos[store.storeName[0]]} alt=""/>
-              <Typography variant="h6" component="h6">{store.storeName}</Typography>
-              <List>
-              <ListItem>
-                  <ListItemIcon>
-                    <ShoppingCartIcon id="store-icon" />
-                  </ListItemIcon>
-                  <ListItemText>
-                  Total Items Found: {store.totalItemsFound}/{this.props.numItems}
-                  </ListItemText>
-              </ListItem>
-              <ListItem>
-                  <ListItemIcon>
-                    <AttachMoneyIcon id="store-icon" />
-                  </ListItemIcon>
-                  <ListItemText>
-                  Lowest Potential Price: ${(store.lowestPotentialPrice-.005).toFixed(2)}
-                  </ListItemText>
-              </ListItem>
-              <ListItem>
-                  <ListItemIcon>
-                    <DriveEtaIcon id="store-icon" />
-                  </ListItemIcon>
-                  <ListItemText>
-                  Distance: {store.distanceFromUser.toFixed(1)} miles
-                  </ListItemText>
-              </ListItem>
-              </List>
-              <StoresContext.Consumer>
-                  {(context) => (
-                    <Button variant="contained" id="interior-button" onClick={() => 
-                      context.setStore(index)}>
-                    Show More Information
-                    </Button>
-                  )}
-              </StoresContext.Consumer>
-              </div>
-        ));
-        return (
-            <div>
-              {storeOverviewCards}
-            </div>
-        )
-    }
+  render() {
+    const storeOverviewCards = this.props.stores.map((store, index) => (
+      <div id="store-overview-card">
+        <img id="store-logo" src={logos[store.storeName[0]]} alt={store.storeName[0]}/>
+        <Typography variant="h6" component="h6">{store.storeName}</Typography>
+        <List>
+          <ListItem>
+            <ListItemIcon>
+              <ShoppingCartIcon id="store-icon" aria-label="Shopping cart"/>
+            </ListItemIcon>
+            <ListItemText>
+              Total Items Found: {store.totalItemsFound}/{this.props.numItems}
+            </ListItemText>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <AttachMoneyIcon id="store-icon" aria-label="Dollar sign"/>
+            </ListItemIcon>
+            <ListItemText>
+              Lowest Potential Price: ${(store.lowestPotentialPrice-.005).toFixed(2)}
+            </ListItemText>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <DriveEtaIcon id="store-icon" aria-label="Car"/>
+            </ListItemIcon>
+            <ListItemText>
+              Distance: {store.distanceFromUser.toFixed(1)} miles
+            </ListItemText>
+          </ListItem>
+        </List>
+        <StoresContext.Consumer>
+          {(context) => (
+            <Button variant="contained" id="interior-button" onClick={() => 
+              context.setStore(index)}>
+              Show More Information
+            </Button>
+          )}
+        </StoresContext.Consumer>
+      </div>
+    ));
+    
+    return (
+      <div>
+        {storeOverviewCards}
+      </div>
+    )
+  }
 }
 
 export default StoreOverviewCards;
