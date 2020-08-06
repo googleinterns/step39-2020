@@ -266,7 +266,7 @@ class StorePage extends Component {
           </Grid>
           <Grid item component={Card} xs>
             <div id="details-cards">
-            <StoreDetailCards stores={this.state.stores} style={{display: 'none'}}/>
+            <StoreDetailCards stores={this.state.stores} userLat={this.state.latitude} userLong={this.state.longitude} style={{display: 'none'}}/>
             </div>
           </Grid>
         </Grid> 

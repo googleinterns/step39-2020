@@ -29,6 +29,7 @@ class StoreMaps extends Component {
     this.state = {
       latitude: 0,
       longitude: 0,
+      userAddress: null,
       url: null,
     }
   } 
@@ -51,6 +52,16 @@ class StoreMaps extends Component {
     Geocode.setApiKey(APIKey.APIKey());
     this.getLatLangFromAddress(this.props.store.storeAddress);
     this.getDirectionsUrl(this.props.store.storeAddress);
+
+    Geocode.fromLatLng(this.props.userLat, this.props.userLong).then(
+      response => {
+        const address = response.results[0].formatted_address;
+        this.setState({
+          userAddress: address,
+        });
+        this.getDirectionsUrl(this.props.store.storeAddress);
+      }
+    );
   }
 
   componentDidUpdate = (prevProps) => {
@@ -61,7 +72,12 @@ class StoreMaps extends Component {
   }
 
   getDirectionsUrl(address) {
-    const url = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(address);
+    let url = 'https://www.google.com/maps/dir/?api=1';
+    if (this.state.userAddress) {
+      url = url + '&origin=' + encodeURIComponent(this.state.userAddress);
+    } 
+    url = url + '&destination=' + encodeURIComponent(address);
+
     this.setState({
       url,
     });
@@ -72,19 +88,16 @@ class StoreMaps extends Component {
   }
 
   render() {
-    const style = {
-      width: '75%'
-    }
-
     const containerStyle = {
       position: 'relative',
       width: '500px', 
-      height: '400px'
+      height: '400px',
+      marginBottom: '20px'
     }
 
     return (
       <div>
-        <Map id="google-map" google={this.props.google} containerStyle={containerStyle} style={style} zoom={14}
+        <Map id="google-map" google={this.props.google} containerStyle={containerStyle} zoom={14}
           center={{lat: this.state.latitude, lng: this.state.longitude}}>
           <Marker position={{lat: this.state.latitude, lng: this.state.longitude}}/>
         </Map>
