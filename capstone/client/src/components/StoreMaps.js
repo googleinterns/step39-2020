@@ -72,12 +72,11 @@ class StoreMaps extends Component {
   }
 
   getDirectionsUrl(address) {
-    let url;
+    let url = 'https://www.google.com/maps/dir/?api=1';
     if (this.state.userAddress) {
-      url = 'https://www.google.com/maps/dir/?api=1&origin=' + encodeURIComponent(this.state.userAddress) + '&destination=' + encodeURIComponent(address);
-    } else {
-      url = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(address);
-    }
+      url = url + '&origin=' + encodeURIComponent(this.state.userAddress);
+    } 
+    url = url + '&destination=' + encodeURIComponent(address);
 
     this.setState({
       url,
