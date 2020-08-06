@@ -350,6 +350,7 @@ h6 {
   color : #111;
   font-family: 'Open Sans',serif;
   text-transform: none;
+  margin-bottom: 20px;
 }
 
 #stores-loading {
