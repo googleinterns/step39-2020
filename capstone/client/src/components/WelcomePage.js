@@ -16,9 +16,11 @@
 
 import React from 'react';
 import { Redirect ,} from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import { GoogleApiWrapper } from 'google-maps-react';
-import { Button, Card, Grid, Typography } from '@material-ui/core';
+import { Button, Card, Dialog, DialogActions,DialogContent, DialogContentText, 
+  DialogTitle, Grid, Typography } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import APIKey from './APIKey.js';
 import PlacesAutocomplete, {
@@ -47,9 +49,13 @@ class WelcomePage extends React.Component {
     super(props);
     this.state = { 
         address: '21 North 5th Street, San Jose, CA 95112, USA', // Reverse geocoded from the default location
+        getLocationButtonText: 'Use current location',
         location: { // San Jose by default
           latitude: 37.338207,
           longitude: -121.886330,
+        },
+        locationStatus: {
+          display: false,
         },
         redirect: null,
     };
@@ -128,18 +134,35 @@ class WelcomePage extends React.Component {
         },
         error => {
           this.setState({
-            address: null,
+            locationStatus: {
+              display: true,
+            }
           });
         }
       );
 
       this.setState({
+        // TODO(carolynlwang): change colors
         location: {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         },
       });
-    });
+    }, ((error) => {
+      this.setState({
+        locationStatus: {
+          display: true,
+        }
+      });
+    }));
+  }
+
+  handleLocationStatusDialogClose = () => {
+    this.setState({
+      locationStatus: {
+        display: false,
+      },
+    })
   }
 
   render() {
@@ -148,6 +171,9 @@ class WelcomePage extends React.Component {
     }
     return (
       <div id="welcome-page-container">
+        <Helmet>
+          <title> Welcome | Shopsmart</title>
+        </Helmet>
         <div id="banner">
           <img id="banner-image" src={banner} alt="Banner"/>
           <div id="banner-text-container">
@@ -182,7 +208,7 @@ class WelcomePage extends React.Component {
             </PlacesAutocomplete>
             <div><Button id="enter-location-button" onClick={this.onSubmit}><SearchIcon /></Button></div>
           </Grid>
-          <div><Button id="current-location-button" onClick={this.requestLocation}>Use current location</Button></div>
+          <div><Button id="current-location-button" onClick={this.requestLocation}>{this.state.getLocationButtonText}</Button></div>
           </div>
         </div>
         <Grid container justify="center" id="features-grid-container">
@@ -245,7 +271,7 @@ class WelcomePage extends React.Component {
             <div class="feature-card">
               <img src={brett} alt="brett-profile" class="profile-photos"/>
               <h3 className="card-title">Brett Allen</h3>
-              <Typography variant="body1" class="body-text">Brett Allen is a rising junior at Massachusetts Institute of Technology, where he plays for the varisty men's volleyball team. He is a simple man who loves three things: backend development, The Office, and his one-eyed dog named Fergie.</Typography>
+              <Typography variant="body1" class="body-text">Brett Allen is a rising junior at Massachusetts Institute of Technology, where he plays for the varsity men's volleyball team. He is a simple man who loves three things: backend development, The Office, and his one-eyed dog named Fergie.</Typography>
             </div>
           </Grid>
           <Grid item component={Card} xs>
@@ -257,6 +283,23 @@ class WelcomePage extends React.Component {
           </Grid>
         </Grid> 
         <Footer bottom='© 2020 Shopsmart' backgroundColor='#05386b'></Footer> 
+        <Dialog
+        open={this.state.locationStatus.display}
+        onClose={this.handleLocationStatusDialogClose}
+        aria-labelledby="location-dialog-title"
+        aria-describedby="location-dialog-description">
+          <DialogTitle id="get-location-dialog-title">{"Location Status"}</DialogTitle>
+          <DialogContent>
+          <DialogContentText id="get-location-dialog-text">
+            Can't retrieve your current location. You may need to enable location tracking in your browser settings.
+          </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleLocationStatusDialogClose} color="primary">
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
