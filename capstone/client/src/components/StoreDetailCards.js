@@ -76,7 +76,7 @@ class StoreDetailCards extends Component {
         <Typography variant='h6'>Address: {store.storeAddress}</Typography>
         <Grid container alignItems="stretch">
           <Grid item component={Card} xs>
-            <StoreMaps store={store}/>
+            <StoreMaps store={store} userLat={this.props.userLat} userLong={this.props.userLong} />
           </Grid>
           <Grid item component={Card} xs>
             <Typography variant='subtitle1'>This store has the following items:</Typography>
