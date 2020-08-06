@@ -191,7 +191,7 @@ class StorePage extends Component {
       }}/>
     }
 
-    const overviewFiller = (this.state.storesFound) ? <p>No stores found</p> : <CircularProgress id="stores-loading" color="action" />;
+    const overviewFiller = (this.state.storesFound) ? <p>No stores found. Try expanding your search.</p> : <CircularProgress id="stores-loading" color="action" />;
 
     const overviewCards = (this.state.originalStores.length === 0) ? overviewFiller : <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>;
     const shareButton = (this.state.originalStores.length === 0) ? null :
