@@ -119,7 +119,7 @@ class ListPage extends Component {
     for(let i = 0; i < arr.length; i++){
       redirectAddress = redirectAddress + `items=${arr[i]}&`;
     }
-    redirectAddress = redirectAddress + `latitude=${latit}&longitude=${longi}&distanceValue=${MAX_JAVA_INTEGER}&method=${method}`;
+    redirectAddress = redirectAddress + `latitude=${latit}&longitude=${longi}&distanceValue=100&method=${method}`;
     this.setState({
       redirect : redirectAddress,
       errorMessage: null,

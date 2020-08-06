@@ -44,6 +44,7 @@ class StorePage extends Component {
       method : params.get('method'),
       zipCode : params.get('zipCode'),
       redirect : null,
+      storesFound : false,
       shareDialog: {
         display: false,
       },
@@ -70,10 +71,15 @@ class StorePage extends Component {
         selectedItemTypes : this.state.items,
       } }})
         .then(res => {
-          console.log(res.data);
           this.setState({
             stores: res.data,
-            originalStores : res.data
+            originalStores : res.data,
+            storesFound : true,
+          });
+        })
+        .catch(error => {
+          this.setState({
+            storesFound : true,
           });
         });
     }
@@ -189,8 +195,9 @@ class StorePage extends Component {
       }}/>
     }
 
-    const overviewCards = (this.state.originalStores.length === 0) ? <CircularProgress id="stores-loading" color="action" /> : 
-    <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>;
+    const overviewFiller = (this.state.storesFound) ? <p>No stores found. Try expanding your search.</p> : <CircularProgress id="stores-loading" color="action" />;
+
+    const overviewCards = (this.state.originalStores.length === 0) ? overviewFiller : <StoreOverviewCards stores={this.state.stores} numItems={this.state.items.length}/>;
     const shareButton = (this.state.originalStores.length === 0) ? null :
         (<Button id="back-button" variant="contained" onClick={this.onShare}>
            Share Results&nbsp;<MailOutlineIcon color='white' />
